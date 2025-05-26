@@ -541,17 +541,16 @@ let edadaleatoria = ['10', '28', '20', '40', '18', '21', '15', '11', '9', '17', 
 let user2 = m.pushName || 'Anónimo'
 let verifyaleatorio = ['registrar', 'reg', 'verificar', 'verify', 'register'].getRandom()
 
-const msg = {
-rowner: `『✦』El comando *${comando}* solo puede ser usado por los creadores del bot.`, 
-owner: `『✦』El comando *${comando}* solo puede ser usado por los desarrolladores del bot.`, 
-mods: `『✦』El comando *${comando}* solo puede ser usado por los moderadores del bot.`, 
-premium: `『✦』El comando *${comando}* solo puede ser usado por los usuarios premium.`, 
-group: `『✦』El comando *${comando}* solo puede ser usado en grupos.`,
-private: `『✦』El comando *${comando}* solo puede ser usado al chat privado del bot.`,
-admin: `『✦』El comando *${comando}* solo puede ser usado por los administradores del grupo.`, 
-botAdmin: `『✦』Para ejecutar el comando *${comando}* debo ser administrador del grupo.`,
-unreg: `『✦』El comando *${comando}* solo puede ser usado por los usuarios registrado, registrate usando:\n> » #${verifyaleatorio} ${user2}.${edadaleatoria}`,
-restrict: `『✦』Esta caracteristica está desactivada.`
+rowner: `✿ 𝗘𝗹 𝗰𝗼𝗺𝗮𝗻𝗱𝗼 *${comando}* 𝘀𝗼𝗹𝗼 𝗽𝘂𝗲𝗱𝗲 𝘀𝗲𝗿 𝘂𝘀𝗮𝗱𝗼 𝗽𝗼𝗿 𝗹𝗼𝘀 𝗰𝗿𝗲𝗮𝗱𝗼𝗿𝗲𝘀 𝗱𝗲𝗹 𝗯𝗼𝘁.`,
+owner: `✿ 𝗘𝗹 𝗰𝗼𝗺𝗮𝗻𝗱𝗼 *${comando}* 𝘀𝗼𝗹𝗼 𝗽𝘂𝗲𝗱𝗲 𝘀𝗲𝗿 𝘂𝘀𝗮𝗱𝗼 𝗽𝗼𝗿 𝗹𝗼𝘀 𝗱𝗲𝘀𝗮𝗿𝗿𝗼𝗹𝗹𝗮𝗱𝗼𝗿𝗲𝘀 𝗱𝗲𝗹 𝗯𝗼𝘁.`,
+mods: `✿ 𝗘𝗹 𝗰𝗼𝗺𝗮𝗻𝗱𝗼 *${comando}* 𝘀𝗼𝗹𝗼 𝗽𝘂𝗲𝗱𝗲 𝘀𝗲𝗿 𝘂𝘀𝗮𝗱𝗼 𝗽𝗼𝗿 𝗹𝗼𝘀 𝗺𝗼𝗱𝗲𝗿𝗮𝗱𝗼𝗿𝗲𝘀 𝗱𝗲𝗹 𝗯𝗼𝘁.`,
+premium: `✿ 𝗘𝗹 𝗰𝗼𝗺𝗮𝗻𝗱𝗼 *${comando}* 𝘀𝗼𝗹𝗼 𝗽𝘂𝗲𝗱𝗲 𝘀𝗲𝗿 𝘂𝘀𝗮𝗱𝗼 𝗽𝗼𝗿 𝗹𝗼𝘀 𝘂𝘀𝘂𝗮𝗿𝗶𝗼𝘀 𝗽𝗿𝗲𝗺𝗶𝘂𝗺.`,
+group: `✿ 𝗘𝗹 𝗰𝗼𝗺𝗮𝗻𝗱𝗼 *${comando}* 𝘀𝗼𝗹𝗼 𝗽𝘂𝗲𝗱𝗲 𝘀𝗲𝗿 𝘂𝘀𝗮𝗱𝗼 𝗲𝗻 𝗴𝗿𝘂𝗽𝗼𝘀.`,
+private: `✿ 𝗘𝗹 𝗰𝗼𝗺𝗮𝗻𝗱𝗼 *${comando}* 𝘀𝗼𝗹𝗼 𝗽𝘂𝗲𝗱𝗲 𝘀𝗲𝗿 𝘂𝘀𝗮𝗱𝗼 𝗲𝗻 𝗰𝗵𝗮𝘁 𝗽𝗿𝗶𝘃𝗮𝗱𝗼 𝗰𝗼𝗻 𝗲𝗹 𝗯𝗼𝘁.`,
+admin: `✿ 𝗘𝗹 𝗰𝗼𝗺𝗮𝗻𝗱𝗼 *${comando}* 𝘀𝗼𝗹𝗼 𝗽𝘂𝗲𝗱𝗲 𝘀𝗲𝗿 𝘂𝘀𝗮𝗱𝗼 𝗽𝗼𝗿 𝗹𝗼𝘀 𝗮𝗱𝗺𝗶𝗻𝗶𝘀𝘁𝗿𝗮𝗱𝗼𝗿𝗲𝘀 𝗱𝗲𝗹 𝗴𝗿𝘂𝗽𝗼.`,
+botAdmin: `✿ 𝗣𝗮𝗿𝗮 𝗲𝗷𝗲𝗰𝘂𝘁𝗮𝗿 𝗲𝗹 𝗰𝗼𝗺𝗮𝗻𝗱𝗼 *${comando}* 𝗱𝗲𝗯𝗼 𝘀𝗲𝗿 𝗮𝗱𝗺𝗶𝗻𝗶𝘀𝘁𝗿𝗮𝗱𝗼𝗿 𝗱𝗲𝗹 𝗴𝗿𝘂𝗽𝗼.`,
+unreg: `✿ 𝗘𝗹 𝗰𝗼𝗺𝗮𝗻𝗱𝗼 *${comando}* 𝘀𝗼𝗹𝗼 𝗽𝘂𝗲𝗱𝗲 𝘀𝗲𝗿 𝘂𝘀𝗮𝗱𝗼 𝗽𝗼𝗿 𝗹𝗼𝘀 𝘂𝘀𝘂𝗮𝗿𝗶𝗼𝘀 𝗿𝗲𝗴𝗶𝘀𝘁𝗿𝗮𝗱𝗼𝘀, 𝗿𝗲𝗴𝗶́𝘀𝘁𝗿𝗮𝘁𝗲 𝘂𝘀𝗮𝗻𝗱𝗼:\n> » #${verifyaleatorio} ${user2}.${edadaleatoria}`,
+restrict: `✿ 𝗘𝘀𝘁𝗮 𝗰𝗮𝗿𝗮𝗰𝘁𝗲𝗿𝗶́𝘀𝘁𝗶𝗰𝗮 𝗲𝘀𝘁𝗮́ 𝗱𝗲𝘀𝗮𝗰𝘁𝗶𝘃𝗮𝗱𝗮.`
 }[type];
 if (msg) return m.reply(msg).then(_ => m.react('✖️'))}
 
