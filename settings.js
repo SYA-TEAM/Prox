@@ -42,17 +42,17 @@ global.yukiJadibts = true
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
-global.packname = '⪛✰ 𝐘𝐮𝐤𝐢-𝐒𝐮𝐨𝐮-𝐁𝐨𝐭 ✰⪜'
-global.botname = 'ᥡᥙkі-sᥙ᥆ᥙ-ᑲ᥆𝗍'
-global.wm = 'ৎ୭࠭͢𝐘𝐮𝐤𝐢_𝐒𝐮𝐨𝐮-𝐁𝐨𝐭ⷭ𓆪͟͞ '
-global.author = 'Made By ⁱᵃᵐ|𝔇ĕ𝐬†𝓻⊙γ𒆜'
-global.dev = '© ⍴᥆ᥕᥱrᥱძ ᑲᥡ ⁱᵃᵐ|𝔇ĕ𝐬†𝓻⊙γ𒆜'
-global.textbot = 'Yυƙι-Sυσυ-Bσƚ • Powered By ⁱᵃᵐ|𝔇ĕ𝐬†𝓻⊙γ𒆜'
-global.etiqueta = 'ⁱᵃᵐ|𝔇ĕ𝐬†𝓻⊙γ𒆜'
+global.packname = '✿ ᴀɴʏᴀ ꜰᴏʀɢᴇʀ ʙᴏᴛ ✿'
+global.botname = 'ᴀɴʏᴀ-ꜰᴏʀɢᴇʀ-ʙᴏᴛ'
+global.wm = '↬ ᴀɴʏᴀ ꜰᴏʀɢᴇʀ ʙᴏᴛ • ᴄʀᴇᴀᴛᴇᴅ ʙʏ ᴡɪʀᴋ'
+global.author = 'ᴍᴀᴅᴇ ʙʏ ᴡɪʀᴋ'
+global.dev = 'ᴅᴇᴠ﹕ᴡɪʀᴋ | ᴀɴʏᴀ ꜱʏꜱ'
+global.textbot = '✧ ᴀɴʏᴀ ʙᴏᴛ • ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴡɪʀᴋ ✧'
+global.etiqueta = 'ᴡɪʀᴋ'
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
-global.moneda = '¥enes'
+global.moneda = ✿ 𝖢𝗁𝗈𝖼𝗈𝗅𝖺𝗍𝖾𝗌 ✿'
 global.welcom1 = '❍ Edita Con El Comando setwelcome'
 global.welcom2 = '❍ Edita Con El Comando setbye'
 global.banner = 'https://qu.ax/YKqoa.jpg'
