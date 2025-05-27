@@ -32,7 +32,7 @@ let drm1 = ""
 let drm2 = ""
 let rtx = `╭˚₊‧୨ *⟡ Anya Forger ⟡* ୧‧₊˚╮
 
-꒰ 🩷 *Modo conexión Sub-Bot (QR)* 🩷 ꒱
+꒰ 🩷 *Modo Sub-Bot (QR)* 🩷 ꒱
 
 ¡Escanea este QR desde otro celular o PC  
 para convertirte en un 𖦹 *Sub-Bot Temporal* 𖦹!
@@ -43,10 +43,10 @@ para convertirte en un 𖦹 *Sub-Bot Temporal* 𖦹!
 
 ୨୧ Este código expira en *45 segundos* ⏱️
 
-╰────────────♡────────────╯`;
+╰────────♡─────────╯`;
 let rtx2 = `╭˚₊‧୨ *⟡ Anya Forger ⟡* ୧‧₊˚╮
 
-꒰ 💌 *Modo conexión Sub-Bot (Código)* 💌 ꒱
+꒰ 💌 *Modo Sub-Bot (Código)* 💌 ꒱
 
 ¡Usa este ૮₍｡•́︿•̀｡₎ა *Código especial*  
 para conectarte como un *Sub-Bot Temporal*!
@@ -58,7 +58,7 @@ para conectarte como un *Sub-Bot Temporal*!
 
 ୨୧ ⭒ *No uses tu cuenta principal, por seguridad*
 
-╰────────────♡────────────╯`;
+╰────────♡─────────╯`;
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
