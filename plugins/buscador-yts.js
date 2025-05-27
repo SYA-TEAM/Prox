@@ -1,27 +1,31 @@
 import yts from 'yt-search'
 
-var handler = async (m, { text, conn, args, command, usedPrefix }) => {
-  if (!text) return conn.reply(m.chat, '❗ Por favor, ingresa una búsqueda de YouTube.', rcanal)
+var handler = async (m, { text, conn, command }) => {
+  try {
+    if (!text) return conn.reply(m.chat, '❗ Ingresa una búsqueda para YouTube.', rcanal)
 
-  conn.reply(m.chat, '⏳ Buscando resultados, espera un momento...', rcanal)
+    await conn.reply(m.chat, '⏳ Buscando en YouTube...', rcanal)
 
-  let results = await yts(text)
-  let tes = results.all
+    const results = await yts(text)
+    const videos = results.all.filter(v => v.type === 'video')
 
-  let teks = results.all.map(v => {
-    if (v.type === 'video') {
-      return `「✦」Resultados de la búsqueda para <${text}>
+    if (!videos.length) return conn.reply(m.chat, '⚠️ No se encontraron resultados.', rcanal)
+
+    const teks = videos.map(v => `「✦」Resultados de la búsqueda para <${text}>
 
 > ☁️ Título » ${v.title}
 🍬 Canal » ${v.author.name}
 🕝 Duración » ${v.timestamp}
 📆 Subido » ${v.ago}
 👀 Vistas » ${v.views}
-🔗 Enlace » ${v.url}`
-    }
-  }).filter(v => v).join('\n\n••••••••••••••••••••••••••••••••••••\n\n')
+🔗 Enlace » ${v.url}`).join('\n\n••••••••••••••••••••••••••••••••••••\n\n')
 
-  conn.sendFile(m.chat, tes[0].thumbnail, 'yts.jpeg', teks, rcanal)
+    await conn.sendFile(m.chat, videos[0].thumbnail, 'yts.jpeg', teks, rcanal)
+
+  } catch (e) {
+    console.error(e)
+    conn.reply(m.chat, '❌ Ocurrió un error al buscar en YouTube.', rcanal)
+  }
 }
 
 handler.help = ['ytsearch']
