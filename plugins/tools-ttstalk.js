@@ -1,10 +1,10 @@
 import axios from 'axios'
 
 let handler = async (m, { usedPrefix, command, conn, text }) => {
-  if (!text) return m.reply(`🔎 Por favor, ingresa un usuario de tiktok para Stalkear.\n> *\`Ejemplo:\`* ${usedPrefix + command} mrbeast`);
+  if (!text) return m.reply(`Por favor, ingresa un usuario de tiktok para ver perfil.\n> *\`Ejemplo:\`* ${usedPrefix + command} mrbeast`);
 
   try {
-    await m.react('⏳');
+    await m.react('⏱️');
 
     let ress = await axios.get(`https://api.koboo.my.id/api/stalk/tiktok?username=${text}`)
     let res = ress.data
