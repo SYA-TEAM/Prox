@@ -61,17 +61,16 @@ let handler = async (m, { conn }) => {
             ? `Reclamado por @${randomCharacter.user.split('@')[0]}` 
             : 'Libre'
 
-        const message = `
-╭─────────────✦
-│  🎴 *RollWaifu*
+        const message = `╭─────────────✦
+│  ✸ *RollWaifu*
 ╰─────────────✦
 
-• 📝 *Nombre:* ${randomCharacter.name}
+• ✎ *Nombre:* ${randomCharacter.name}
 • ⚥ *Género:* ${randomCharacter.gender}
-• 💰 *Valor:* ${randomCharacter.value}
-• 📊 *Estado:* ${statusMessage}
-• 📚 *Fuente:* ${randomCharacter.source}
-• 🆔 *ID:* ${randomCharacter.id}
+• ☁︎ *Valor:* ${randomCharacter.value}
+• ✦ *Estado:* ${statusMessage}
+• ❀ *Fuente:* ${randomCharacter.source}
+• ✿ *ID:* ${randomCharacter.id}
 `
 
         const mentions = userEntry ? [userEntry.userId] : []
