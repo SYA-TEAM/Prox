@@ -1,51 +1,55 @@
 import axios from 'axios'
 
 let handler = async (m, { usedPrefix, command, conn, text }) => {
-  if (!text) return m.reply(`Por favor, ingresa un usuario de tiktok para ver perfil.\n> *\`Ejemplo:\`* ${usedPrefix + command} mrbeast`);
+if (!text) return m.reply(`(｡•́︿•̀｡) Porfis, ingresa un usuario de TikTok para ver su perfil~\n✿ Ejemplo: \`${usedPrefix + command} mrbeast\``);
 
-  try {
-    await m.react('⏱️');
+try {
+await m.react('⏱️');
 
-    let ress = await axios.get(`https://api.koboo.my.id/api/stalk/tiktok?username=${text}`)
-    let res = ress.data
+let ress = await axios.get(`https://api.koboo.my.id/api/stalk/tiktok?username=${text}`)  
+let res = ress.data  
 
-    if (res.status !== 200) throw 'Error! No se encontró el usuario. Asegúrate de escribirlo correctamente.'
+if (res.status !== 200) throw '｡ﾟ･ (>﹏<) ･ﾟ｡ ¡Error! No se encontró el usuario. Asegúrate de escribirlo bien, ¿sí?~'  
 
-    let user = res.result.user
-    let stats = res.result.stats
-    let profileTab = user.profileTab
+let user = res.result.user  
+let stats = res.result.stats  
+let profileTab = user.profileTab  
 
-    let teks = `\`\`\`❁ STALK - TIKTOK\`\`\`\n
-*❀ 𝖭𝖮𝖬𝖡𝖱𝖤 :* ${user.nickname}
-*❀ 𝖴𝖲𝖴𝖠𝖱𝖨𝖮 :* ${user.uniqueId}
-*❀ 𝖨𝖣 :* ${user.id}
-*❀ 𝖲𝖤𝖦𝖴𝖨𝖣𝖮𝖱𝖤𝖲 :* ${stats.followerCount}
-*❀ 𝖲𝖨𝖦𝖴𝖨𝖤𝖭𝖣𝖮 :* ${stats.followingCount}
-*❀ 𝖬𝖤 𝖦𝖴𝖲𝖳𝖠𝖲 𝖳𝖮𝖳𝖠𝖫𝖤𝖲 :* ${stats.heartCount}
-*❀ 𝖵𝖨𝖣𝖤𝖮𝖲 :* ${stats.videoCount}
-*❀ 𝖠𝖬𝖨𝖦𝖮𝖲 :* ${stats.friendCount}
-*❀ 𝖣𝖤𝖲𝖢𝖱𝖨𝖯𝖢𝖨𝖮́𝖭 :* ${user.signature || 'Sin descripción'}
-*◦ REGIÓN :* ${user.region || 'Desconocida'}
-*◦ CUENTA PRIVADA :* ${user.privateAccount ? '🔒 Sí' : '🔓 No'}
-*◦ VERIFICADO :* ${user.verified ? '✅ Sí' : '❌ No'}
-*◦ CUENTA COMERCIAL :* ${user.commerceUserInfo.commerceUser ? '🛒 Sí' : '❌ No'}
-*◦ DESCARGAS PERMITIDAS :* ${user.downloadSetting === 3 ? '✅ Sí' : '❌ No'}
-*◦ EXPANDIR PLAYLIST :* ${user.canExpPlaylist ? '✅ Sí' : '❌ No'}
-*◦ PESTAÑA DE MÚSICA :* ${profileTab.showMusicTab ? '✅ Sí' : '❌ No'}
-*◦ PESTAÑA DE PREGUNTAS :* ${profileTab.showQuestionTab ? '✅ Sí' : '❌ No'}
-*◦ PESTAÑA DE PLAYLIST :* ${profileTab.showPlayListTab ? '✅ Sí' : '❌ No'}
-*◦ ORGANIZACIÓN :* ${user.isOrganization ? '🏢 Sí' : '❌ No'}
-*◦ LENGUAJE :* ${user.language || 'Desconocido'}`
+let teks = `┏━━━━°❀•°:💗:°•❀°━━━━┓
+          ʚ STALK TIKTOK ɞ
+┗━━━━°❀•°:💗:°•❀°━━━━┛
 
-    await conn.sendMessage(m.chat, { image: { url: user.avatarLarger }, caption: teks }, { quoted: m })
-    await m.react('✅')
+•ꕤ Nombre: ${user.nickname}
+•ꕤ Usuario: @${user.uniqueId}
+•ꕤ ID: ${user.id}
+•ꕤ Seguidores: ${stats.followerCount}
+•ꕤ Siguiendo: ${stats.followingCount}
+•ꕤ Me gusta: ${stats.heartCount}
+•ꕤ Videos: ${stats.videoCount}
+•ꕤ Amigos: ${stats.friendCount}
+•ꕤ Descripción: ${user.signature || 'Sin descripción'}
 
-  } catch (err) {
-    m.reply('*❌ Error: No se encontró el usuario o la API falló. Intenta nuevamente.*')
-  }
+∘ Región: ${user.region || 'Desconocida'}
+∘ Cuenta privada: ${user.privateAccount ? '🔒 Sí' : '🔓 No'}
+∘ Verificado: ${user.verified ? '✅ Sí' : '❌ No'}
+∘ Comercial: ${user.commerceUserInfo.commerceUser ? '🛒 Sí' : '❌ No'}
+∘ Descargas permitidas: ${user.downloadSetting === 3 ? '✅ Sí' : '❌ No'}
+∘ Playlist expandible: ${user.canExpPlaylist ? '✅ Sí' : '❌ No'}
+∘ Pestaña de música: ${profileTab.showMusicTab ? '✅ Sí' : '❌ No'}
+∘ Pestaña de preguntas: ${profileTab.showQuestionTab ? '✅ Sí' : '❌ No'}
+∘ Pestaña de playlist: ${profileTab.showPlayListTab ? '✅ Sí' : '❌ No'}
+∘ Organización: ${user.isOrganization ? '🏢 Sí' : '❌ No'}
+∘ Lenguaje: ${user.language || 'Desconocido'}`
+
+await conn.sendMessage(m.chat, { image: { url: user.avatarLarger }, caption: teks }, { quoted: m })  
+await m.react('✅')
+
+} catch (err) {
+m.reply('(｡•́︿•̀｡) ❌ No se pudo encontrar el usuario o la API falló~ ¡Intenta otra vez, onegai!')
+}
 }
 
-handler.help = ['tiktokstalk *<usuario>*']
+handler.help = ['tiktokstalk <usuario>']
 handler.tags = ['stalk']
 handler.command = ['ttstalk', 'tiktokstalk']
 
