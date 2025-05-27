@@ -15,16 +15,16 @@ let handler = async (m, { usedPrefix, command, conn, text }) => {
     let stats = res.result.stats
     let profileTab = user.profileTab
 
-    let teks = `\`\`\`乂 STALKER - TIKTOK\`\`\`\n
-*◦ NOMBRE :* ${user.nickname}
-*◦ USUARIO :* ${user.uniqueId}
-*◦ ID :* ${user.id}
-*◦ SEGUIDORES :* ${stats.followerCount}
-*◦ SIGUIENDO :* ${stats.followingCount}
-*◦ ME GUSTAS :* ${stats.heartCount}
-*◦ VIDEOS :* ${stats.videoCount}
-*◦ AMIGOS :* ${stats.friendCount}
-*◦ DESCRIPCIÓN :* ${user.signature || 'Sin descripción'}
+    let teks = `\`\`\`❁ STALK - TIKTOK\`\`\`\n
+*❀ 𝖭𝖮𝖬𝖡𝖱𝖤 :* ${user.nickname}
+*❀ 𝖴𝖲𝖴𝖠𝖱𝖨𝖮 :* ${user.uniqueId}
+*❀ 𝖨𝖣 :* ${user.id}
+*❀ 𝖲𝖤𝖦𝖴𝖨𝖣𝖮𝖱𝖤𝖲 :* ${stats.followerCount}
+*❀ 𝖲𝖨𝖦𝖴𝖨𝖤𝖭𝖣𝖮 :* ${stats.followingCount}
+*❀ 𝖬𝖤 𝖦𝖴𝖲𝖳𝖠𝖲 𝖳𝖮𝖳𝖠𝖫𝖤𝖲 :* ${stats.heartCount}
+*❀ 𝖵𝖨𝖣𝖤𝖮𝖲 :* ${stats.videoCount}
+*❀ 𝖠𝖬𝖨𝖦𝖮𝖲 :* ${stats.friendCount}
+*❀ 𝖣𝖤𝖲𝖢𝖱𝖨𝖯𝖢𝖨𝖮́𝖭 :* ${user.signature || 'Sin descripción'}
 *◦ REGIÓN :* ${user.region || 'Desconocida'}
 *◦ CUENTA PRIVADA :* ${user.privateAccount ? '🔒 Sí' : '🔓 No'}
 *◦ VERIFICADO :* ${user.verified ? '✅ Sí' : '❌ No'}
@@ -47,6 +47,6 @@ let handler = async (m, { usedPrefix, command, conn, text }) => {
 
 handler.help = ['tiktokstalk *<usuario>*']
 handler.tags = ['stalk']
-handler.command = /^(tiktokstalk|stalktiktok|ttstalk)$/i
+handler.command = ['ttstalk', 'tiktokstalk']
 
 export default handler
