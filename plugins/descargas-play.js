@@ -46,7 +46,7 @@ author = author || 'no encontrado'
         },
       },
     }
-    await conn.reply(m.chat, infoMessage, m, rcanal, JT)    
+    await conn.reply(m.chat, infoMessage, JT, m, rcanal, JT)    
     if (command === 'play' || command === 'yta' || command === 'ytmp3' || command === 'playaudio') {
       try {
         const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
