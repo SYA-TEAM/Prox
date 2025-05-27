@@ -24,7 +24,7 @@ let handler = async (message, { conn, text }) => {
                     text: `Imagen ${index + 1}: ${response.data.data[index].title}`
                 }),
                 footer: proto.Message.InteractiveMessage.Footer.fromObject({
-                    text: '${dev}'
+                    text: '✦ ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴡɪʀᴋ ❆'
                 }),
                 header: proto.Message.InteractiveMessage.Header.fromObject({
                     title: response.data.data[index].title,
@@ -48,10 +48,10 @@ let handler = async (message, { conn, text }) => {
                 message: {
                     interactiveMessage: proto.Message.InteractiveMessage.fromObject({
                         body: proto.Message.InteractiveMessage.Body.fromObject({
-                            text: `📌 𝗋𝖾𝗌𝗎𝗅𝗍𝖺𝖽𝗈𝗌 ძ𝖾 : ${text}`
+                            text: `✎ ʀ𝖾𝗌𝗎𝗅𝗍𝖺𝖽𝗈𝗌 ძ𝖾 : ${text}`
                         }),
                         footer: proto.Message.InteractiveMessage.Footer.fromObject({
-                            text: '𝗚𝗮𝗹𝗲𝗿𝗶́𝗮 𝗔𝗻𝘆𝗮 𝗙𝗼𝗿𝗴𝗲𝗿',
+                            text: '𝗚𝗮𝗹𝗲𝗿𝗶́𝗮 𝗱𝗲 𝗶𝗺𝗮𝗴𝗲𝗻𝗲𝘀 𝗔𝗻𝘆𝗮 𝗙𝗼𝗿𝗴𝗲𝗿',
                         }),
                         header: proto.Message.InteractiveMessage.Header.fromObject({
                             hasMediaAttachment: false
