@@ -3,11 +3,11 @@ import axios from 'axios';
 
 let handler = async (message, { conn, text }) => {
     if (!text) {
-        return conn.reply(message.chat, `🍭 *⍴᥆r 𝖿ᥲ᥎᥆r, іᥒgrᥱsᥲ ᥣ᥆ 𝗊ᥙᥱ ძᥱsᥱᥲs ᑲᥙsᥴᥲr ..*`, message);
+        return conn.reply(message.chat, `*⍴᥆r 𝖿ᥲ᥎᥆r, іᥒgrᥱsᥲ ᥣ᥆ 𝗊ᥙᥱ ძᥱsᥱᥲs ᑲᥙsᥴᥲr ..*`, message);
     }
 
     await message.react('⏱️');
-    conn.reply(message.chat, `*🌩 Dᥱsᥴᥲrgᥲᥒძ᥆ іmágᥱᥒᥱs, ⍴᥆r 𝖿ᥲ᥎᥆r ᥱs⍴ᥱrᥲ...*`, message);
+    conn.reply(message.chat, `*✆ 𝘋𝘦𝘴𝘤𝘢𝘳𝘨𝘢𝘯𝘥𝘰 𝘦 𝘦𝘯𝘷𝘪𝘢𝘯𝘥𝘰 𝘪𝘮𝘢́𝘨𝘦𝘯𝘦𝘴.*`, message);
 
     const apiUrl = `https://delirius-apiofc.vercel.app/search/wallpapers?q=${encodeURIComponent(text)}`;
 
@@ -39,7 +39,7 @@ let handler = async (message, { conn, text }) => {
                     buttons: [{
                         name: "cta_url",
                         buttonParamsJson: JSON.stringify({
-                            display_text: "Ver Más",
+                            display_text: "➮ Ver Más ★",
                             url: buttonUrl
                         })
                     }]
