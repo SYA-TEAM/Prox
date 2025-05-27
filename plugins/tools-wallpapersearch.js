@@ -6,7 +6,7 @@ let handler = async (message, { conn, text }) => {
         return conn.reply(message.chat, `🍭 *⍴᥆r 𝖿ᥲ᥎᥆r, іᥒgrᥱsᥲ ᥣ᥆ 𝗊ᥙᥱ ძᥱsᥱᥲs ᑲᥙsᥴᥲr ..*`, message, rcanal);
     }
 
-    await message.react('🍬');
+    await message.react('⏱️');
     conn.reply(message.chat, `*🌩 Dᥱsᥴᥲrgᥲᥒძ᥆ іmágᥱᥒᥱs, ⍴᥆r 𝖿ᥲ᥎᥆r ᥱs⍴ᥱrᥲ...*`, message, rcanal);
 
     const apiUrl = `https://delirius-apiofc.vercel.app/search/wallpapers?q=${text}`;
@@ -24,7 +24,7 @@ let handler = async (message, { conn, text }) => {
                     text: `Imagen ${index + 1}: ${response.data.data[index].title}`
                 }),
                 footer: proto.Message.InteractiveMessage.Footer.fromObject({
-                    text: '© ⍴᥆ᥕᥱrᥱძ ᑲᥡ ȷ᥆sᥱ ᥊rᥣ'
+                    text: '${dev}'
                 }),
                 header: proto.Message.InteractiveMessage.Header.fromObject({
                     title: response.data.data[index].title,
@@ -48,10 +48,10 @@ let handler = async (message, { conn, text }) => {
                 message: {
                     interactiveMessage: proto.Message.InteractiveMessage.fromObject({
                         body: proto.Message.InteractiveMessage.Body.fromObject({
-                            text: `📌 rᥱsᥙᥣ𝗍ᥲძ᥆s ძᥱ : ${text}`
+                            text: `📌 𝗋𝖾𝗌𝗎𝗅𝗍𝖺𝖽𝗈𝗌 ძ𝖾 : ${text}`
                         }),
                         footer: proto.Message.InteractiveMessage.Footer.fromObject({
-                            text: 'Gᥲᥣᥱríᥲ іmágᥱᥒᥱs ᥒіᥒ᥆ ᥒᥲkᥲᥒ᥆',
+                            text: '𝗚𝗮𝗹𝗲𝗿𝗶́𝗮 𝗔𝗻𝘆𝗮 𝗙𝗼𝗿𝗴𝗲𝗿',
                         }),
                         header: proto.Message.InteractiveMessage.Header.fromObject({
                             hasMediaAttachment: false
