@@ -8,8 +8,8 @@ let handler = async (m, { conn, args }) => {
     let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length
 
     let txt = `
-*❒❅ Hola! Soy*  *${botname}* *❅❒*
-> Aquí tienes la lista de comandos :3
+> *❒❅ Hola! Soy*  *${botname}* *❅❒*
+Aquí tienes la lista de comandos :3
 ╭┈ ▼
 │❀ 𝖴𝗌𝖾𝗋 » @${userId.split('@')[0]}
 │★ 𝖬𝗈𝖽𝗈 » *Privado*
@@ -19,7 +19,7 @@ let handler = async (m, { conn, args }) => {
 │✦ 𝖢𝗈𝗆𝖺𝗇𝖽𝗈𝗌 » *${totalCommands}*
 │☼ 𝖡𝖺𝗂𝗅𝖾𝗒𝗌 » *MekBaileys*
 ╰─────────────────
-ᴘᴜᴇᴅᴇs ᴄʀᴇᴀʀ ᴛᴜ *sᴜʙ-ʙᴏᴛ* ᴄᴏɴ *#code* o *#qr*
+> ᴘᴜᴇᴅᴇs ᴄʀᴇᴀʀ ᴛᴜ *sᴜʙ-ʙᴏᴛ* ᴄᴏɴ *#code* o *#qr*
 
 ◦•●◉✿ 𝖨𝗇𝖿𝗈 𝖡𝗈𝗍 ✿◉●•◦
 
@@ -556,7 +556,7 @@ let handler = async (m, { conn, args }) => {
               newsletterName: channelRD.name,
               serverMessageId: -1,
           },
-          forwardingScore: 999,
+          forwardingScore: 1,
           externalAdReply: {
               title: botname,
               body: textbot,
