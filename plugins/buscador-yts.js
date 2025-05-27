@@ -1,40 +1,30 @@
 import yts from 'yt-search'
 
-let handler = async (m, { text, conn }) => {
-  if (!text) return conn.reply(m.chat, '🍭 *Por favor, ingresa una búsqueda de YouTube.*', m)
+var handler = async (m, { text, conn, args, command, usedPrefix }) => {
+  if (!text) return conn.reply(m.chat, '❗ Por favor, ingresa una búsqueda de YouTube.', rcanal)
 
-  await m.react('🔎')
-  conn.reply(m.chat, '*⏳ Buscando resultado, espera un momento...*', m)
+  conn.reply(m.chat, '⏳ Buscando resultados, espera un momento...', rcanal)
 
   let results = await yts(text)
-  let video = results.videos[0]
+  let tes = results.all
 
-  if (!video) return conn.reply(m.chat, '❌ No se encontraron resultados.', m)
+  let teks = results.all.map(v => {
+    if (v.type === 'video') {
+      return `「✦」Resultados de la búsqueda para <${text}>
 
-  let caption = `
-「🎬」 *${video.title}*
-📺 *Canal:* ${video.author.name}
-⏱️ *Duración:* ${video.timestamp}
-📅 *Subido:* ${video.ago}
-👁 *Vistas:* ${video.views}
-🔗 *Enlace:* ${video.url}
-`
+> ☁️ Título » ${v.title}
+🍬 Canal » ${v.author.name}
+🕝 Duración » ${v.timestamp}
+📆 Subido » ${v.ago}
+👀 Vistas » ${v.views}
+🔗 Enlace » ${v.url}`
+    }
+  }).filter(v => v).join('\n\n••••••••••••••••••••••••••••••••••••\n\n')
 
-  let buttons = [
-    { buttonId: `.play ${video.url}`, buttonText: { displayText: '▶️ Audio' }, type: 1 },
-    { buttonId: `.ytmp4 ${video.url}`, buttonText: { displayText: '📹 Video' }, type: 1 },
-    { buttonId: video.url, buttonText: { displayText: '🔗 Ver en YouTube' }, type: 1 }
-  ]
-
-  await conn.sendMessage(m.chat, {
-    image: { url: video.thumbnail },
-    caption,
-    footer: 'Selecciona una opción:',
-    buttons
-  }, { quoted: m })
+  conn.sendFile(m.chat, tes[0].thumbnail, 'yts.jpeg', teks, rcanal)
 }
 
-handler.help = ['ytbuscar', 'ytsearch']
+handler.help = ['ytsearch']
 handler.tags = ['buscador']
 handler.command = ['ytbuscar', 'ytsearch', 'yts']
 handler.register = true
