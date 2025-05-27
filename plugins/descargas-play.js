@@ -61,7 +61,7 @@ author = author || 'no encontrado'
       try {
         const response = await fetch(`https://api.neoxr.eu/api/youtube?url=${url}&type=video&quality=480p&apikey=GataDios`)
         const json = await response.json()
-        await conn.sendFile(m.chat, json.data.url, json.title + '.mp4', title, m)
+        await conn.sendFile(m.chat, json.data.url, json.title + '.mp4', title, rcanal)
       } catch (e) {
         return conn.reply(m.chat, '⚠︎ No se pudo enviar el video. Esto puede deberse a que el archivo es demasiado pesado o a un error en la generación de la URL. Por favor, intenta nuevamente más tarde.', m)
       }
