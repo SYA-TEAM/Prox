@@ -67,16 +67,16 @@ let handler = async (m, { conn: _envio, command, usedPrefix, args, text, isOwner
         let días = Math.floor(ms / 86400000);
         return [
           días ? `${días} días` : '',
-          horas ? `${horas}horas` : '',
-          minutos ? `${minutos}minutis` : '',
-          segundos ? `${segundos}segundos` : ''
+          horas ? `${horas} horas` : '',
+          minutos ? `${minutos} minutos` : '',
+          segundos ? `${segundos} segundos` : ''
         ].filter(Boolean).join(', ');
       }
 
       const message = users.map((v, index) =>
         `✧･ﾟ「 ${index + 1} 」･ﾟ✧
 📎 https://wa.me/${v.user.jid.replace(/[^0-9]/g, '')}?text=${usedPrefix}estado
-*♡ Usuario:* ${v.user.name || 'Sub-Bot'}
+*🫦 Usuario:* ${v.user.name || 'Sub-Bot'}
 *☔ Conectado hace:* ${v.uptime ? convertirMs(Date.now() - v.uptime) : 'Desconocido'}`
       ).join('\n\n｡･:*:･ﾟ★,｡･:*:･ﾟ☆\n\n');
 
