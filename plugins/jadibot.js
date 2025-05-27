@@ -87,23 +87,23 @@ let handler = async (m, { conn: _envio, command, usedPrefix, args, text, isOwner
       const totalUsers = users.length;
 
       const responseMessage =
-`╭─ ⋞⟡⋟───❀───⋞⟡⋟─╮
-     ୨୧ ʟɪsᴛᴀ ᴅᴇ Sᴜʙ-Bᴏᴛs ᴀᴄᴛɪᴠᴏs
-╰─ ⋞⟡⋟─────────────╯
+`*╭─ ⋞⟡⋟───❀──⋞⟡⋟─╮*
+   ୨୧ ʟɪsᴛᴀ ᴅᴇ Sᴜʙ-Bᴏᴛs
+*╰─ ⋞⟡⋟───────────╯*
 
-╭─⊹˚₊✦ Puedes pedir permiso para que uno se una a tu grupo.
+╭⊹˚₊✦ Puedes pedir permiso para que uno se una a tu grupo.
 
 ┈┈┈┈┈┈┈┈┈┈┈┈
-「 ᴀᴠɪsᴏ 」
+*「 ᴀᴠɪsᴏ 」*
 Cada Sub-Bot es independiente.
 El Bot principal no se responsabiliza de su uso.
 
-✦ Sub-Bots conectados: ${totalUsers || '0'}
+*✦ Sub-Bots conectados:* ${totalUsers || '0'}
 ┈┈┈┈┈┈┈┈┈┈┈┈
 
 ${replyMessage}
 
-╰─⌗ Sʏsᴛᴇᴍ ᴀᴄᴛɪᴠᴏ · Aɴʏᴀ Fᴏʀɢᴇʀ ⌗─╯`;
+╰─⌗ Aɴʏᴀ Fᴏʀɢᴇʀ ⌗─╯`;
 
       await _envio.sendMessage(m.chat, {
         text: responseMessage,
