@@ -556,7 +556,7 @@ Aquí tienes la lista de comandos :3
               newsletterName: channelRD.name,
               serverMessageId: -1,
           },
-          forwardingScore: 1,
+          forwardingScore: 99999999,
           externalAdReply: {
               title: botname,
               body: textbot,
