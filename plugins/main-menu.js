@@ -94,6 +94,8 @@ Aquí tienes la lista de comandos :3
 ◦•●◉✿ 𝖣𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗌 ✿◉●•◦
 
 *✎ Comandos de descargas para varios archivos.*
+❀ *#ttstalk • #tiktokstalk* + [username]
+> ✿ Mira la info de algún usuario de tiktok.
 ❀ *#tiktok • #tt*
 > ✿ Descarga videos de TikTok.
 ❀ *#mediafire • #mf*
