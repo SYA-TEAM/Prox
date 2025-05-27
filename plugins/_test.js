@@ -11,7 +11,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
     await conn.sendMessage(m.chat, {
       video: { url: dl_url },
-      caption: `Aquí tienes 💋/n> ❀ Send By Anya Forger`,
+      caption: `Aquí tienes 💋\n> ❀ Send By Anya Forger`,
     }, { quoted: m });
 
     await m.react('✅');
