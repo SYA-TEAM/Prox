@@ -63,8 +63,7 @@ https://chat.whatsapp.com/HXsoXHoKEIe4OhrPjYroX2
   await m.react('❤️‍🔥')
 
   await conn.sendMessage(m.chat, {
-    text: regbot,
-    ...bcanal
+    text: regbot
   }, { quoted: m })
 
   // Notificación al grupo oficial
@@ -89,8 +88,7 @@ https://chat.whatsapp.com/HXsoXHoKEIe4OhrPjYroX2
       const ppGroup = await conn.profilePictureUrl(who, 'image').catch(() => pp)
       await global.conn.sendMessage(grupoNotificacion, {
         image: { url: ppGroup || pp },
-        caption: mensajeNotificacion,
-        ...bcanal
+        caption: mensajeNotificacion
       })
     }
   } catch (e) {
