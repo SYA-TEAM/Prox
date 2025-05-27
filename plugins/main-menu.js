@@ -62,6 +62,8 @@ Aquí tienes la lista de comandos :3
 ◦•●◉✿ 𝖡𝗎𝗌𝖼𝖺𝖽𝗈𝗋𝖾𝗌 ✿◉●•◦
 
 *✎ Comandos para realizar búsquedas en distintas plataformas.*
+❀ *#wallpapersearch + [ búsqueda ]
+> ✿ Buscador de wallpapers.
 ❀ *#tiktoksearch • #tiktoks*
 > ✿ Buscador de videos de tiktok.
 ❀ *#tweetposts*
