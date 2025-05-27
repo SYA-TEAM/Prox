@@ -9,7 +9,7 @@ const {
 
 let handler = async (message, { conn, text, usedPrefix, command }) => {
   if (!text) {
-    return conn.reply(message.chat, "❀ Por favor, ingrese un texto para realizar una búsqueda en tiktok.", message, rcanal);
+    return conn.reply(message.chat, "🌸 ⍴᥆r 𝖿ᥲ᥎᥆r, іᥒgrᥱsᥱ ᥙᥒ 𝗍ᥱ᥊𝗍᥆ ⍴ᥲrᥲ rᥱᥲᥣіzᥲr ᥙᥒᥲ ᑲᥙ́s𝗊ᥙᥱძᥲ ᥱᥒ 𝗍іk𝗍᥆k.", message, rcanal);
   }
 
   async function createVideoMessage(url) {
@@ -29,13 +29,13 @@ let handler = async (message, { conn, text, usedPrefix, command }) => {
   }
 
   try {
-    conn.reply(message.chat, '✧ *ENVIANDO SUS RESULTADOS..*', message, {
+    conn.reply(message.chat, '✧ *𝖤ᥒ᥎іᥲᥒძ᥆ sᥙs rᥱsᥙᥣ𝗍ᥲძ᥆s..*', message, {
       contextInfo: { 
         externalAdReply: { 
           mediaUrl: null, 
           mediaType: 1, 
           showAdAttribution: true,
-          title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝘿𝙚𝙨𝙘𝙖𝙧𝙜𝙖𝙨⏜࣪᷼︵۬ ͜ ',
+          title: '♡  ͜ ۬︵࣪᷼⏜݊᷼𝗧𝗶𝗸𝗧𝗼𝗸 𝗦𝗲𝗮𝗿𝗰𝗵⏜࣪᷼︵۬ ͜ ',
           body: dev,
           previewType: 0, 
           thumbnail: avatar,
@@ -72,7 +72,7 @@ let handler = async (message, { conn, text, usedPrefix, command }) => {
           },
           interactiveMessage: proto.Message.InteractiveMessage.fromObject({
             body: proto.Message.InteractiveMessage.Body.create({
-              text: "✧ RESULTADO DE: " + text
+              text: "➤ 𝙍𝙀𝙎𝙐𝙇𝙏𝘼𝘿𝙊𝙎 𝘿𝙀: " + text
             }),
             footer: proto.Message.InteractiveMessage.Footer.create({
               text: dev
@@ -94,7 +94,7 @@ let handler = async (message, { conn, text, usedPrefix, command }) => {
       messageId: messageContent.key.id
     });
   } catch (error) {
-    conn.reply(message.chat, `⚠︎ *OCURRIÓ UN ERROR:* ${error.message}`, message);
+    conn.reply(message.chat, `⚠︎ *᥆ᥴᥙrrі᥆ ᥙᥒ ᥱrr᥆r:* ${error.message}`, message);
   }
 };
 
