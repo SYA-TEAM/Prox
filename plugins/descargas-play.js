@@ -35,8 +35,8 @@ author = author || 'no encontrado'
     const JT = {
       contextInfo: {
         externalAdReply: {
-          title: botname,
-          body: dev,
+          title: title,
+          body: botname,
           mediaType: 1,
           previewType: 0,
           mediaUrl: url,
@@ -46,7 +46,7 @@ author = author || 'no encontrado'
         },
       },
     }
-    await conn.reply(m.chat, infoMessage, m, thumb)    
+    await conn.reply(m.chat, infoMessage, m, JT, rcanal)    
     if (command === 'play' || command === 'yta' || command === 'ytmp3' || command === 'playaudio') {
       try {
         const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
