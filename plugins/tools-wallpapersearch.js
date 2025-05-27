@@ -1,15 +1,15 @@
-import axios from 'axios';
 const { generateWAMessageContent, generateWAMessageFromContent, proto } = (await import("@whiskeysockets/baileys")).default;
+import axios from 'axios';
 
 let handler = async (message, { conn, text }) => {
     if (!text) {
-        return conn.reply(message.chat, `🍭 *⍴᥆r 𝖿ᥲ᥎᥆r, іᥒgrᥱsᥲ ᥣ᥆ 𝗊ᥙᥱ ძᥱsᥱᥲs ᑲᥙsᥴᥲr ..*`, message, rcanal);
+        return conn.reply(message.chat, `🍭 *⍴᥆r 𝖿ᥲ᥎᥆r, іᥒgrᥱsᥲ ᥣ᥆ 𝗊ᥙᥱ ძᥱsᥱᥲs ᑲᥙsᥴᥲr ..*`, message);
     }
 
     await message.react('⏱️');
-    conn.reply(message.chat, `*🌩 Dᥱsᥴᥲrgᥲᥒძ᥆ іmágᥱᥒᥱs, ⍴᥆r 𝖿ᥲ᥎᥆r ᥱs⍴ᥱrᥲ...*`, message, rcanal);
+    conn.reply(message.chat, `*🌩 Dᥱsᥴᥲrgᥲᥒძ᥆ іmágᥱᥒᥱs, ⍴᥆r 𝖿ᥲ᥎᥆r ᥱs⍴ᥱrᥲ...*`, message);
 
-    const apiUrl = `https://delirius-apiofc.vercel.app/search/wallpapers?q=${text}`;
+    const apiUrl = `https://delirius-apiofc.vercel.app/search/wallpapers?q=${encodeURIComponent(text)}`;
 
     try {
         const response = await axios.get(apiUrl);
@@ -17,26 +17,30 @@ let handler = async (message, { conn, text }) => {
 
         let cards = [];
 
-        for (const [index, imageUrl] of images.entries()) {
+        for (const [index, item] of response.data.data.entries()) {
             if (index >= 5) break;
+
+            const imageUrl = item.image;
+            const buttonUrl = item.thumbnail?.startsWith('http') ? item.thumbnail : imageUrl;
+
             cards.push({
                 body: proto.Message.InteractiveMessage.Body.fromObject({
-                    text: `Imagen ${index + 1}: ${response.data.data[index].title}`
+                    text: `Imagen ${index + 1}: ${item.title}`
                 }),
                 footer: proto.Message.InteractiveMessage.Footer.fromObject({
                     text: '✦ ᴘᴏᴡᴇʀᴇᴅ ʙʏ ᴡɪʀᴋ ❆'
                 }),
                 header: proto.Message.InteractiveMessage.Header.fromObject({
-                    title: response.data.data[index].title,
+                    title: item.title,
                     hasMediaAttachment: true,
-                    imageMessage: await createImageMessage(imageUrl)
+                    imageMessage: await createImageMessage(imageUrl, conn)
                 }),
                 nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.fromObject({
                     buttons: [{
                         name: "cta_url",
                         buttonParamsJson: JSON.stringify({
                             display_text: "Ver Más",
-                            Url: response.data.data[index].thumbnail
+                            url: buttonUrl
                         })
                     }]
                 })
@@ -65,20 +69,18 @@ let handler = async (message, { conn, text }) => {
         }, { quoted: message });
 
         await conn.relayMessage(message.chat, carouselMessage.message, { messageId: carouselMessage.key.id });
+
     } catch (error) {
         console.error(error);
-        conn.reply(message.chat, `Error al buscar imágenes de coches.`, message);
+        conn.reply(message.chat, `⚠️ Error al buscar imágenes.`, message);
     }
 };
 
-async function createImageMessage(imageUrl) {
+async function createImageMessage(imageUrl, conn) {
     const { imageMessage } = await generateWAMessageContent({
-        'image': {
-            'url': imageUrl
-        }
-    }, {
-        'upload': conn.waUploadToServer
-    });
+        image: { url: imageUrl }
+    }, { upload: conn.waUploadToServer });
+
     return imageMessage;
 }
 
