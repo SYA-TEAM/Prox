@@ -4,10 +4,10 @@ import yts from 'yt-search';
 const limit = 250; // ahora permite hasta 250 MB
 
 const handler = async (m, { conn, text, command }) => {
-  if (!text) return m.reply('🌴 Ingresa el nombre de un video o una URL de YouTube.');
+  if (!text) return m.reply('💖 Ingresa el nombre de un video o una URL de YouTube.');
 
   try {
-    await m.react('⏱️');
+    await m.react('🕒');
     const res = await yts(text);
     const video = res.all[0];
 
@@ -17,11 +17,11 @@ const handler = async (m, { conn, text, command }) => {
   ✿ YouTube Play ✿
 ｡･:*:･ﾟ★,｡･:*:･ﾟ☆
 
-🌼 Título: ${video.title}
-🐥 Autor: ${video.author.name}
-⏳ Duración: ${video.duration.timestamp}
-✨ Vistas: ${video.views.toLocaleString()}
-🔗 URL: ${video.url}
+💜 *Título:* ${video.title}
+👻 *Autor:* ${video.author.name}
+⏳ *Duración:* ${video.duration.timestamp}
+👤 *Vistas:* ${video.views.toLocaleString()}
+🔗 *URL:* ${video.url}
 `;
 
     // Enviar miniatura del video como presentación
