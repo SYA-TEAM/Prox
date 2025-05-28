@@ -1,27 +1,28 @@
 import fetch from 'node-fetch';
 import yts from 'yt-search';
 
-const limit = 10;
+const limit = 100;
 
 const handler = async (m, { conn, text, command }) => {
   if (!text) return m.reply("🌴 Ingresa el nombre de un video o una URL de YouTube.");
 
   try {
-    await m.react("🌱");
+    await m.react("⏱️");
     const res = await yts(text);
     const video = res.all[0];
 
     if (!video) return m.reply("❌ No se encontró ningún resultado.");
 
-    const caption = `
-\`\`\`⊜─⌈ 📻 ◜YouTube Play◞ 📻 ⌋─⊜\`\`\`
+    const caption = `｡･:*:･ﾟ★,｡･:*:･ﾟ☆
+  ✿ YouTube Play ✿
+｡･:*:･ﾟ★,｡･:*:･ﾟ☆
 
-≡ 🌿 \`Título\` : » ${video.title}
-≡ 🌾 \`Autor\` : » ${video.author.name}
-≡ 🌱 \`Duración\` : » ${video.duration.timestamp}
-≡ 🌴 \`Vistas\` : » ${video.views}
-≡ ☘️ \`URL\`      : » ${video.url}
-    `.trim();
+🌼 Título: ${video.title}
+🐥 Autor: ${video.author.name}
+⏳ Duración: ${video.duration.timestamp}
+✨ Vistas: ${video.views.toLocaleString()}
+🔗 URL: ${video.url}
+`;
 
     // Enviar miniatura del video como presentación
     await conn.sendFile(m.chat, video.thumbnail, 'thumbnail.jpg', caption, m);
