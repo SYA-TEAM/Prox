@@ -34,7 +34,7 @@ const handler = async (m, { conn, text, command }) => {
       if (!json.data || !json.data.dl_url) throw '❌ Error al descargar el audio.';
 
       await conn.sendFile(m.chat, json.data.dl_url, `${json.data.title}.mp3`, '', m, null, {
-        asDocument: json.data.size_mb >= 50, // audio grande se manda como documento
+        asDocument: json.data.size_mb >= 90, // audio grande se manda como documento
       });
       await m.react('✔️');
 
