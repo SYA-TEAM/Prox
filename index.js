@@ -1,5 +1,6 @@
-Process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
 import './settings.js'
+import { setupMaster, fork } from 'cluster'
 import { watchFile, unwatchFile } from 'fs'
 import cfonts from 'cfonts'
 import {createRequire} from 'module'
@@ -8,8 +9,9 @@ import {platform} from 'process'
 import * as ws from 'ws'
 import fs, {readdirSync, statSync, unlinkSync, existsSync, mkdirSync, readFileSync, rmSync, watch} from 'fs'
 import yargs from 'yargs';
-import {spawn} from 'child_process' // Importamos spawn para iniciar procesos hijos
+import {spawn} from 'child_process'
 import lodash from 'lodash'
+import { yukiJadiBot } from './plugins/jadibot-serbot.js';
 import chalk from 'chalk'
 import syntaxerror from 'syntax-error'
 import {tmpdir} from 'os'
@@ -35,6 +37,8 @@ const {CONNECTING} = ws
 const {chain} = lodash
 const PORT = process.env.PORT || process.env.SERVER_PORT || 3000
 
+//const yuw = dirname(fileURLToPath(import.meta.url))
+//let require = createRequire(megu)
 let { say } = cfonts
 
 console.log(chalk.bold.redBright(`\n✰ Iniciando Yuki-Suou-Bot ✰\n`))
@@ -70,6 +74,7 @@ const __dirname = global.__dirname(import.meta.url)
 
 global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse())
 global.prefix = new RegExp('^[#/!.]')
+// global.opts['db'] = process.env['db']
 
 global.db = new Low(/https?:\/\//.test(opts['db'] || '') ? new cloudDBAdapter(opts['db']) : new JSONFile('./src/database/database.json'))
 
@@ -118,13 +123,13 @@ let opcion
 if (methodCodeQR) {
 opcion = '1'
 }
-if (!methodCodeQR && !methodCode && !fs.existsSync(`./${global.sessions}/creds.json`)) {
+if (!methodCodeQR && !methodCode && !fs.existsSync(`./${sessions}/creds.json`)) {
 do {
 opcion = await question(colores('⌨ Seleccione una opción:\n') + opcionQR('1. Con código QR\n') + opcionTexto('2. Con código de texto de 8 dígitos\n--> '))
 
 if (!/^[1-2]$/.test(opcion)) {
 console.log(chalk.bold.redBright(`✦ No se permiten numeros que no sean 1 o 2, tampoco letras o símbolos especiales.`))
-}} while (opcion !== '1' && opcion !== '2' || fs.existsSync(`./${global.sessions}/creds.json`))
+}} while (opcion !== '1' && opcion !== '2' || fs.existsSync(`./${sessions}/creds.json`))
 } 
 
 console.info = () => {} 
@@ -134,7 +139,7 @@ const connectionOptions = {
 logger: pino({ level: 'silent' }),
 printQRInTerminal: opcion == '1' ? true : methodCodeQR ? true : false,
 mobile: MethodMobile, 
-browser: opcion == '1' ? [`${global.nameqr}`, 'Edge', '20.0.04'] : methodCodeQR ? [`${global.nameqr}`, 'Edge', '20.0.04'] : ['Ubuntu', 'Edge', '110.0.1587.56'],
+browser: opcion == '1' ? [`${nameqr}`, 'Edge', '20.0.04'] : methodCodeQR ? [`${nameqr}`, 'Edge', '20.0.04'] : ['Ubuntu', 'Edge', '110.0.1587.56'],
 auth: {
 creds: state.creds,
 keys: makeCacheableSignalKeyStore(state.keys, Pino({ level: "fatal" }).child({ level: "fatal" })),
@@ -154,7 +159,7 @@ version,
 
 global.conn = makeWASocket(connectionOptions);
 
-if (!fs.existsSync(`./${global.sessions}/creds.json`)) {
+if (!fs.existsSync(`./${sessions}/creds.json`)) {
 if (opcion === '2' || methodCode) {
 opcion = '2'
 if (!conn.authState.creds.registered) {
@@ -181,13 +186,16 @@ console.log(chalk.bold.white(chalk.bgMagenta(`✧ CÓDIGO DE VINCULACIÓN ✧`))
 
 conn.isInit = false;
 conn.well = false;
+//conn.logger.info(`✦  H E C H O\n`)
 
 if (!opts['test']) {
 if (global.db) setInterval(async () => {
 if (global.db.data) await global.db.write()
-if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [tmpdir(), 'tmp', `${global.jadi}`], tmp.forEach((filename) => spawn('find', [filename, '-amin', '3', '-type', 'f', '-delete'])));
+if (opts['autocleartmp'] && (global.support || {}).find) (tmp = [os.tmpdir(), 'tmp', `${jadi}`], tmp.forEach((filename) => cp.spawn('find', [filename, '-amin', '3', '-type', 'f', '-delete'])));
 }, 30 * 1000);
 }
+
+// if (opts['server']) (await import('./server.js')).default(global.conn, PORT);
 
 async function connectionUpdate(update) {
 const {connection, lastDisconnect, isNewLogin} = update;
@@ -219,14 +227,14 @@ await global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.connectionReplaced) {
 console.log(chalk.bold.yellowBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ✗\n┆ ⚠︎ CONEXIÓN REEMPLAZADA, SE HA ABIERTO OTRA NUEVA SESION, POR FAVOR, CIERRA LA SESIÓN ACTUAL PRIMERO.\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ✗`))
 } else if (reason === DisconnectReason.loggedOut) {
-console.log(chalk.bold.redBright(`\n⚠︎ SIN CONEXIÓN, BORRE LA CARPETA ${global.sessions} Y ESCANEA EL CÓDIGO QR ⚠︎`))
+console.log(chalk.bold.redBright(`\n😭 SIN CONEXIÓN, BORRE LA CARPETA ${global.sessions} Y ESCANEA EL CÓDIGO QR 🫦`))
 await global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.restartRequired) {
 console.log(chalk.bold.cyanBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ✓\n┆ ✧ CONECTANDO AL SERVIDOR...\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ✓`))
 await global.reloadHandler(true).catch(console.error)
 } else if (reason === DisconnectReason.timedOut) {
 console.log(chalk.bold.yellowBright(`\n╭┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ▸\n┆ ⧖ TIEMPO DE CONEXIÓN AGOTADO, RECONECTANDO....\n╰┄┄┄┄┄┄┄┄┄┄┄┄┄┄ • • • ┄┄┄┄┄┄┄┄┄┄┄┄┄┄ ▸`))
-await global.reloadHandler(true).catch(console.error)
+await global.reloadHandler(true).catch(console.error) //process.send('reset')
 } else {
 console.log(chalk.bold.redBright(`\n⚠︎！ RAZON DE DESCONEXIÓN DESCONOCIDA: ${reason || 'No encontrado'} >> ${connection || 'No encontrado'}`))
 }}
@@ -277,71 +285,45 @@ isInit = false
 return true
 };
 
----
-### **Arranque de Jadibots (Sub-Bots)**
----
+//Arranque nativo para subbots by - ReyEndymion >> https://github.com/ReyEndymion
+
 global.rutaJadiBot = join(__dirname, './JadiBots')
 
-if (global.yukiJadibts) { // Asegúrate de que global.yukiJadibts esté definido en settings.js y sea 'true' para habilitar esto
-    if (!existsSync(global.rutaJadiBot)) {
-        mkdirSync(global.rutaJadiBot, { recursive: true })
-        console.log(chalk.bold.cyan(`La carpeta: ${global.jadi} se creó correctamente.`))
-    } else {
-        console.log(chalk.bold.cyan(`La carpeta: ${global.jadi} ya está creada.`))
-    }
-
-    const readRutaJadiBot = readdirSync(global.rutaJadiBot)
-    if (readRutaJadiBot.length > 0) {
-        const creds = 'creds.json'
-        for (const gjbts of readRutaJadiBot) {
-            const botPath = join(global.rutaJadiBot, gjbts)
-            const readBotPath = readdirSync(botPath)
-            if (readBotPath.includes(creds)) {
-                console.log(chalk.bold.green(`Iniciando Jadibot en proceso separado para: ${botPath}`));
-                const child = spawn(process.execPath, [
-                    join(__dirname, 'start-jadibot.js'), // Ruta al nuevo script
-                    botPath // Argumento: la ruta de la sesión del Jadibot
-                ], {
-                    stdio: 'inherit' // Permite ver la salida del proceso hijo en esta consola
-                });
-
-                child.on('error', (err) => {
-                    console.error(chalk.bold.red(`Error al iniciar el proceso Jadibot para ${botPath}: ${err.message}`));
-                });
-
-                child.on('exit', (code, signal) => {
-                    console.log(chalk.bold.yellow(`Proceso Jadibot para ${botPath} salió con código ${code} y señal ${signal}.`));
-                    // Aquí puedes añadir lógica para reintentar iniciar el Jadibot si se detiene inesperadamente
-                    // Por ejemplo, un pequeño retraso y luego volver a llamar a spawn.
-                    // setTimeout(() => {
-                    //    console.log(chalk.bold.yellow(`Reintentando iniciar Jadibot para: ${botPath}`));
-                    //    spawn(process.execPath, [join(__dirname, 'start-jadibot.js'), botPath], { stdio: 'inherit' });
-                    // }, 5000);
-                });
-            }
-        }
-    }
+if (global.yukiJadibts) {
+if (!existsSync(global.rutaJadiBot)) {
+mkdirSync(global.rutaJadiBot, { recursive: true }) 
+console.log(chalk.bold.cyan(`La carpeta: ${jadi} se creó correctamente.`))
+} else {
+console.log(chalk.bold.cyan(`La carpeta: ${jadi} ya está creada.`)) 
 }
----
 
-const pluginFolder = global.__dirname(join(__dirname, './plugins')) // Ajustado para apuntar a la carpeta 'plugins' general
+const readRutaJadiBot = readdirSync(rutaJadiBot)
+if (readRutaJadiBot.length > 0) {
+const creds = 'creds.json'
+for (const gjbts of readRutaJadiBot) {
+const botPath = join(rutaJadiBot, gjbts)
+const readBotPath = readdirSync(botPath)
+if (readBotPath.includes(creds)) {
+yukiJadiBot({pathYukiJadiBot: botPath, m: null, conn, args: '', usedPrefix: '/', command: 'serbot'})
+}
+}
+}
+}
+
+const pluginFolder = global.__dirname(join(__dirname, './plugins/index'))
 const pluginFilter = (filename) => /\.js$/.test(filename)
 global.plugins = {}
 async function filesInit() {
-    // Escanear directamente la carpeta 'plugins'
-    for (const filename of readdirSync(pluginFolder).filter(pluginFilter)) {
-        try {
-            const file = global.__filename(join(pluginFolder, filename))
-            const module = await import(file)
-            global.plugins[filename] = module.default || module
-        } catch (e) {
-            conn.logger.error(`Error al cargar el plugin '${filename}': ${e}`);
-            delete global.plugins[filename]
-        }
-    }
-}
+for (const filename of readdirSync(pluginFolder).filter(pluginFilter)) {
+try {
+const file = global.__filename(join(pluginFolder, filename))
+const module = await import(file)
+global.plugins[filename] = module.default || module
+} catch (e) {
+conn.logger.error(e)
+delete global.plugins[filename]
+}}}
 filesInit().then((_) => Object.keys(global.plugins)).catch(console.error);
-
 
 global.reload = async (_ev, filename) => {
 if (pluginFilter(filename)) {
@@ -397,80 +379,62 @@ Object.freeze(global.support);
 
 function clearTmp() {
 const tmpDir = join(__dirname, 'tmp')
-if (existsSync(tmpDir)) {
-    const filenames = readdirSync(tmpDir)
-    filenames.forEach(file => {
-        const filePath = join(tmpDir, file)
-        try {
-            unlinkSync(filePath)
-        } catch (e) {
-            console.error(`Error al eliminar ${filePath}: ${e.message}`);
-        }
-    })
-}
+const filenames = readdirSync(tmpDir)
+filenames.forEach(file => {
+const filePath = join(tmpDir, file)
+unlinkSync(filePath)})
 }
 
 function purgeSession() {
 let prekey = []
-let directorio = readdirSync(`./${global.sessions}`)
+let directorio = readdirSync(`./${sessions}`)
 let filesFolderPreKeys = directorio.filter(file => {
 return file.startsWith('pre-key-')
 })
 prekey = [...prekey, ...filesFolderPreKeys]
 filesFolderPreKeys.forEach(files => {
-try {
-    unlinkSync(`./${global.sessions}/${files}`)
-} catch (e) {
-    console.error(`Error al eliminar ${files} en ${global.sessions}: ${e.message}`);
-}
+unlinkSync(`./${sessions}/${files}`)
 })
 } 
 
 function purgeSessionSB() {
 try {
-const listaDirectorios = readdirSync(`./${global.jadi}/`);
+const listaDirectorios = readdirSync(`./${jadi}/`);
 let SBprekey = [];
 listaDirectorios.forEach(directorio => {
-if (statSync(`./${global.jadi}/${directorio}`).isDirectory()) {
-const DSBPreKeys = readdirSync(`./${global.jadi}/${directorio}`).filter(fileInDir => {
+if (statSync(`./${jadi}/${directorio}`).isDirectory()) {
+const DSBPreKeys = readdirSync(`./${jadi}/${directorio}`).filter(fileInDir => {
 return fileInDir.startsWith('pre-key-')
 })
 SBprekey = [...SBprekey, ...DSBPreKeys];
 DSBPreKeys.forEach(fileInDir => {
 if (fileInDir !== 'creds.json') {
-try {
-    unlinkSync(`./${global.jadi}/${directorio}/${fileInDir}`)
-} catch (e) {
-    console.error(`Error al eliminar ${fileInDir} en ${global.jadi}/${directorio}: ${e.message}`);
-}
+unlinkSync(`./${jadi}/${directorio}/${fileInDir}`)
 }})
 }})
 if (SBprekey.length === 0) {
-console.log(chalk.bold.green(`\n╭» ❍ ${global.jadi} ❍\n│→ NADA POR ELIMINAR \n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻︎`))
+console.log(chalk.bold.green(`\n╭» ❍ ${jadi} ❍\n│→ NADA POR ELIMINAR \n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻︎`))
 } else {
-console.log(chalk.bold.cyanBright(`\n╭» ❍ ${global.jadi} ❍\n│→ ARCHIVOS NO ESENCIALES ELIMINADOS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻︎︎`))
+console.log(chalk.bold.cyanBright(`\n╭» ❍ ${jadi} ❍\n│→ ARCHIVOS NO ESENCIALES ELIMINADOS\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻︎︎`))
 }} catch (err) {
-console.log(chalk.bold.red(`\n╭» ❍ ${global.jadi} ❍\n│→ OCURRIÓ UN ERROR\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻\n` + err))
+console.log(chalk.bold.red(`\n╭» ❍ ${jadi} ❍\n│→ OCURRIÓ UN ERROR\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻\n` + err))
 }}
 
 function purgeOldFiles() {
-const directories = [`./${global.sessions}/`, `./${global.jadi}/`]
+const directories = [`./${sessions}/`, `./${jadi}/`]
 directories.forEach(dir => {
-    if (existsSync(dir)) {
-        readdirSync(dir).forEach(file => {
-            if (file !== 'creds.json') {
-                const filePath = path.join(dir, file);
-                try {
-                    unlinkSync(filePath);
-                    console.log(chalk.bold.green(`\n╭» ❍ ARCHIVO ❍\n│→ ${file} BORRADO CON ÉXITO\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`));
-                } catch (err) {
-                    console.log(chalk.bold.red(`\n╭» ❍ ARCHIVO ❍\n│→ ${file} NO SE LOGRÓ BORRAR\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ✘\n` + err));
-                }
-            }
-        });
-    }
-});
-}
+readdirSync(dir, (err, files) => {
+if (err) throw err
+files.forEach(file => {
+if (file !== 'creds.json') {
+const filePath = path.join(dir, file);
+unlinkSync(filePath, err => {
+if (err) {
+console.log(chalk.bold.red(`\n╭» ❍ ARCHIVO ❍\n│→ ${file} NO SE LOGRÓ BORRAR\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ✘\n` + err))
+} else {
+console.log(chalk.bold.green(`\n╭» ❍ ARCHIVO ❍\n│→ ${file} BORRADO CON ÉXITO\n╰― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ― ⌫ ♻`))
+} }) }
+}) }) }) }
 
 function redefineConsoleMethod(methodName, filterStrings) {
 const originalConsoleMethod = console[methodName]
