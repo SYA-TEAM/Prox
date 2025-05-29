@@ -546,7 +546,7 @@ Comandos de juegos para jugar con tus amigos, ¡a divertirse!
 *꒰ 🎲 ꒱* #ttt
 » Crea una sala de juego.
 
-> ${Dev}`.trim();
+> ${dev}`.trim();
 
   await conn.sendMessage(m.chat, {
     text: txt,
