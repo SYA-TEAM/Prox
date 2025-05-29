@@ -25,7 +25,7 @@ let tags = {
   'logos': '「EDICIÓN LOGOS」😼', 
 }
 
-const vid = ['https://files.catbox.moe/sjwjvy.mp4', 'https://files.catbox.moe/k0uy1v.mp4']
+const vid = ['https://files.catbox.moe/9jh4vr.mp4', 'https://files.catbox.moe/9jh4vr.mp4']
 
 const defaultMenu = {
   before: `
@@ -165,8 +165,8 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
         mentionedJid: [m.sender],
         isForwarded: true,
         externalAdReply: {
-          title: '🌟 MENÚ KAWAII 🌟',
-          body: 'By Dev Wirk 💕',
+          title: '🌟 MENÚ 🌟',
+          body: 'Dev Wirk 💕',
           thumbnailUrl: 'https://i.imgur.com/VRt2QYg.jpeg',
           mediaType: 1,
           renderLargerThumbnail: true,
@@ -177,7 +177,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     })
   } catch (e) {
     console.error(e)
-    m.reply('Ocurrió un error mostrando el menú kawaii 💔')
+    m.reply('Ocurrió un error mostrando el menú💔')
   }
 }
 
