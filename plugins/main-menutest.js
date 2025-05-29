@@ -15,7 +15,7 @@ let handler = async (m, { conn, args }) => {
   const moneda = global.moneda || 'monedas';
 
   let txt = `
-> Holis, soy ${botname}
+> Holis, soy ${botname} ${(conn.user.jid == global.conn.user.jid ? '*͜͡P͜͡r͜͡i͜͡n͜͡c͜͡i͜͡p͜͡a͜͡l͜͡🐊*͜͡' : '*͜͡S͜͡u͜͡b͜͡ B͜͡o͜͡t͜͡ 💜*͜͡')}
 Aquí tienes la lista de comandos:
 
 ╭┈────── ❃
