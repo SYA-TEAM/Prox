@@ -22,51 +22,52 @@ let tags = {
   'tools': '「HERRAMIENTAS」😼',
   'info': '「INFORMACIÓN」😂',
   'owner': '「CREADOR」😼',
-  'logos': '「EDICION LOGOS」😼', 
+  'logos': '「EDICIÓN LOGOS」😼', 
 }
 
-const vid = ['https://files.catbox.moe/sjwjvy.mp4', 'https://files.catbox.moe/k0uy1v.mp4', 'https://files.catbox.moe/sjwjvy.mp4']
+const vid = ['https://files.catbox.moe/sjwjvy.mp4', 'https://files.catbox.moe/k0uy1v.mp4']
 
 const defaultMenu = {
-  before: `*┇◦✦◦✦◦✦◦✦◦◦✦◦◦✦◦◦✦◦◦✦◦◦┋:̖́*
+  before: `
+*┇◦✦◦✦◦✦◦✦◦◦✦◦◦✦◦◦✦◦◦✦◦◦┋:̖́*
 
-“ *➪ 𝗛ola %name* ❒”
-    
-╭꒱≡≡≡≡≡╡✦✧✦✧✦✧╞≡≡≡≡♡
-┊ *🍁⃨፝⃕✰INFO - BOT🍁⃨፝⃕✰*
-┊  🦁 *Cliente:* %name
-┊  🧰 *Exp:* %exp
-┊  🌟 *Estrellas:* %estrellas
-┊  🥇 *Nivel:* %level
-┊  ⚓ *Rango:* %role
-╰------➫┇◦✦◦✦◦✦◦✦◦┋:̖́-
-%readmore
-╭꒱≡≡≡≡≡╡✦✧✦✧✦✧╞≡≡≡≡♡
-┊  ❥ ⌲ *⊱INFO - USER⊰*
-┊  🤖 *Bot:* Anya
-┊  💫 *Modo:* Privado VIP 
-┊  ✨ *Baileys:* Multi Device
-┊  🪐 *Tiempo Activo:* %muptime
-┊  😻 *Usuarios:* %totalreg 
-╰⌦≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈‧₊˚✧
-%readmore
-*♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡*
+“ *➪ 𝗛ola %name* ❒” 🩵✨
 
-\t* 𝐂 𝐨 𝐦 𝐚 𝐧 𝐝 𝐨 𝐬*   
+╭꒱≡≡≡≡≡╡💌𝑰𝑵𝑭𝑶 - 𝑩𝑶𝑻💌╞≡≡≡≡꒱
+┊ ✿ 𝘾𝙡𝙞𝙚𝙣𝙩𝙚: %name
+┊ 💫 𝙀𝙭𝙥: %exp
+┊ 🌟 𝙀𝙨𝙩𝙧𝙚𝙡𝙡𝙖𝙨: %estrellas
+┊ 🥇 𝙉𝙞𝙫𝙚𝙡: %level
+┊ 🎖️ 𝙍𝙖𝙣𝙜𝙤: %role
+╰━━━━━━━━━━━━━━━━━♡
+
+%readmore
+
+╭꒱≡≡≡≡≡╡🌈𝑰𝑵𝑭𝑶 - 𝑼𝑺𝑬𝑹🌈╞≡≡≡≡꒱
+┊ ✧ 𝘽𝙤𝙩: Anya
+┊ ✨ 𝙈𝙤𝙙𝙤: Privado VIP 
+┊ 💌 𝘽𝙖𝙞𝙡𝙚𝙮𝙨: Multi Device
+┊ 🪐 𝙏𝙞𝙚𝙢𝙥𝙤 𝘼𝙘𝙩𝙞𝙫𝙖: %uptime
+┊ 😻 𝙐𝙨𝙪𝙖𝙧𝙞𝙤𝙨: %totalreg
+╰━━━━━━━━━━━━━━━━━♡
+
+♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡♡
+
+🎀 𝐂 𝐨 𝐦 𝐚 𝐧 𝐝 𝐨 𝐬 🎀
 `.trimStart(),
-      header: '➫┇◦✦◦✦◦✦◦✦◦┋:̖́-*̥˚\n┊ %category \n✧*̥˚ ︶︶︶︶︶︶︶︶︶  ✧*̥˚',
-  body: '*┊❥ ⌲💙* %cmd',
-  footer: '*╰⌦≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈‧₊˚✧*\n',
-  after: `> ${dev}`,
+
+  header: '🍒 *%category* 🍒\n———————————————',
+  body: '💗 %cmd',
+  footer: '━━━━━━━━━━━━━━━━━━━\n',
+  after: `🍓 𝙍𝙚𝙘𝙪𝙚𝙧𝙙𝙖: Usa los comandos con amor 💕`,
 }
+
 let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
   try {
     let _package = JSON.parse(await promises.readFile(join(__dirname, '../package.json')).catch(_ => ({}))) || {}
     let { exp, estrellas, level, role } = global.db.data.users[m.sender]
     let { min, xp, max } = xpRange(level, global.multiplier)
     let name = await conn.getName(m.sender)
-    exp = exp || 'Desconocida';
-    role = role || 'Aldeano';
     let d = new Date(new Date + 3600000)
     let locale = 'es'
     let weton = ['Pahing', 'Pon', 'Wage', 'Kliwon', 'Legi'][Math.floor(d / 84600000) % 5]
@@ -118,7 +119,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
     let header = conn.menu.header || defaultMenu.header
     let body = conn.menu.body || defaultMenu.body
     let footer = conn.menu.footer || defaultMenu.footer
-    let after = conn.menu.after || (conn.user.jid == conn.user.jid ? '' : `Powered by https://wa.me/${conn.user.jid.split`@`[0]}`) + defaultMenu.after
+    let after = conn.menu.after || defaultMenu.after
     let _text = [
       before,
       ...Object.keys(tags).map(tag => {
@@ -137,79 +138,56 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
       after
     ].join('\n')
     let text = typeof conn.menu == 'string' ? conn.menu : typeof conn.menu == 'object' ? _text : ''
-let replace = {
-'%': '%',
-p: _p, uptime, muptime,
-me: conn.getName(conn.user.jid),
-taguser: '@' + m.sender.split("@s.whatsapp.net")[0],
-npmname: _package.name,
-npmdesc: _package.description,
-version: _package.version,
-exp: exp - min,
-maxexp: xp,
-botofc: (conn.user.jid == global.conn.user.jid ? '👑 𝙴𝚂𝚃𝙴 𝙴𝚂 𝙴𝙻 𝙱𝙾𝚃 𝙾𝙵𝙲' : `👑 𝚂𝚄𝙱-𝙱𝙾𝚃 𝙳𝙴: Wa.me/${global.conn.user.jid.split`@`[0]}`), 
-totalexp: exp,
-xp4levelup: max - exp,
-github: _package.homepage ? _package.homepage.url || _package.homepage : '[unknown github url]',
-greeting, level, estrellas, name, weton, week, date, dateIslamic, time, totalreg, rtotalreg, role,
-readmore: readMore
-}
-text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
-
-await m.react(emojis) 
-
-await conn.sendMessage(m.chat, { video: { url: vid.getRandom() }, caption: text.trim(), contextInfo: { mentionedJid: [m.sender], isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, newsletterName: channelRD.name, serverMessageId: -1, }, forwardingScore: 999, externalAdReply: { title: textbot, body: dev, thumbnailUrl: 'https://files.catbox.moe/zmaoi0.jpeg', sourceUrl: redes, mediaType: 1, renderLargerThumbnail: false,
-}, }, gifPlayback: true, gifAttribution: 0 }, { quoted: null })
-
+    let replace = {
+      '%': '%',
+      p: _p, uptime, muptime,
+      me: conn.getName(conn.user.jid),
+      taguser: '@' + m.sender.split("@")[0],
+      npmname: _package.name,
+      npmdesc: _package.description,
+      version: _package.version,
+      exp: exp - min,
+      maxexp: xp,
+      botofc: '👑 BOT OFICIAL',
+      totalexp: exp,
+      xp4levelup: max - exp,
+      github: _package.homepage ? _package.homepage.url || _package.homepage : '[unknown github url]',
+      level, estrellas, name, weton, week, date, dateIslamic, time, totalreg, rtotalreg, role,
+      readmore: readMore
+    }
+    text = text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join`|`})`, 'g'), (_, name) => '' + replace[name])
+    
+    await m.react('🌸')
+    await conn.sendMessage(m.chat, {
+      video: { url: vid[Math.floor(Math.random() * vid.length)] },
+      caption: text.trim(),
+      contextInfo: {
+        mentionedJid: [m.sender],
+        isForwarded: true,
+        externalAdReply: {
+          title: '🌟 MENÚ KAWAII 🌟',
+          body: 'By Dev Wirk 💕',
+          thumbnailUrl: 'https://i.imgur.com/VRt2QYg.jpeg',
+          mediaType: 1,
+          renderLargerThumbnail: true,
+          showAdAttribution: true,
+          sourceUrl: 'https://github.com'
+        }
+      }
+    })
   } catch (e) {
-    conn.reply(m.chat, '❌️ Lo sentimos, el menú tiene un error', m, rcanal, )
-    throw e
+    console.error(e)
+    m.reply('Ocurrió un error mostrando el menú kawaii 💔')
   }
 }
-handler.help = ['rembot']
-handler.tags = ['main']
-handler.estrellas = 5;
-handler.command = ['menutest', 'helptest'] 
-handler.register = true
-
-export default handler
-
-const more = String.fromCharCode(8206)
-const readMore = more.repeat(4001)
 
 function clockString(ms) {
-  let h = isNaN(ms) ? '--' : Math.floor(ms / 3600000)
-  let m = isNaN(ms) ? '--' : Math.floor(ms / 60000) % 60
-  let s = isNaN(ms) ? '--' : Math.floor(ms / 1000) % 60
+  let h = Math.floor(ms / 3600000)
+  let m = Math.floor(ms / 60000) % 60
+  let s = Math.floor(ms / 1000) % 60
   return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')
 }
 
-  var ase = new Date();
-  var hour = ase.getHours();
-switch(hour){
-  case 0: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌙'; break;
-  case 1: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 💤'; break;
-  case 2: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🦉'; break;
-  case 3: hour = 'Bᴜᴇɴᴏs Dɪᴀs ✨'; break;
-  case 4: hour = 'Bᴜᴇɴᴏs Dɪᴀs 💫'; break;
-  case 5: hour = 'Bᴜᴇɴᴏs Dɪᴀs 🌅'; break;
-  case 6: hour = 'Bᴜᴇɴᴏs Dɪᴀs 🌄'; break;
-  case 7: hour = 'Bᴜᴇɴᴏs Dɪᴀs 🌅'; break;
-  case 8: hour = 'Bᴜᴇɴᴏs Dɪᴀs 💫'; break;
-  case 9: hour = 'Bᴜᴇɴᴏs Dɪᴀs ✨'; break;
-  case 10: hour = 'Bᴜᴇɴᴏs Dɪᴀs 🌞'; break;
-  case 11: hour = 'Bᴜᴇɴᴏs Dɪᴀs 🌨'; break;
-  case 12: hour = 'Bᴜᴇɴᴏs Dɪᴀs ❄'; break;
-  case 13: hour = 'Bᴜᴇɴᴏs Dɪᴀs 🌤'; break;
-  case 14: hour = 'Bᴜᴇɴᴀs Tᴀʀᴅᴇs 🌇'; break;
-  case 15: hour = 'Bᴜᴇɴᴀs Tᴀʀᴅᴇs 🥀'; break;
-  case 16: hour = 'Bᴜᴇɴᴀs Tᴀʀᴅᴇs 🌹'; break;
-  case 17: hour = 'Bᴜᴇɴᴀs Tᴀʀᴅᴇs 🌆'; break;
-  case 18: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌙'; break;
-  case 19: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌃'; break;
-  case 20: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌌'; break;
-  case 21: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌃'; break;
-  case 22: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌙'; break;
-  case 23: hour = 'Bᴜᴇɴᴀs Nᴏᴄʜᴇs 🌃'; break;
-}
-  var greeting = hour;
+const readMore = String.fromCharCode(8206).repeat(4001)
+
+export default handler
