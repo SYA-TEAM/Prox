@@ -186,4 +186,5 @@ function clockString(ms) {
 
 const readMore = String.fromCharCode(8206).repeat(4001)
 
+handler.command = ['menutest']
 export default handler
