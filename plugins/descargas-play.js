@@ -23,7 +23,8 @@ const handler = async (m, { conn, text, command }) => {
 👤 *Vistas:* ${video.views.toLocaleString()}
 🔗 *URL:* ${video.url}
 
-> ${botname} ${(conn.user.jid == global.conn.user.jid ? '*͜͡☔ P͜͡r͜͡i͜͡n͜͡c͜͡i͜͡p͜͡a͡l 🅞🅕🅒 🐊*͜͡' : '*͜͡🍫 S͜͡u͜͡b͜͡ B͜͡o͜͡t͜͡ 🅢 💜*͜͡')}`;
+> ${botname} 
+${(conn.user.jid == global.conn.user.jid ? '*͜͡☔ P͜͡r͜͡i͜͡n͜͡c͜͡i͜͡p͜͡a͡l 🅞🅕🅒 🐊*͜͡' : '*͜͡🍫 S͜͡u͜͡b͜͡ B͜͡o͜͡t͜͡ 🅢 💜*͜͡')}`;
 
     // Enviar miniatura del video como presentación
     await conn.sendFile(m.chat, video.thumbnail, 'thumbnail.jpg', caption, m);
