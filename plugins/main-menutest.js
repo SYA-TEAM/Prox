@@ -15,8 +15,9 @@ let handler = async (m, { conn, args }) => {
   const moneda = global.moneda || 'monedas';
 
   let txt = `
-> Holis, soy ${botname} ✨💖
+> Holis, soy ${botname}
 Aquí tienes la lista de comandos:
+
 ╭┈─────── ೄྀ࿐ ˊˎ-
 │ 👤 *Usuario:* @${userId.split('@')[0]}
 │ 🪷 *Modo:* Privado
@@ -26,6 +27,7 @@ Aquí tienes la lista de comandos:
 │ 🤍 *Comandos:* ${totalCommands}
 │ 🍫 *Baileys:* MekBaileys
 ╰─➤ ✎
+
 > Puedes crear tu *SUB-BOT* con #code o #qr ☔
 
 > ･::ﾟ･ﾟ☆ 𝐈𝐧𝐟𝐨 𝐁𝐨𝐭 ☆･ﾟ:･ﾟ::･> 
@@ -543,7 +545,8 @@ Comandos de juegos para jugar con tus amigos, ¡a divertirse!
 » Juega un pvp contra otro usuario.
 *꒰ 🎲 ꒱* #ttt
 » Crea una sala de juego.
-`.trim();
+
+> ${Dev}`.trim();
 
   await conn.sendMessage(m.chat, {
     text: txt,
@@ -558,7 +561,7 @@ Comandos de juegos para jugar con tus amigos, ¡a divertirse!
       forwardingScore: 99999999,
       externalAdReply: {
         title: botname,
-        body: textbot,
+        body: wm,
         thumbnailUrl: banner,
         sourceUrl: redes,
         mediaType: 1,
