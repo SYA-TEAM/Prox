@@ -15,13 +15,12 @@ let handler = async (m, { conn, args }) => {
   const moneda = global.moneda || 'monedas';
 
   let txt = `
-> Holis, soy ${botname}\n${(conn.user.jid == global.conn.user.jid ? '*͜͡P͜͡r͜͡i͜͡n͜͡c͜͡i͜͡p͜͡a͜͡l͜͡🐊*͜͡' : '*͜͡S͜͡u͜͡b͜͡ B͜͡o͜͡t͜͡ 💜*͜͡')}
+> Holis, soy ${botname}\n ${(conn.user.jid == global.conn.user.jid ? '*͜͡☔ P͜͡r͜͡i͜͡n͜͡c͜͡i͜͡p͜͡a͜͡l͜͡  🐊*͜͡' : '*͜͡🍫 S͜͡u͜͡b͜͡ B͜͡o͜͡t͜͡ 𝔹 💜*͜͡')}
 Aquí tienes la lista de comandos:
 
 ╭┈────── ❃
 │ 👤 *Usuario:* @${userId.split('@')[0]}
 │ 🪷 *Modo:* Privado
-│ 🧸 *Bot:* ${(conn.user.jid == global.conn.user.jid ? '*͜͡P͜͡r͜͡i͜͡n͜͡c͜͡i͜͡p͜͡a͜͡l͜͡*͜͡' : '*͜͡S͜͡u͜͡b͜͡ B͜͡o͜͡t͜͡*͜͡')}
 │ 🕒 *Activa hace:* ${uptime}
 │ 👥 *Usuarios:* *${totalreg}*
 │ 🤍 *Comandos:* ${totalCommands}
