@@ -22,7 +22,8 @@ const handler = async (m, { conn, text, command }) => {
 ⏳ *Duración:* ${video.duration.timestamp}
 👤 *Vistas:* ${video.views.toLocaleString()}
 🔗 *URL:* ${video.url}
-`;
+
+> ${botname} ${(conn.user.jid == global.conn.user.jid ? '*͜͡☔ P͜͡r͜͡i͜͡n͜͡c͜͡i͜͡p͜͡a͡l 🅞🅕🅒 🐊*͜͡' : '*͜͡🍫 S͜͡u͜͡b͜͡ B͜͡o͜͡t͜͡ 🅢 💜*͜͡')}`;
 
     // Enviar miniatura del video como presentación
     await conn.sendFile(m.chat, video.thumbnail, 'thumbnail.jpg', caption, m);
@@ -36,7 +37,7 @@ const handler = async (m, { conn, text, command }) => {
       await conn.sendFile(m.chat, json.data.dl_url, `${json.data.title}.mp3`, '', m, null, {
         asDocument: json.data.size_mb >= 90, // audio grande se manda como documento
       });
-      await m.react('✔️');
+      await m.react('✅');
 
     } else if (command === 'play2' || command === 'playvid') {
       const api = await fetch(`https://ytdl.sylphy.xyz/dl/mp4?url=${video.url}&quality=480`);
