@@ -18,7 +18,7 @@ let handler = async (m, { conn, args }) => {
 > Holis, soy ${botname}
 Aquí tienes la lista de comandos:
 
-╭┈─────── ೄྀ࿐ ˊˎ-
+╭┈────── ❃
 │ 👤 *Usuario:* @${userId.split('@')[0]}
 │ 🪷 *Modo:* Privado
 │ 🧸 *Bot:* ${(conn.user.jid == global.conn.user.jid ? '*͜͡P͜͡r͜͡i͜͡n͜͡c͜͡i͜͡p͜͡a͜͡l͜͡*͜͡' : '*͜͡S͜͡u͜͡b͜͡ B͜͡o͜͡t͜͡*͜͡')}
@@ -575,7 +575,7 @@ Comandos de juegos para jugar con tus amigos, ¡a divertirse!
 
 handler.help = ['menu'];
 handler.tags = ['main'];
-handler.command = ['menutest'];
+handler.command = ['menutest', 'menu', 'help'];
 
 export default handler;
 
