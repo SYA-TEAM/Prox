@@ -577,7 +577,7 @@ Aquí tienes la lista de comandos :3
 
 handler.help = ['menu']
 handler.tags = ['main']
-handler.command = ['menu', 'menú', 'help']
+handler.command = ['men']
 
 export default handler
 
