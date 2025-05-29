@@ -1,21 +1,31 @@
 let handler = async (m, { conn, args }) => {
-    let userId = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.sender
-    let user = global.db.data.users[userId]
-    let name = conn.getName(userId)
-    let _uptime = process.uptime() * 1000
-    let uptime = clockString(_uptime)
-    let totalreg = Object.keys(global.db.data.users).length
-    let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length
+  let userId = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.sender;
+  let user = global.db.data.users[userId];
+  let name = conn.getName(userId);
+  let _uptime = process.uptime() * 1000;
+  let uptime = clockString(_uptime);
+  let totalreg = Object.keys(global.db.data.users).length;
+  let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length;
 
-    let txt = `
+  // Asegúrate de que botname, textbot, banner, redes y channelRD estén definidos en tu contexto global o dentro de la función.
+  // Ejemplo:
+  const botname = global.botname || "NombreDelBot";
+  const textbot = global.textbot || "Descripción del bot";
+  const banner = global.banner || "URL de la imagen del banner";
+  const redes = global.redes || "URL de las redes sociales";
+  const channelRD = global.channelRD || { id: 'id_del_canal', name: 'Nombre del canal' };
+  const moneda = global.moneda || 'monedas'; // Asegúrate de que 'moneda' esté definido globalmente o aquí.
+
+
+  let txt = `
 💖✨ ¡Holis, soy la dulce ${botname} ! ✨💖
 Aquí tienes la lista de comandos más adorables:
 ╭┈─────── ೄྀ࿐ ˊˎ-
-│ 🌸 Usuario: @{userId.split('@')[0]}
+│ 🌸 Usuario: @${userId.split('@')[0]}
 │ 🎀 *Modo:* Privado
-│ 🧸 *Bot:* ${(conn.user.jid == global.conn.user.jid ? '`Principal`' : '`Sub Bot`')}
+│ 🧸 *Bot:* ${(conn.user.jid == global.conn.user.jid ? '\`Principal\`' : '\`Sub Bot\`')}
 │ ⏳ *Activa hace:* *${uptime}*
-│ 🐾 *Usuarios:* *{totalreg}*
+│ 🐾 *Usuarios:* *${totalreg}*
 │ 📜 Comandos: ${totalCommands}
 │ 💎 Baileys: MekBaileys
 ╰─➤ ✎
@@ -525,42 +535,42 @@ Comandos de juegos para jugar con tus amigos, ¡a divertirse!
 ꒰ 🎲 ꒱ > #ttt
 » Crea una sala de juego.
  
-  `.trim()
+  `.trim();
 
-  await conn.sendMessage(m.chat, { 
-      text: txt,
-      contextInfo: {
-          mentionedJid: [m.sender, userId],
-          isForwarded: true,
-          forwardedNewsletterMessageInfo: {
-              newsletterJid: channelRD.id,
-              newsletterName: channelRD.name,
-              serverMessageId: -1,
-          },
-          forwardingScore: 99999999,
-          externalAdReply: {
-              title: botname,
-              body: textbot,
-              thumbnailUrl: banner,
-              sourceUrl: redes,
-              mediaType: 1,
-              showAdAttribution: true,
-              renderLargerThumbnail: true,
-          },
+  await conn.sendMessage(m.chat, {
+    text: txt,
+    contextInfo: {
+      mentionedJid: [m.sender, userId],
+      isForwarded: true,
+      forwardedNewsletterMessageInfo: {
+        newsletterJid: channelRD.id,
+        newsletterName: channelRD.name,
+        serverMessageId: -1,
       },
-  }, { quoted: m })
+      forwardingScore: 99999999,
+      externalAdReply: {
+        title: botname,
+        body: textbot,
+        thumbnailUrl: banner,
+        sourceUrl: redes,
+        mediaType: 1,
+        showAdAttribution: true,
+        renderLargerThumbnail: true,
+      },
+    },
+  }, { quoted: m });
 
-}
+};
 
-handler.help = ['menu']
-handler.tags = ['main']
-handler.command = ['menutest']
+handler.help = ['menu'];
+handler.tags = ['main'];
+handler.command = ['menutest'];
 
-export default handler
+export default handler;
 
 function clockString(ms) {
-    let seconds = Math.floor((ms / 1000) % 60)
-    let minutes = Math.floor((ms / (1000 * 60)) % 60)
-    let hours = Math.floor((ms / (1000 * 60 * 60)) % 24)
-    return `${hours}Horas ${minutes}Minutos ${seconds}Segundos`
+  let seconds = Math.floor((ms / 1000) % 60);
+  let minutes = Math.floor((ms / (1000 * 60)) % 60);
+  let hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+  return `${hours}Horas ${minutes}Minutos ${seconds}Segundos`;
 }
