@@ -18,18 +18,20 @@ let handler = async (m, { conn, args }) => {
 
 
   let txt = `
-💖✨ ¡Holis, soy la dulce ${botname} ! ✨💖
-Aquí tienes la lista de comandos más adorables:
+💖✨ ¡Holis, soy ${botname} ✨💖
+Aquí tienes la lista de comandos:
 ╭┈─────── ೄྀ࿐ ˊˎ-
-│ 🌸 Usuario: @${userId.split('@')[0]}
+│ 🌸 *Usuario:* @${userId.split('@')[0]}
 │ 🎀 *Modo:* Privado
-│ 🧸 *Bot:* ${(conn.user.jid == global.conn.user.jid ? '\`Principal\`' : '\`Sub Bot\`')}
-│ ⏳ *Activa hace:* *${uptime}*
+│ 🧸 *Bot:* ${(conn.user.jid == global.conn.user.jid ? '*͜͡P͜͡r͜͡i͜͡n͜͡c͜͡i͜͡p͜͡a͜͡l͜͡*͜͡' : '*͜͡S͜͡u͜͡b͜͡ B͜͡o͜͡t͜͡*͜͡')}
+│ ⏳ *Activa hace:* ${uptime}
 │ 🐾 *Usuarios:* *${totalreg}*
 │ 📜 Comandos: ${totalCommands}
 │ 💎 Baileys: MekBaileys
 ╰─➤ ✎
-✨ Puedes crear tu SUB-BOT con #code o #qr ✨
+
+> Puedes crear tu SUB-BOT con #code o #qr ✨
+
 ｡･::･ﾟ★,｡･::･ﾟ☆ 𝐈𝐧𝐟𝐨 𝐁𝐨𝐭 ☆･ﾟ::･｡,★･ﾟ::･｡
 Comandos para ver el estado e información de la Bot.
 ꒰ 🌸 ꒱ > #help • #menu
@@ -572,5 +574,5 @@ function clockString(ms) {
   let seconds = Math.floor((ms / 1000) % 60);
   let minutes = Math.floor((ms / (1000 * 60)) % 60);
   let hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
-  return `${hours}Horas ${minutes}Minutos ${seconds}Segundos`;
+  return `${hours} Horas ${minutes} Minutos ${seconds} Segundos`;
 }
