@@ -60,6 +60,8 @@ const defaultMenu = {
   after: '🍓 𝙍𝙚𝙘𝙪𝙚𝙧𝙙𝙖: Usa los comandos con amor 💕'
 }
 
+const readMore = String.fromCharCode(8206).repeat(4001) // Mover esta declaración aquí arriba
+
 let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
   try {
     let _package = JSON.parse(await fs.readFile(join(__dirname, '../package.json')).catch(() => '{}')) || {}
@@ -146,7 +148,7 @@ let handler = async (m, { conn, usedPrefix: _p, __dirname }) => {
       totalreg,
       rtotalreg,
       role,
-      readmore
+      readmore: readMore
     }
 
     let text = _text.replace(new RegExp(`%(${Object.keys(replace).sort((a, b) => b.length - a.length).join('|')})`, 'g'), (_, name) => replace[name])
@@ -182,8 +184,6 @@ function clockString(ms) {
   let s = Math.floor(ms / 1000) % 60
   return [h, m, s].map(v => v.toString().padStart(2, 0)).join(':')
 }
-
-const readMore = String.fromCharCode(8206).repeat(4001)
 
 handler.command = ['menutest']
 export default handler
