@@ -30,7 +30,7 @@ ${(conn.user.jid == global.conn.user.jid ? '*͜͡☔ P͜͡r͜͡i͜͡n͜͡c͜͡i�
     await conn.sendFile(m.chat, video.thumbnail, 'thumbnail.jpg', caption, m);
 
     if (command === 'play') {
-      const api = await fetch(`https://api.vreden.my.id/api/ytmp3?url=${video.url}&quality=129`);
+      const api = await fetch(`https://ytdl.sylphy.xyz/dl/mp3?url=${video.url}&quality=128`);
       const json = await api.json();
 
       if (!json.data || !json.data.dl_url) throw '❌ Error al descargar el audio.';
