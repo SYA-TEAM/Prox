@@ -25,11 +25,11 @@ const handler = async (m, { conn, text, command }) => {
       contextInfo: {
         externalAdReply: {
           title: video.title,
-          body: "video.duration.timestamp",
-          thumbnailUrl: null,
+          body: "wm",
+          thumbnailUrl: video.thumbnail,
           sourceUrl: video.url,
           mediaType: 2,
-          renderLargerThumbnail: true,
+          renderLargerThumbnail: false,
           showAdAttribution: true
         }
       }
