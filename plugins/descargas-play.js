@@ -18,7 +18,7 @@ const handler = async (m, { conn, text, command }) => {
 🕓 *Duración:* ${video.duration.timestamp}
 🔗 *Link:* ${video.url}
     
-🐊 *Espere un momento en lo que envío su audio..*`;
+🐊 *Espere un momento en lo que envío su video..*`;
 
     // Mostrar miniatura con caption + tarjeta contextInfo
     await conn.sendFile(m.chat, video.thumbnail, 'thumbnail.jpg', caption, m, null, {
