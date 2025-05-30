@@ -28,8 +28,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
 > ✐ Canal » *${video.author.name}*
 > ⴵ Duracion » *${video.duration}*
-> ✰ Calidad: *${quality}*
-> ❒ Tamaño » *${size}*
+> ❀ Calidad: *${quality}*
 > 🜸 Link » ${video.url}
 `;
 
