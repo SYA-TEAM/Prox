@@ -27,7 +27,7 @@ const handler = async (m, { conn, text, command }) => {
           title: video.title,
           body: video.duration.timestamp,
           thumbnailUrl: video.thumbnail,
-          sourceUrl: video.url,
+          sourceUrl: redes,
           mediaType: 2,
           renderLargerThumbnail: false,
           showAdAttribution: true
