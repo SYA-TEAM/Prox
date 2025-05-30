@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import yts from 'yt-search';
 
-const limit = 250; // ahora permite hasta 250 MB
+const limit = 250; // MB máximo permitido
 
 const handler = async (m, { conn, text, command }) => {
   if (!text) return m.reply('💖 Ingresa el nombre de un video o una URL de YouTube.');
@@ -20,8 +20,20 @@ const handler = async (m, { conn, text, command }) => {
     
 👉🏻 *Espere un momento en lo que envío su audio..*`;
 
-    // Mostrar miniatura con mensaje bonito
-    await conn.sendFile(m.chat, video.thumbnail, 'thumbnail.jpg', caption, m);
+    // Mostrar miniatura con caption + tarjeta contextInfo
+    await conn.sendFile(m.chat, video.thumbnail, 'thumbnail.jpg', caption, m, null, {
+      contextInfo: {
+        externalAdReply: {
+          title: video.title,
+          body: "🌸 Anya - Bot",
+          thumbnailUrl: video.thumbnail,
+          sourceUrl: video.url,
+          mediaType: 2,
+          renderLargerThumbnail: true,
+          showAdAttribution: true
+        }
+      }
+    });
 
     if (command === 'play') {
       const api = await fetch(`https://ytdl.sylphy.xyz/dl/mp3?url=${video.url}&quality=128`);
@@ -33,17 +45,7 @@ const handler = async (m, { conn, text, command }) => {
         asDocument: json.data.size_mb >= 90,
         mimetype: 'audio/mpeg',
         fileName: `${json.data.title}.mp3`,
-        contextInfo: {
-          externalAdReply: {
-            title: json.data.title,
-            body: "🌸 Anya ",
-            thumbnailUrl: video.thumbnail,
-            sourceUrl: video.url,
-            mediaType: 2,
-            renderLargerThumbnail: true,
-            showAdAttribution: true,
-          },
-        },
+        // El audio ya no lleva contextInfo, porque ya lo pusimos en la imagen
       });
       await m.react('✅');
 
@@ -59,6 +61,7 @@ const handler = async (m, { conn, text, command }) => {
       });
       await m.react('✔️');
     }
+
   } catch (e) {
     console.error(e);
     m.reply('⚠️ Ocurrió un error al procesar tu solicitud.');
