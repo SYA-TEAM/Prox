@@ -13,20 +13,14 @@ const handler = async (m, { conn, text, command }) => {
 
     if (!video) return m.reply('❌ No se encontró ningún resultado.');
 
-    const caption = `｡･:*:･ﾟ★,｡･:*:･ﾟ☆
-  ✿ YouTube Play ✿
-｡･:*:･ﾟ★,｡･:*:･ﾟ☆
+    const caption = `🎧 *${video.title}*
+👤 *Autor:* ${video.author.name}
+🕓 *Duración:* ${video.duration.timestamp}
+🔗 *Link:* ${video.url}
+    
+👉🏻 *Espere un momento en lo que envío su audio..*`;
 
-💜 *Título:* ${video.title}
-👻 *Autor:* ${video.author.name}
-⏳ *Duración:* ${video.duration.timestamp}
-👤 *Vistas:* ${video.views.toLocaleString()}
-🔗 *URL:* ${video.url}
-
-> ${botname} 
-${(conn.user.jid == global.conn.user.jid ? '*͜͡☔ P͜͡r͜͡i͜͡n͜͡c͜͡i͜͡p͜͡a͡l 🅞🅕🅒 🐊*͜͡' : '*͜͡🍫 S͜͡u͜͡b͜͡ B͜͡o͜͡t͜͡ 🅢 💜*͜͡')}`;
-
-    // Enviar miniatura del video como presentación
+    // Mostrar miniatura con mensaje bonito
     await conn.sendFile(m.chat, video.thumbnail, 'thumbnail.jpg', caption, m);
 
     if (command === 'play') {
@@ -36,7 +30,20 @@ ${(conn.user.jid == global.conn.user.jid ? '*͜͡☔ P͜͡r͜͡i͜͡n͜͡c͜͡i�
       if (!json.data || !json.data.dl_url) throw '❌ Error al descargar el audio.';
 
       await conn.sendFile(m.chat, json.data.dl_url, `${json.data.title}.mp3`, '', m, null, {
-        asDocument: json.data.size_mb >= 90, // audio grande se manda como documento
+        asDocument: json.data.size_mb >= 90,
+        mimetype: 'audio/mpeg',
+        fileName: `${json.data.title}.mp3`,
+        contextInfo: {
+          externalAdReply: {
+            title: json.data.title,
+            body: "🌸 Anya ",
+            thumbnailUrl: video.thumbnail,
+            sourceUrl: video.url,
+            mediaType: 2,
+            renderLargerThumbnail: true,
+            showAdAttribution: true,
+          },
+        },
       });
       await m.react('✅');
 
@@ -48,7 +55,7 @@ ${(conn.user.jid == global.conn.user.jid ? '*͜͡☔ P͜͡r͜͡i͜͡n͜͡c͜͡i�
 
       const doc = json.data.size_mb >= limit;
       await conn.sendFile(m.chat, json.data.dl_url, `${json.data.title}.mp4`, '', m, null, {
-        asDocument: doc, // si pasa del límite, se manda como documento
+        asDocument: doc,
       });
       await m.react('✔️');
     }
