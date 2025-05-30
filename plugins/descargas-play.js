@@ -4,7 +4,7 @@ import yts from 'yt-search';
 const limit = 250; // MB máximo permitido
 
 const handler = async (m, { conn, text, command }) => {
-  if (!text) return m.reply('💖 Ingresa el nombre de un video o una URL de YouTube.');
+  if (!text) return m.reply('💖 Ingresa el nombre de un video de YouTube.');
 
   try {
     await m.react('🕒');
@@ -18,15 +18,15 @@ const handler = async (m, { conn, text, command }) => {
 🕓 *Duración:* ${video.duration.timestamp}
 🔗 *Link:* ${video.url}
     
-👉🏻 *Espere un momento en lo que envío su audio..*`;
+🐊 *Espere un momento en lo que envío su audio..*`;
 
     // Mostrar miniatura con caption + tarjeta contextInfo
     await conn.sendFile(m.chat, video.thumbnail, 'thumbnail.jpg', caption, m, null, {
       contextInfo: {
         externalAdReply: {
           title: video.title,
-          body: "🌸 Anya - Bot",
-          thumbnailUrl: video.thumbnail,
+          body: "video.duration.timestamp",
+          thumbnailUrl: null,
           sourceUrl: video.url,
           mediaType: 2,
           renderLargerThumbnail: true,
@@ -59,7 +59,7 @@ const handler = async (m, { conn, text, command }) => {
       await conn.sendFile(m.chat, json.data.dl_url, `${json.data.title}.mp4`, '', m, null, {
         asDocument: doc,
       });
-      await m.react('✔️');
+      await m.react('✅');
     }
 
   } catch (e) {
