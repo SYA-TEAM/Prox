@@ -13,9 +13,11 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
     const video = searchData.data[0];
 
+   const xd = `> ✦ 𝖠𝗇𝗒𝖺 𝖥𝗈𝗋𝗀𝖾𝗋 𝖯𝗅𝖺𝗒 ✦`;
+
     // Enviar solo contextInfo con miniatura y enlace al grupo
     await conn.sendMessage(m.chat, {
-      text: '', // SIN TEXTO
+      text: 𝗑𝖽, // SIN TEXTO
       contextInfo: {
         externalAdReply: {
           title: video.title,
