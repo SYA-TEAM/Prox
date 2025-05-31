@@ -2,7 +2,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
   if (!text) return m.reply(`🌐 Ingresa un texto para buscar en YouTube.\n> *Ejemplo:* ${usedPrefix + command} Space Off You`);
 
   try {
-    // Primero hacemos la búsqueda para obtener datos del video antes del mensaje de espera
     const searchApi = `https://delirius-apiofc.vercel.app/search/ytsearch?q=${encodeURIComponent(text)}`;
     const searchResponse = await fetch(searchApi);
     const searchData = await searchResponse.json();
@@ -11,9 +10,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       return m.reply(`⚠️ No se encontraron resultados para "${text}".`);
     }
 
-    const video = searchData.data[0]; // Primer resultado
+    const video = searchData.data[0];
 
-    // Mensaje de espera con contextInfo y miniatura
     const waitMessage = `*⏤͟͟͞͞✰ 𝘠𝘛 𝘗𝘓𝘈𝘠 ✰⏤͟͟͞͞*
 ❀ *Título:* ${video.title}
 ❀ *Duración:* ${video.duration}
@@ -27,12 +25,12 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
           title: video.title,
           body: `☛ 𝗗𝘂𝗿𝗮𝗰𝗶𝗼́𝗻: ${video.duration} | ➡︎ 𝗖𝗮𝗻𝗮𝗹: ${video.author.name}`,
           thumbnailUrl: video.image,
-          sourceUrl: video.url
+          mediaUrl: "https://chat.whatsapp.com/DzoM73E8Fb7BvnUwquQuGr",
+          sourceUrl: "https://chat.whatsapp.com/DzoM73E8Fb7BvnUwquQuGr"
         }
       }
     }, { quoted: m });
 
-    // Ahora sí descarga el audio
     const downloadApi = `https://api.vreden.my.id/api/ytmp3?url=${video.url}`;
     const downloadResponse = await fetch(downloadApi);
     const downloadData = await downloadResponse.json();
