@@ -14,7 +14,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     const video = searchData.data[0]; // Primer resultado
     const textoBonito = `> ✦ 𝖠𝗇𝗒𝖺 𝖥𝗈𝗋𝗀𝖾𝗋 𝖯𝗅𝖺𝗒 ✦`;
 
-    // Enviar mensaje con miniatura, sin texto visible
+    // Enviar texto decorado y reaccionar de inmediato
     await conn.sendMessage(m.chat, {
       text: textoBonito,
       contextInfo: {
@@ -22,7 +22,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
           title: video.title,
           body: `☛ 𝗗𝘂𝗿𝗮𝗰𝗶𝗼́𝗻: ${video.duration} | ➡︎ 𝗖𝗮𝗻𝗮𝗹: ${video.author.name}`,
           thumbnailUrl: video.image,
-          sourceUrl: 'https://chat.whatsapp.com/DzoM73E8Fb7BvnUwquQuGr', // Enlace al grupo
+          sourceUrl: 'https://chat.whatsapp.com/DzoM73E8Fb7BvnUwquQuGr',
           mediaType: 1,
           renderLargerThumbnail: true,
           showAdAttribution: false
@@ -30,7 +30,9 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       }
     }, { quoted: m });
 
-    // Descargar y enviar el audio del video
+    await m.react("⏱️"); // Reacciona rápido mientras descarga
+
+    // Descargar el audio del video
     const downloadApi = `https://api.vreden.my.id/api/ytmp3?url=${video.url}`;
     const downloadResponse = await fetch(downloadApi);
     const downloadData = await downloadResponse.json();
@@ -41,14 +43,26 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
     const audioUrl = downloadData.result.download.url;
 
+    // Enviar el audio como nota de voz
     await conn.sendMessage(m.chat, {
       audio: { url: audioUrl },
       mimetype: 'audio/mpeg',
-      ptt: false,
-      fileName: `${video.title}.mp3`
+      ptt: true,
+      fileName: `${video.title}.mp3`,
+      contextInfo: {
+        externalAdReply: {
+          title: video.title,
+          body: '🎧 MP3 ❤️‍🔥',
+          thumbnailUrl: video.image,
+          mediaType: 1,
+          renderLargerThumbnail: false,
+          showAdAttribution: false,
+          sourceUrl: video.url
+        }
+      }
     }, { quoted: m });
 
-    await m.react("✅");
+    await m.react("✅"); // Reacciona al terminar
 
   } catch (error) {
     console.error(error);
