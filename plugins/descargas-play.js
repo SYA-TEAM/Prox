@@ -15,14 +15,7 @@ const handler = async (m, { conn, text, command }) => {
 
     const encabezado = `> ✦ 𝖠𝗇𝗒𝖺 𝖥𝗈𝗋𝗀𝖾𝗋 𝖯𝗅𝖺𝗒𝟤 ✦`;
 
-    const textoBonito = `${encabezado}
-
-🔎 *Título:* ${video.title}
-📽️ *Canal:* ${video.author.name}
-⏰ *Duración:* ${video.timestamp}
-🌐 *URL:* ${video.url}
-
-✨ *Espera mientras preparo tu archivo*`;
+    const textoBonito = `${encabezado}`;
 
     // Enviar miniatura decorada
     await conn.sendFile(m.chat, video.thumbnail, 'thumb.jpg', textoBonito, m, null, {
@@ -41,7 +34,7 @@ const handler = async (m, { conn, text, command }) => {
 
     // Enviar audio o video SIN caption
     if (command === 'play2' || command === 'playvid') {
-      const api = await fetch(`https://ytdl.sylphy.xyz/dl/mp4?url=${video.url}&quality=380`);
+      const api = await fetch(`https://ytdl.sylphy.xyz/dl/mp4?url=${video.url}&quality=480`);
       const json = await api.json();
 
       if (!json.data || !json.data.dl_url) throw '❌ Error al descargar el video.';
