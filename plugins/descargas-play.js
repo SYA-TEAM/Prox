@@ -22,7 +22,7 @@ const handler = async (m, { conn, text, command }) => {
 ⏰ *Duración:* ${video.timestamp}
 🌐 *URL:* ${video.url}
 
-✨ *Espera mientras preparo tu archivo mágico...*`;
+✨ *Espera mientras preparo tu archivo*`;
 
     // Enviar miniatura decorada
     await conn.sendFile(m.chat, video.thumbnail, 'thumb.jpg', textoBonito, m, null, {
@@ -33,7 +33,7 @@ const handler = async (m, { conn, text, command }) => {
           thumbnailUrl: video.thumbnail,
           sourceUrl: video.url,
           mediaType: 2,
-          renderLargerThumbnail: true,
+          renderLargerThumbnail: false,
           showAdAttribution: false
         }
       }
@@ -41,7 +41,7 @@ const handler = async (m, { conn, text, command }) => {
 
     // Enviar audio o video SIN caption
     if (command === 'play2' || command === 'playvid') {
-      const api = await fetch(`https://ytdl.sylphy.xyz/dl/mp4?url=${video.url}&quality=480`);
+      const api = await fetch(`https://ytdl.sylphy.xyz/dl/mp4?url=${video.url}&quality=380`);
       const json = await api.json();
 
       if (!json.data || !json.data.dl_url) throw '❌ Error al descargar el video.';
