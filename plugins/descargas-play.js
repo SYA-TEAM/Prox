@@ -2,54 +2,39 @@ import fetch from 'node-fetch';
 import yts from 'yt-search';
 
 const limit = 250; // MB máximo permitido
+const redes = 'https://youtube.com'; // Puedes cambiarlo por tu link personal
 
 const handler = async (m, { conn, text, command }) => {
-  if (!text) return m.reply('💖 Ingresa el nombre de un video de YouTube.');
+  if (!text) return m.reply('🌸 Ingresa el nombre de un video de YouTube para buscar.');
 
   try {
-    await m.react('🕒');
+    await m.react('🔥');
     const res = await yts(text);
     const video = res.all[0];
 
     if (!video) return m.reply('❌ No se encontró ningún resultado.');
 
-    const caption = `🎧 *${video.title}*
-👤 *Autor:* ${video.author.name}
-🕓 *Duración:* ${video.duration.timestamp}
-🔗 *Link:* ${video.url}
-    
-🐊 *Espere un momento en lo que envío su video..*`;
+    const encabezado = `> ✦ 𝖠𝗇𝗒𝖺 𝖥𝗈𝗋𝗀𝖾𝗋 𝖯𝗅𝖺𝗒𝟤 ✦`;
 
-    // Mostrar miniatura con caption + tarjeta contextInfo
-    await conn.sendFile(m.chat, video.thumbnail, 'thumbnail.jpg', caption, m, null, {
+    const textoBonito = `${encabezado}`;
+
+    // Enviar miniatura decorada con contextInfo
+    await conn.sendFile(m.chat, video.thumbnail, 'thumb.jpg', textoBonito, m, null, {
       contextInfo: {
         externalAdReply: {
           title: video.title,
-          body: video.duration.timestamp,
+          body: `🎵 Duración: ${video.duration.timestamp} | Autor: ${video.author.name}`,
           thumbnailUrl: video.thumbnail,
-          sourceUrl: redes,
+          sourceUrl: video.url,
           mediaType: 2,
-          renderLargerThumbnail: false,
-          showAdAttribution: true
+          renderLargerThumbnail: true,
+          showAdAttribution: false
         }
       }
     });
 
-    if (command === 'play') {
-      const api = await fetch(`https://ytdl.sylphy.xyz/dl/mp3?url=${video.url}&quality=128`);
-      const json = await api.json();
-
-      if (!json.data || !json.data.dl_url) throw '❌ Error al descargar el audio.';
-
-      await conn.sendFile(m.chat, json.data.dl_url, `${json.data.title}.mp3`, '', m, null, {
-        asDocument: json.data.size_mb >= 90,
-        mimetype: 'audio/mpeg',
-        fileName: `${json.data.title}.mp3`,
-        // El audio ya no lleva contextInfo, porque ya lo pusimos en la imagen
-      });
-      await m.react('✅');
-
-    } else if (command === 'play2' || command === 'playvid') {
+    // Enviar audio o video SIN caption
+    if (command === 'play2' || command === 'playvid') {
       const api = await fetch(`https://ytdl.sylphy.xyz/dl/mp4?url=${video.url}&quality=480`);
       const json = await api.json();
 
@@ -58,8 +43,24 @@ const handler = async (m, { conn, text, command }) => {
       const doc = json.data.size_mb >= limit;
       await conn.sendFile(m.chat, json.data.dl_url, `${json.data.title}.mp4`, '', m, null, {
         asDocument: doc,
+        fileName: `${json.data.title}.mp4`,
+        mimetype: 'video/mp4'
       });
-      await m.react('✅');
+
+      await m.react('📽️');
+    } else if (command === 'play') {
+      const api = await fetch(`https://ytdl.sylphy.xyz/dl/mp3?url=${video.url}&quality=128`);
+      const json = await api.json();
+
+      if (!json.data || !json.data.dl_url) throw '❌ Error al descargar el audio.';
+
+      await conn.sendFile(m.chat, json.data.dl_url, `${json.data.title}.mp3`, '', m, null, {
+        asDocument: json.data.size_mb >= 90,
+        mimetype: 'audio/mpeg',
+        fileName: `${json.data.title}.mp3`
+      });
+
+      await m.react('🎧');
     }
 
   } catch (e) {
@@ -70,6 +71,6 @@ const handler = async (m, { conn, text, command }) => {
 
 handler.help = ['play', 'play2'];
 handler.tags = ['dl'];
-handler.command = ['play2', 'playvid'];
+handler.command = ['play2', 'playvid', 'play'];
 
 export default handler;
