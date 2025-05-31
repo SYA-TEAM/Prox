@@ -20,13 +20,13 @@ const handler = async (m, { conn, args, text }) => {
       caption: info
     }, { quoted: m })
 
-    // Descargar y enviar el video como documento
+    // Enviar video como archivo de video (no documento)
     const downloadUrl = `https://ytdl.sylphy.xyz/dl/mp4?url=${video.url}&quality=480`
 
     await conn.sendMessage(m.chat, {
-      document: { url: downloadUrl },
-      mimetype: 'video/mp4',
-      fileName: `${video.title}.mp4`
+      video: { url: downloadUrl },
+      caption: `🎬 ${video.title}`,
+      mimetype: 'video/mp4'
     }, { quoted: m })
 
   } catch (e) {
