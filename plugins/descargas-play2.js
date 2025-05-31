@@ -14,16 +14,17 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     const video = searchData.data[0]; // Primer resultado
 
     // Mensaje de espera con contextInfo y miniatura
-    const waitMessage = `✦ *Título:* ${video.title}
-✦ *Duración:* ${video.duration}
-✦ *Canal:* ${video.author.name}`;
+    const waitMessage = `❀ *Título:* ${video.title}
+❀ *Duración:* ${video.duration}
+❀ *Canal:* ${video.author.name}
+> ➮ 𝖯𝗋𝗈𝗏𝗂𝗏𝖾𝖽 𝖡𝗒 𝖠𝗇𝗒𝖺 𝖥𝗈𝗋𝗀𝖾𝗋 ✿`;
 
     await conn.sendMessage(m.chat, {
       text: waitMessage,
       contextInfo: {
         externalAdReply: {
           title: video.title,
-          body: `Duración: ${video.duration} | Canal: ${video.author.name}`,
+          body: `☛ 𝗗𝘂𝗿𝗮𝗰𝗶𝗼́𝗻: ${video.duration} | Canal: ${video.author.name}`,
           thumbnailUrl: video.image,
           sourceUrl: video.url
         }
