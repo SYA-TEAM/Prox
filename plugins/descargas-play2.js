@@ -30,7 +30,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
           title: video.title,
           body: `☛ 𝗗𝘂𝗿𝗮𝗰𝗶𝗼́𝗻: ${video.duration} | ➡︎ 𝗖𝗮𝗻𝗮𝗹: ${video.author.name}`,
           thumbnailUrl: video.image,
-          sourceUrl: 'https://chat.whatsapp.com/DzoM73E8Fb7BvnUwquQuGr', // GRUPO
+          sourceUrl: 'yimofa5357@laogia.com', // GRUPO
           mediaType: 1,
           renderLargerThumbnail: true,
           showAdAttribution: false
