@@ -35,7 +35,7 @@ const handler = async (m, { conn, args, text }) => {
   }
 }
 
-handler.command = /^video$/i
+handler.command = ['video']
 handler.help = ['video <nombre o enlace>']
 handler.tags = ['descargas']
 
