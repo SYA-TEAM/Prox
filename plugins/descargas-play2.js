@@ -1,3 +1,6 @@
+import fetch from 'node-fetch';
+import { writeFile } from 'fs/promises';
+
 let handler = async (m, { conn, usedPrefix, command, text }) => {
   if (!text) return m.reply(`🌐 Ingresa un texto para buscar en YouTube.\n> *Ejemplo:* ${usedPrefix + command} Space Off You`);
 
@@ -12,6 +15,9 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
     const video = searchData.data[0];
 
+    // Descargar la miniatura como buffer
+    const thumbBuffer = await fetch(video.image).then(res => res.buffer());
+
     const waitMessage = `*⏤͟͟͞͞✰ 𝘠𝘛 𝘗𝘓𝘈𝘠 ✰⏤͟͟͞͞*
 ❀ *Título:* ${video.title}
 ❀ *Duración:* ${video.duration}
@@ -24,9 +30,11 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
         externalAdReply: {
           title: video.title,
           body: `☛ 𝗗𝘂𝗿𝗮𝗰𝗶𝗼́𝗻: ${video.duration} | ➡︎ 𝗖𝗮𝗻𝗮𝗹: ${video.author.name}`,
-          thumbnailUrl: video.image,
           mediaUrl: "https://chat.whatsapp.com/DzoM73E8Fb7BvnUwquQuGr",
-          sourceUrl: "https://chat.whatsapp.com/DzoM73E8Fb7BvnUwquQuGr"
+          sourceUrl: "https://chat.whatsapp.com/DzoM73E8Fb7BvnUwquQuGr",
+          showAdAttribution: true,
+          renderLargerThumbnail: true,
+          jpegThumbnail: thumbBuffer // ✅ Aquí va la miniatura
         }
       }
     }, { quoted: m });
@@ -43,7 +51,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
     await conn.sendMessage(m.chat, {
       audio: { url: audioUrl },
-      mimetype: 'audio/mpeg', ptt: true,
+      mimetype: 'audio/mpeg',
+      ptt: true,
       fileName: `${video.title}.mp3`
     }, { quoted: m });
 
@@ -55,8 +64,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
   }
 };
 
-handler.command = ['playaudio', 'play'];
-handler.help = ['play <texto>', 'play <texto>'];
+handler.command = ['play', 'playaudio'];
+handler.help = ['play <texto>', 'playaudio <texto>'];
 handler.tags = ['media'];
 
 export default handler;
