@@ -15,7 +15,8 @@ let handler = async (m, { conn, args }) => {
   const moneda = global.moneda || 'monedas';
 
   let txt = `
-> Holis, soy ${botname}\n ${(conn.user.jid == global.conn.user.jid ? '*͜͡☔ P͜͡r͜͡i͜͡n͜͡c͜͡i͜͡p͜͡a͡l 🅞🅕🅒 🐊*͜͡' : '*͜͡🍫 S͜͡u͜͡b͜͡ B͜͡o͜͡t͜͡ 🅢 💜*͜͡')}
+> Holis, Soy ${botname}\n   ${(conn.user.jid == global.conn.user.jid ? '*͜͡☔ P͜͡r͜͡i͜͡n͜͡c͜͡i͜͡p͜͡a͡l 🅞🅕🅒 🐊*͜͡' : '*͜͡🍫 S͜͡u͜͡b͜͡ B͜͡o͜͡t͜͡ 🅢 💜*͜͡')}
+*❤️‍🔥 Subidor De Archivos:*https://wirksi-box.vercel.app/
 
 Aquí tienes la lista de comandos:
 
