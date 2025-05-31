@@ -2,7 +2,6 @@ import fetch from 'node-fetch';
 import yts from 'yt-search';
 
 const limit = 250; // MB máximo permitido
-const redes = 'https://youtube.com'; // Puedes cambiarlo por tu link personal
 
 const handler = async (m, { conn, text, command }) => {
   if (!text) return m.reply('🌸 Ingresa el nombre de un video de YouTube para buscar.');
@@ -16,14 +15,21 @@ const handler = async (m, { conn, text, command }) => {
 
     const encabezado = `> ✦ 𝖠𝗇𝗒𝖺 𝖥𝗈𝗋𝗀𝖾𝗋 𝖯𝗅𝖺𝗒𝟤 ✦`;
 
-    const textoBonito = `${encabezado}`;
+    const textoBonito = `${encabezado}
 
-    // Enviar miniatura decorada con contextInfo
+🔎 *Título:* ${video.title}
+📽️ *Canal:* ${video.author.name}
+⏰ *Duración:* ${video.timestamp}
+🌐 *URL:* ${video.url}
+
+✨ *Espera mientras preparo tu archivo mágico...*`;
+
+    // Enviar miniatura decorada
     await conn.sendFile(m.chat, video.thumbnail, 'thumb.jpg', textoBonito, m, null, {
       contextInfo: {
         externalAdReply: {
-          title: video.title,
-          body: `🎵 Duración: ${video.duration.timestamp} | Autor: ${video.author.name}`,
+          title: `♪ ${video.title}`,
+          body: `🌸 Anya Forger Play2`,
           thumbnailUrl: video.thumbnail,
           sourceUrl: video.url,
           mediaType: 2,
@@ -71,6 +77,6 @@ const handler = async (m, { conn, text, command }) => {
 
 handler.help = ['play', 'play2'];
 handler.tags = ['dl'];
-handler.command = ['play2', 'playvid', 'play'];
+handler.command = ['play2', 'playvid'];
 
 export default handler;
