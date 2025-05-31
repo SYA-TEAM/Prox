@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 import yts from 'yt-search'
 
-const handler = async (m, { conn, args, text }) => {
+const handler = async (m, { conn, text }) => {
   if (!text) return m.reply('🌸 Ingresa el nombre o enlace del video\n\nEjemplo: *.video Shakira Acróstico*')
 
   try {
@@ -14,24 +14,29 @@ const handler = async (m, { conn, args, text }) => {
 📺 *Canal:* ${video.author.name}
 🔗 *Enlace:* ${video.url}`
 
-    // Enviar imagen con descripción
     await conn.sendMessage(m.chat, {
       image: { url: video.thumbnail },
       caption: info
     }, { quoted: m })
 
-    // Enviar video como archivo de video (no documento)
     const downloadUrl = `https://ytdl.sylphy.xyz/dl/mp4?url=${video.url}&quality=480`
 
+    m.reply('⏳ Descargando el video, espera un momento...')
+
+    const res = await fetch(downloadUrl)
+    if (!res.ok) throw '❌ Error al descargar el video.'
+    const buffer = await res.buffer()
+
     await conn.sendMessage(m.chat, {
-      video: { url: downloadUrl },
-      caption: `🎬 ${video.title}`,
-      mimetype: 'video/mp4'
+      video: buffer,
+      mimetype: 'video/mp4',
+      fileName: `${video.title}.mp4`,
+      caption: `🎬 ${video.title}`
     }, { quoted: m })
 
   } catch (e) {
     console.error(e)
-    m.reply('❌ Ocurrió un error al procesar el comando.')
+    m.reply('❌ Ocurrió un error al enviar el video.')
   }
 }
 
