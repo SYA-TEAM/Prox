@@ -1,47 +1,74 @@
-import fetch from 'node-fetch'
-import yts from 'yt-search'
+import WebTorrent from 'webtorrent';
+import axios from 'axios';
+import fs from 'fs-extra';
+import path from 'path';
 
 const handler = async (m, { conn, text }) => {
-  if (!text) return m.reply('🌸 Ingresa el nombre o enlace del video\n\nEjemplo: *.video Shakira Acróstico*')
+  if (!text) return m.reply('🎬 Escribe el nombre de la película. Ejemplo: `.pelicula john wick`');
+
+  const query = encodeURIComponent(text.trim());
+  const apiUrl = `https://yts.mx/api/v2/list_movies.json?query_term=${query}`;
 
   try {
-    const search = await yts(text)
-    const video = search.videos[0]
-    if (!video) return m.reply('❌ No se encontró ningún video.')
+    m.reply(`🔍 Buscando la película *${text}*...`);
 
-    const info = `🎬 *Título:* ${video.title}
-🕒 *Duración:* ${video.timestamp}
-📺 *Canal:* ${video.author.name}
-🔗 *Enlace:* ${video.url}`
+    const res = await axios.get(apiUrl);
+    const movies = res.data?.data?.movies;
 
-    await conn.sendMessage(m.chat, {
-      image: { url: video.thumbnail },
-      caption: info
-    }, { quoted: m })
+    if (!movies || movies.length === 0) {
+      return m.reply('❌ No se encontró ninguna película con ese nombre.');
+    }
 
-    const downloadUrl = `https://ytdl.sylphy.xyz/dl/mp4?url=${video.url}&quality=480`
+    const movie = movies[0];
+    const title = movie.title_long;
+    const torrent = movie.torrents.find(t => t.quality === '720p') || movie.torrents[0];
+    const magnet = `magnet:?xt=urn:btih:${torrent.hash}&dn=${encodeURIComponent(title)}&tr=udp://tracker.openbittorrent.com:80`;
 
-    m.reply('⏳ Descargando el video, espera un momento...')
+    m.reply(`⬇️ Descargando: *${title}* (${torrent.quality})... por favor espera, esto puede tardar varios minutos.`);
 
-    const res = await fetch(downloadUrl)
-    if (!res.ok) throw '❌ Error al descargar el video.'
-    const buffer = await res.buffer()
+    const client = new WebTorrent();
+    client.add(magnet, { path: '/tmp' }, async torrent => {
+      const file = torrent.files.find(file => file.name.endsWith('.mp4') || file.name.endsWith('.mkv'));
 
-    await conn.sendMessage(m.chat, {
-      video: buffer,
-      mimetype: 'video/mp4',
-      fileName: `${video.title}.mp4`,
-      caption: `🎬 ${video.title}`
-    }, { quoted: m })
+      if (!file) {
+        client.destroy();
+        return m.reply('❌ No se encontró un archivo de video válido en el torrent.');
+      }
 
-  } catch (e) {
-    console.error(e)
-    m.reply('❌ Ocurrió un error al enviar el video.')
+      const filePath = path.join('./tmp', file.path);
+      const stream = file.createReadStream();
+      const writeStream = fs.createWriteStream(filePath);
+
+      await new Promise((resolve, reject) => {
+        stream.pipe(writeStream);
+        writeStream.on('finish', resolve);
+        writeStream.on('error', reject);
+      });
+
+      const stats = fs.statSync(filePath);
+      if (stats.size > 2 * 1024 * 1024 * 1024) {
+        fs.unlinkSync(filePath);
+        return m.reply('❌ El archivo supera los 2 GB permitidos por WhatsApp.');
+      }
+
+      await conn.sendMessage(m.chat, {
+        document: fs.readFileSync(filePath),
+        fileName: file.name,
+        mimetype: 'video/mp4'
+      }, { quoted: m });
+
+      fs.unlinkSync(filePath);
+      torrent.destroy();
+    });
+
+  } catch (err) {
+    console.error(err);
+    m.reply('❌ Error al buscar o descargar la película.');
   }
-}
+};
 
-handler.command = ['video']
-handler.help = ['video <nombre o enlace>']
-handler.tags = ['descargas']
+handler.command = ['pelicula', 'movie'];
+handler.help = ['pelicula <nombre>'];
+handler.tags = ['descargas'];
 
-export default handler
+export default handler;
