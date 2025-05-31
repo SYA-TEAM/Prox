@@ -1,6 +1,3 @@
-import fetch from 'node-fetch';
-import { writeFile } from 'fs/promises';
-
 let handler = async (m, { conn, usedPrefix, command, text }) => {
   if (!text) return m.reply(`🌐 Ingresa un texto para buscar en YouTube.\n> *Ejemplo:* ${usedPrefix + command} Space Off You`);
 
@@ -13,32 +10,36 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       return m.reply(`⚠️ No se encontraron resultados para "${text}".`);
     }
 
-    const video = searchData.data[0];
-
-    // Descargar la miniatura como buffer
-    const thumbBuffer = await fetch(video.image).then(res => res.buffer());
+    const video = searchData.data[0]; // Primer resultado
 
     const waitMessage = `*⏤͟͟͞͞✰ 𝘠𝘛 𝘗𝘓𝘈𝘠 ✰⏤͟͟͞͞*
 ❀ *Título:* ${video.title}
 ❀ *Duración:* ${video.duration}
 ❀ *Canal:* ${video.author.name}
-> ➮ 𝖯𝗋𝗈𝗏𝗂𝗏𝖾𝖽 𝖡𝗒 𝖠𝗇𝗒𝖺 𝖥𝗈𝗋𝗀𝖾𝗋 ✿`;
+🎀 Únete a nuestro grupo tocando el botón de abajo ✨`;
+
+    const groupLink = 'https://chat.whatsapp.com/DzoM73E8Fb7BvnUwquQuGr';
 
     await conn.sendMessage(m.chat, {
       text: waitMessage,
-      contextInfo: {
-        externalAdReply: {
-          title: video.title,
-          body: `☛ 𝗗𝘂𝗿𝗮𝗰𝗶𝗼́𝗻: ${video.duration} | ➡︎ 𝗖𝗮𝗻𝗮𝗹: ${video.author.name}`,
-          mediaUrl: "https://chat.whatsapp.com/DzoM73E8Fb7BvnUwquQuGr",
-          sourceUrl: "https://chat.whatsapp.com/DzoM73E8Fb7BvnUwquQuGr",
-          showAdAttribution: true,
-          renderLargerThumbnail: true,
-          jpegThumbnail: thumbBuffer // ✅ Aquí va la miniatura
+      footer: 'By Anya Forger ✿',
+      buttons: [
+        {
+          buttonId: `.menu`,
+          buttonText: { displayText: '📂 Menú' },
+          type: 1
+        },
+        {
+          buttonId: groupLink,
+          buttonText: { displayText: '📥 Unirse al grupo' },
+          type: 1
         }
-      }
+      ],
+      headerType: 4,
+      image: { url: video.image }
     }, { quoted: m });
 
+    // Descarga de audio
     const downloadApi = `https://api.vreden.my.id/api/ytmp3?url=${video.url}`;
     const downloadResponse = await fetch(downloadApi);
     const downloadData = await downloadResponse.json();
@@ -64,8 +65,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
   }
 };
 
-handler.command = ['play', 'playaudio'];
-handler.help = ['play <texto>', 'playaudio <texto>'];
+handler.command = ['playaudio', 'play'];
+handler.help = ['play <texto>', 'play <texto>'];
 handler.tags = ['media'];
 
 export default handler;
