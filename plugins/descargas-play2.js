@@ -43,23 +43,12 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
     const audioUrl = downloadData.result.download.url;
 
-    // Enviar el audio como nota de voz
+    // Enviar el audio como nota de voz (sin contextInfo)
     await conn.sendMessage(m.chat, {
       audio: { url: audioUrl },
       mimetype: 'audio/mpeg',
       ptt: true,
-      fileName: `${video.title}.mp3`,
-      contextInfo: {
-        externalAdReply: {
-          title: video.title,
-          body: '🎧 MP3 ❤️‍🔥',
-          thumbnailUrl: video.image,
-          mediaType: 1,
-          renderLargerThumbnail: false,
-          showAdAttribution: false,
-          sourceUrl: video.url
-        }
-      }
+      fileName: `${video.title}.mp3`
     }, { quoted: m });
 
     await m.react("✅"); // Reacciona al terminar
