@@ -2,6 +2,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
   if (!text) return m.reply(`🌐 Ingresa un texto para buscar en YouTube.\n> *Ejemplo:* ${usedPrefix + command} Space Off You`);
 
   try {
+    // Primero hacemos la búsqueda para obtener datos del video antes del mensaje de espera
     const searchApi = `https://delirius-apiofc.vercel.app/search/ytsearch?q=${encodeURIComponent(text)}`;
     const searchResponse = await fetch(searchApi);
     const searchData = await searchResponse.json();
@@ -12,6 +13,24 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 
     const video = searchData.data[0]; // Primer resultado
 
+    // Mensaje de espera con contextInfo y miniatura
+    const waitMessage = `✦ *Título:* ${video.title}
+✦ *Duración:* ${video.duration}
+✦ *Canal:* ${video.author.name}`;
+
+    await conn.sendMessage(m.chat, {
+      text: waitMessage,
+      contextInfo: {
+        externalAdReply: {
+          title: video.title,
+          body: `Duración: ${video.duration} | Canal: ${video.author.name}`,
+          thumbnailUrl: video.image,
+          sourceUrl: video.url
+        }
+      }
+    }, { quoted: m });
+
+    // Ahora sí descarga el audio
     const downloadApi = `https://api.vreden.my.id/api/ytmp3?url=${video.url}`;
     const downloadResponse = await fetch(downloadApi);
     const downloadData = await downloadResponse.json();
@@ -21,21 +40,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     }
 
     const audioUrl = downloadData.result.download.url;
-    const size = downloadData.result.size;
-    const quality = downloadData.result.quality || '128k'; // fallback si no trae calidad
-
-    const videoDetails = `「✦」Descargando *<${video.title}>*
-
-> ✐ Canal » *${video.author.name}*
-> ⴵ Duracion » *${video.duration}*
-> ❀ Calidad: *${quality}*
-> 🜸 Link » ${video.url}
-`;
-
-    await conn.sendMessage(m.chat, {
-      image: { url: video.image },
-      caption: videoDetails.trim()
-    }, { quoted: m });
 
     await conn.sendMessage(m.chat, {
       audio: { url: audioUrl },
