@@ -115,48 +115,70 @@ const triviaHandler = async (m, { conn, command, args, usedPrefix }) => {
             startTime: Date.now()
         });
 
-        const caption = `🎓 *TRIVIA DE CULTURA GENERAL*\n\n📝 ${questionData.question}`;
+        const caption = `🎓 *TRIVIA DE CULTURA GENERAL*
 
-        // Crear botones usando el formato moderno de WhatsApp
-        const buttons = [
-            {
-                "name": "quick_reply",
-                "buttonParamsJson": `{"display_text":"🅰️ ${questionData.options[0]}","id":"${usedPrefix}trivia A"}`
-            },
-            {
-                "name": "quick_reply", 
-                "buttonParamsJson": `{"display_text":"🅱️ ${questionData.options[1]}","id":"${usedPrefix}trivia B"}`
-            },
-            {
-                "name": "quick_reply",
-                "buttonParamsJson": `{"display_text":"🅲 ${questionData.options[2]}","id":"${usedPrefix}trivia C"}`
-            }
-        ];
+📝 ${questionData.question}
 
-        // Generar mensaje interactivo
-        let msg = generateWAMessageFromContent(m.chat, {
-            interactiveMessage: proto.Message.InteractiveMessage.create({
-                body: {
-                    text: caption
-                },
-                footer: {
-                    text: "⏰ Tienes tiempo ilimitado para responder"
-                },
-                header: {
-                    title: "🧠 TRIVIA CHALLENGE",
-                    hasMediaAttachment: false
-                },
-                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+🅰️ ${questionData.options[0]}
+🅱️ ${questionData.options[1]}
+🅲 ${questionData.options[2]}
+
+⏰ Responde con: *${usedPrefix}trivia A*, *${usedPrefix}trivia B* o *${usedPrefix}trivia C*`;
+
+        // Intentar enviar botones interactivos modernos
+        try {
+            const interactiveMessage = {
+                body: { text: caption },
+                footer: { text: "🧠 Desafía tu conocimiento" },
+                header: { title: "TRIVIA CHALLENGE", hasSubtitle: false },
+                nativeFlowMessage: {
+                    buttons: [
+                        {
+                            name: "quick_reply",
+                            buttonParamsJson: JSON.stringify({
+                                display_text: `🅰️ ${questionData.options[0]}`,
+                                id: `${usedPrefix}trivia A`
+                            })
+                        },
+                        {
+                            name: "quick_reply",
+                            buttonParamsJson: JSON.stringify({
+                                display_text: `🅱️ ${questionData.options[1]}`,
+                                id: `${usedPrefix}trivia B`
+                            })
+                        },
+                        {
+                            name: "quick_reply",
+                            buttonParamsJson: JSON.stringify({
+                                display_text: `🅲 ${questionData.options[2]}`,
+                                id: `${usedPrefix}trivia C`
+                            })
+                        }
+                    ]
+                }
+            };
+
+            await conn.sendMessage(m.chat, { interactiveMessage }, { quoted: m });
+        } catch (error) {
+            // Fallback: usar botones tradicionales
+            const buttons = [
+                { buttonId: `${usedPrefix}trivia A`, buttonText: { displayText: `🅰️ ${questionData.options[0]}` }, type: 1 },
+                { buttonId: `${usedPrefix}trivia B`, buttonText: { displayText: `🅱️ ${questionData.options[1]}` }, type: 1 },
+                { buttonId: `${usedPrefix}trivia C`, buttonText: { displayText: `🅲 ${questionData.options[2]}` }, type: 1 }
+            ];
+
+            try {
+                await conn.sendMessage(m.chat, {
+                    text: caption,
+                    footer: "🧠 Desafía tu conocimiento",
                     buttons: buttons,
-                })
-            })
-        }, {
-            quoted: m
-        });
-
-        await conn.relayMessage(msg.key.remoteJid, msg.message, {
-            messageId: msg.key.id
-        });
+                    headerType: 1
+                }, { quoted: m });
+            } catch (error2) {
+                // Fallback final: mensaje de texto simple
+                await conn.reply(m.chat, caption, m);
+            }
+        }
 
     } else {
         // Evaluar respuesta
@@ -175,43 +197,54 @@ const triviaHandler = async (m, { conn, command, args, usedPrefix }) => {
         let resultEmoji = isCorrect ? "🎉" : "❌";
         let resultText = isCorrect ? "¡RESPUESTA CORRECTA!" : "RESPUESTA INCORRECTA";
         
-        const responseCaption = `${resultEmoji} *${resultText}*\n\n` +
-                              `📌 Tu respuesta: *${userAnswer}*\n` +
-                              `✅ Respuesta correcta: *${correctAnswer}*\n` +
-                              `⏱️ Tiempo: ${timeElapsed} segundos\n\n` +
-                              `${isCorrect ? "🌟 ¡Excelente conocimiento!" : "📚 ¡Sigue aprendiendo!"}`;
+        const responseCaption = `${resultEmoji} *${resultText}*
 
-        // Botón para nueva pregunta
-        const newQuestionButton = [
-            {
-                "name": "quick_reply",
-                "buttonParamsJson": `{"display_text":"🔄 Nueva Pregunta","id":"${usedPrefix}trivia"}`
-            }
-        ];
+📌 Tu respuesta: *${userAnswer}*
+✅ Respuesta correcta: *${correctAnswer}*
+⏱️ Tiempo: ${timeElapsed} segundos
 
-        let responseMsg = generateWAMessageFromContent(m.chat, {
-            interactiveMessage: proto.Message.InteractiveMessage.create({
-                body: {
-                    text: responseCaption
-                },
-                footer: {
-                    text: "¡Desafía tu conocimiento!"
-                },
-                header: {
-                    title: isCorrect ? "🏆 ¡CORRECTO!" : "📖 INCORRECTO",
-                    hasMediaAttachment: false
-                },
-                nativeFlowMessage: proto.Message.InteractiveMessage.NativeFlowMessage.create({
+${isCorrect ? "🌟 ¡Excelente conocimiento!" : "📚 ¡Sigue aprendiendo!"}
+
+🔄 Usa *${usedPrefix}trivia* para una nueva pregunta`;
+
+        // Intentar enviar respuesta con botón
+        try {
+            const responseMessage = {
+                body: { text: responseCaption },
+                footer: { text: "¡Desafía tu conocimiento!" },
+                header: { title: isCorrect ? "🏆 ¡CORRECTO!" : "📖 INCORRECTO", hasSubtitle: false },
+                nativeFlowMessage: {
+                    buttons: [
+                        {
+                            name: "quick_reply",
+                            buttonParamsJson: JSON.stringify({
+                                display_text: "🔄 Nueva Pregunta",
+                                id: `${usedPrefix}trivia`
+                            })
+                        }
+                    ]
+                }
+            };
+
+            await conn.sendMessage(m.chat, { interactiveMessage: responseMessage }, { quoted: m });
+        } catch (error) {
+            // Fallback: botón tradicional
+            const newQuestionButton = [
+                { buttonId: `${usedPrefix}trivia`, buttonText: { displayText: "🔄 Nueva Pregunta" }, type: 1 }
+            ];
+
+            try {
+                await conn.sendMessage(m.chat, {
+                    text: responseCaption,
+                    footer: "¡Desafía tu conocimiento!",
                     buttons: newQuestionButton,
-                })
-            })
-        }, {
-            quoted: m
-        });
-
-        await conn.relayMessage(responseMsg.key.remoteJid, responseMsg.message, {
-            messageId: responseMsg.key.id
-        });
+                    headerType: 1
+                }, { quoted: m });
+            } catch (error2) {
+                // Fallback final: mensaje simple
+                await conn.reply(m.chat, responseCaption, m);
+            }
+        }
 
         // Marcar como respondida
         triviaSessions.set(m.chat, { ...session, answered: true });
