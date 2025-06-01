@@ -1,30 +1,33 @@
 import axios from 'axios';
 import yts from 'yt-search';
 
-const handler = async (m, { conn }) => {
-  if (m.text.startsWith('!descargar')) {
-    const args = m.text.split(' ');
-    if (args.length < 2) return m.reply('Por favor, proporciona el nombre de la canción');
+const handler = async (m, { conn, args }) => {
+  const songName = args.join(' ');
+  if (!songName) return m.reply('🎵 Por favor, proporciona el nombre de la canción.\n> Ejemplo: *.descargar Shakira - Hips Don\'t Lie*');
 
-    const songName = args.slice(1).join(' ');
+  try {
     const results = await yts(songName);
     const video = results.videos[0];
-
-    if (!video) return m.reply('No se encontró la canción');
+    if (!video) return m.reply('❌ No se encontró ninguna canción con ese nombre.');
 
     const url = video.url;
     const apiUrl = `https://api.vreden.my.id/api/ytmp3?url=${url}`;
+    const { data } = await axios.get(apiUrl);
 
-    try {
-      const response = await axios.get(apiUrl, { responseType: 'arraybuffer' });
-      const buffer = Buffer.from(response.data, 'binary');
+    const downloadUrl = data?.result?.download?.url;
+    if (!downloadUrl) return m.reply('❌ No se pudo obtener el audio del video.');
 
-      await conn.sendMessage(m.chat, { audio: buffer, mimetype: 'audio/mpeg' }, { quoted: m });
+    await conn.sendMessage(m.chat, {
+      audio: { url: downloadUrl },
+      mimetype: 'audio/mpeg',
+      ptt: false,
+      fileName: `${video.title}.mp3`
+    }, { quoted: m });
 
-    } catch (error) {
-      console.error(error);
-      m.reply('Error al descargar la canción');
-    }
+    await m.react("✅");
+  } catch (error) {
+    console.error(error);
+    m.reply('❌ Error al descargar la canción.');
   }
 };
 
