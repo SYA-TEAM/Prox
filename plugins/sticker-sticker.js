@@ -1,7 +1,7 @@
-import { sticker } from '../lib/sticker.js'
-import uploadFile from '../lib/uploadFile.js' // ✅ default export
-import uploadImage from '../lib/uploadImage.js' // ✅ default export
-import { webp2png } from '../lib/webp2mp4.js'
+import { sticker } from './lib/sticker.js'
+import uploadFile from './lib/uploadFile.js' // ✅ default export
+import uploadImage from './lib/uploadImage.js' // ✅ default export
+import { webp2png } from './lib/webp2mp4.js'
 
 let handler = async (m, { conn, args }) => {
   let stiker = false
