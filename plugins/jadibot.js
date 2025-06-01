@@ -53,11 +53,11 @@ let handler = async (m, { conn: _envio, command, usedPrefix, args, text, isOwner
             const replyMessage = users.length === 0
                 ? `No hay Sub-Bots disponibles por el momento.`
                 : `
-❀ Para ser un subbot usa el comando *#code*\n\n✧ *Sub-Bots conectados: ${users.length}*
+🤍 Para ser un subbot usa el comando *#code*\n\n✧ *Sub-Bots conectados: ${users.length}*
 ${wm}`;
 
             const responseMessage = isMainBot
-                ? `*「✦」Subbots Activos Actualmente*\n${replyMessage}`
+                ? `*「✿」Subbots Activos Actualmente*\n${replyMessage}`
                 : `${emoji} *ESTE ES UN SUB-BOT*\n${replyMessage}`;
 
             await _envio.sendMessage(m.chat, {text: responseMessage, mentions: _envio.parseMention(responseMessage)}, {quoted: m})
