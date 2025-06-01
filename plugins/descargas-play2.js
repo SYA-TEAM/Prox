@@ -32,10 +32,11 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     if (!downloadData?.result?.download?.url) {
       return m.reply("❌ No se pudo obtener el audio del video.");
     }
+
     await conn.sendMessage(m.chat, {
       audio: { url: downloadData.result.download.url },
       mimetype: 'audio/mpeg',
-      ptt: true
+      ptt: true,
       fileName: `${video.title}.mp3`
     }, { quoted: m });
 
@@ -46,8 +47,8 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
   }
 };
 
-handler.command = ['playaudio', 'playaudio'];
-handler.help = ['play <texto>', 'play <texto>'];
+handler.command = ['playaudio'];
+handler.help = ['playaudio <texto>'];
 handler.tags = ['media'];
 
 export default handler;
