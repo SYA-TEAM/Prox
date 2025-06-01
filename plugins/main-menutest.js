@@ -24,20 +24,21 @@ const mundo = `${bandera} ${pais}`;
     let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length
 
     let txt = `
-> Hola! @${userId.split('@')[0]} Soy  *${botname}* »  ⊹˚୨ •(=^●ω●^=)•
+> Hola! @${userId.split('@')[0]} 
+Soy  *${botname}* »  ⊹˚୨ •(=^●ω●^=)•
 ╭┈ ↷
-│➮ Modo » Publico
-│✦ Bot » ${(conn.user.jid == global.conn.user.jid ? 'Principal 🅥' : 'Prem Bot 🅑')}
-│ⴵ Activada » ${uptime}
-│• Usuarios » ${totalreg}
-│• Comandos » ${totalCommands}
-│• país » ${mundo}
+│➮ *Modo »* Publico
+│✦ *Bot »* ${(conn.user.jid == global.conn.user.jid ? 'Principal 🅥' : 'Prem Bot 🅑')}
+│ⴵ *Activada »* ${uptime}
+│• *Usuarios »* ${totalreg}
+│• *Comandos »* ${totalCommands}
+│• *País »* ${mundo}
 │• Baileys » Multi Device
 ╰─────────────────
 ✐; *❀*→ ᴘᴀʀᴀ ᴄʀᴇᴀʀ ᴜɴ sᴜʙ-ʙᴏᴛ ᴄᴏɴ ᴛᴜ ɴᴜᴍᴇʀᴏ ᴜᴛɪʟɪᴢᴀ *#qr* o *#code*
 
  
-»  ⊹˚୨ •(=^●ω●^=)• *info-bot*  ❀   
+»  ⊹˚୨ •(=^●ω●^=)• *Info-bot*  ❀   
 
 
 > ᥫ᭡ Comandos para ver estado e información de la Bot.
