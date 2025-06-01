@@ -119,66 +119,35 @@ const triviaHandler = async (m, { conn, command, args, usedPrefix }) => {
 
 📝 ${questionData.question}
 
-🅰️ ${questionData.options[0]}
-🅱️ ${questionData.options[1]}
-🅲 ${questionData.options[2]}
+⏰ Selecciona tu respuesta:`;
 
-⏰ Responde con: *${usedPrefix}trivia A*, *${usedPrefix}trivia B* o *${usedPrefix}trivia C*`;
-
-        // Intentar enviar botones interactivos modernos
-        try {
-            const interactiveMessage = {
-                body: { text: caption },
-                footer: { text: "🧠 Desafía tu conocimiento" },
-                header: { title: "TRIVIA CHALLENGE", hasSubtitle: false },
-                nativeFlowMessage: {
-                    buttons: [
-                        {
-                            name: "quick_reply",
-                            buttonParamsJson: JSON.stringify({
-                                display_text: `🅰️ ${questionData.options[0]}`,
-                                id: `${usedPrefix}trivia A`
-                            })
-                        },
-                        {
-                            name: "quick_reply",
-                            buttonParamsJson: JSON.stringify({
-                                display_text: `🅱️ ${questionData.options[1]}`,
-                                id: `${usedPrefix}trivia B`
-                            })
-                        },
-                        {
-                            name: "quick_reply",
-                            buttonParamsJson: JSON.stringify({
-                                display_text: `🅲 ${questionData.options[2]}`,
-                                id: `${usedPrefix}trivia C`
-                            })
-                        }
-                    ]
-                }
-            };
-
-            await conn.sendMessage(m.chat, { interactiveMessage }, { quoted: m });
-        } catch (error) {
-            // Fallback: usar botones tradicionales
-            const buttons = [
-                { buttonId: `${usedPrefix}trivia A`, buttonText: { displayText: `🅰️ ${questionData.options[0]}` }, type: 1 },
-                { buttonId: `${usedPrefix}trivia B`, buttonText: { displayText: `🅱️ ${questionData.options[1]}` }, type: 1 },
-                { buttonId: `${usedPrefix}trivia C`, buttonText: { displayText: `🅲 ${questionData.options[2]}` }, type: 1 }
-            ];
-
-            try {
-                await conn.sendMessage(m.chat, {
-                    text: caption,
-                    footer: "🧠 Desafía tu conocimiento",
-                    buttons: buttons,
-                    headerType: 1
-                }, { quoted: m });
-            } catch (error2) {
-                // Fallback final: mensaje de texto simple
-                await conn.reply(m.chat, caption, m);
+        // Crear botones flotantes usando el formato de baileys
+        const buttons = [
+            {
+                buttonId: `${usedPrefix}trivia A`,
+                buttonText: { displayText: `🅰️ ${questionData.options[0]}` },
+                type: 1
+            },
+            {
+                buttonId: `${usedPrefix}trivia B`,
+                buttonText: { displayText: `🅱️ ${questionData.options[1]}` },
+                type: 1
+            },
+            {
+                buttonId: `${usedPrefix}trivia C`,
+                buttonText: { displayText: `🅲 ${questionData.options[2]}` },
+                type: 1
             }
-        }
+        ];
+
+        const buttonMessage = {
+            text: caption,
+            footer: '🧠 TRIVIA CHALLENGE - ¡Demuestra tu conocimiento!',
+            buttons: buttons,
+            headerType: 1
+        };
+
+        await conn.sendMessage(m.chat, buttonMessage, { quoted: m });
 
     } else {
         // Evaluar respuesta
@@ -203,48 +172,25 @@ const triviaHandler = async (m, { conn, command, args, usedPrefix }) => {
 ✅ Respuesta correcta: *${correctAnswer}*
 ⏱️ Tiempo: ${timeElapsed} segundos
 
-${isCorrect ? "🌟 ¡Excelente conocimiento!" : "📚 ¡Sigue aprendiendo!"}
+${isCorrect ? "🌟 ¡Excelente conocimiento!" : "📚 ¡Sigue aprendiendo!"}`;
 
-🔄 Usa *${usedPrefix}trivia* para una nueva pregunta`;
-
-        // Intentar enviar respuesta con botón
-        try {
-            const responseMessage = {
-                body: { text: responseCaption },
-                footer: { text: "¡Desafía tu conocimiento!" },
-                header: { title: isCorrect ? "🏆 ¡CORRECTO!" : "📖 INCORRECTO", hasSubtitle: false },
-                nativeFlowMessage: {
-                    buttons: [
-                        {
-                            name: "quick_reply",
-                            buttonParamsJson: JSON.stringify({
-                                display_text: "🔄 Nueva Pregunta",
-                                id: `${usedPrefix}trivia`
-                            })
-                        }
-                    ]
-                }
-            };
-
-            await conn.sendMessage(m.chat, { interactiveMessage: responseMessage }, { quoted: m });
-        } catch (error) {
-            // Fallback: botón tradicional
-            const newQuestionButton = [
-                { buttonId: `${usedPrefix}trivia`, buttonText: { displayText: "🔄 Nueva Pregunta" }, type: 1 }
-            ];
-
-            try {
-                await conn.sendMessage(m.chat, {
-                    text: responseCaption,
-                    footer: "¡Desafía tu conocimiento!",
-                    buttons: newQuestionButton,
-                    headerType: 1
-                }, { quoted: m });
-            } catch (error2) {
-                // Fallback final: mensaje simple
-                await conn.reply(m.chat, responseCaption, m);
+        // Botón para nueva pregunta
+        const newQuestionButtons = [
+            {
+                buttonId: `${usedPrefix}trivia`,
+                buttonText: { displayText: "🔄 Nueva Pregunta" },
+                type: 1
             }
-        }
+        ];
+
+        const responseMessage = {
+            text: responseCaption,
+            footer: isCorrect ? '🏆 ¡CORRECTO! - ¿Listo para otra?' : '📖 INCORRECTO - ¡Inténtalo de nuevo!',
+            buttons: newQuestionButtons,
+            headerType: 1
+        };
+
+        await conn.sendMessage(m.chat, responseMessage, { quoted: m });
 
         // Marcar como respondida
         triviaSessions.set(m.chat, { ...session, answered: true });
