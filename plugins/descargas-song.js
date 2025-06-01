@@ -2,7 +2,6 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
   if (!text) return m.reply(`🌐 Ingresa un texto o link para buscar en YouTube.\n> *Ejemplo:* ${usedPrefix + command} Felicidad Shakira`);
 
   try {
-    // Buscar video
     const yts = await (await fetch(`https://delirius-apiofc.vercel.app/search/ytsearch?q=${encodeURIComponent(text)}`)).json();
     if (!yts?.data?.length) return m.reply("❌ No se encontraron resultados.");
     const video = yts.data[0];
@@ -39,70 +38,88 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
       }
     }, { quoted: m });
 
-    const idMensaje = sent.key.id;
-
-    conn.ev.on('messages.upsert', async (msgUp) => {
-      const msg = msgUp.messages[0];
-      if (!msg.message || msg.key.fromMe) return;
-      const msgText = msg.message.conversation || msg.message.extendedTextMessage?.text;
+    // Esperar respuesta del usuario con un número (1, 2 o 3)
+    const collect = (msg) => {
       const from = msg.key.remoteJid;
-      const isReply = msg.message?.extendedTextMessage?.contextInfo?.stanzaId === idMensaje;
+      const msgText = msg.message?.conversation || msg.message?.extendedTextMessage?.text;
+      const isReplyToPrompt = msg.message?.extendedTextMessage?.contextInfo?.quotedMessage?.imageMessage?.caption === mensaje.trim();
 
-      if (from === m.chat && isReply) {
+      if (from === m.chat && isReplyToPrompt) {
         let tipo = parseInt(msgText);
         if (![1, 2, 3].includes(tipo)) return;
 
-        await conn.sendMessage(from, { react: { text: '⏬', key: msg.key } });
+        conn.ev.off('messages.upsert', listener); // Detener escucha después de la respuesta
 
-        const dl = await (await fetch(`https://lakiya-api-site.vercel.app/download/ytmp3new?url=${video.url}&type=mp3`)).json();
-        const audioUrl = dl.result?.downloadUrl;
-        if (!audioUrl) return m.reply("❌ No se pudo descargar el audio.");
+        // Reacciones y descarga
+        conn.sendMessage(from, { react: { text: '⏬', key: msg.key } });
 
-        await conn.sendMessage(from, { react: { text: '📤', key: msg.key } });
+        fetch(`https://lakiya-api-site.vercel.app/download/ytmp3new?url=${video.url}&type=mp3`)
+          .then(res => res.json())
+          .then(async dl => {
+            const audioUrl = dl.result?.downloadUrl;
+            if (!audioUrl) return conn.sendMessage(from, { text: '❌ No se pudo descargar el audio.', quoted: msg });
 
-        if (tipo === 1) {
-          await conn.sendMessage(from, {
-            audio: { url: audioUrl },
-            mimetype: 'audio/mpeg',
-            contextInfo: {
-              externalAdReply: {
-                title: video.title,
-                body: video.author.name,
-                sourceUrl: video.url,
-                mediaType: 1,
-                thumbnailUrl: video.image,
-                renderLargerThumbnail: true
-              }
+            conn.sendMessage(from, { react: { text: '📤', key: msg.key } });
+
+            if (tipo === 1) {
+              return conn.sendMessage(from, {
+                audio: { url: audioUrl },
+                mimetype: 'audio/mpeg',
+                contextInfo: {
+                  externalAdReply: {
+                    title: video.title,
+                    body: video.author.name,
+                    sourceUrl: video.url,
+                    mediaType: 1,
+                    thumbnailUrl: video.image,
+                    renderLargerThumbnail: true
+                  }
+                }
+              }, { quoted: msg });
             }
-          }, { quoted: msg });
-        } else if (tipo === 2) {
-          await conn.sendMessage(from, {
-            document: { url: audioUrl },
-            fileName: `${video.title}.mp3`,
-            mimetype: 'audio/mp3',
-            caption: `🎵 ${video.title}`
-          }, { quoted: msg });
-        } else if (tipo === 3) {
-          await conn.sendMessage(from, {
-            audio: { url: audioUrl },
-            mimetype: 'audio/mpeg',
-            ptt: true,
-            contextInfo: {
-              externalAdReply: {
-                title: video.title,
-                body: video.author.name,
-                sourceUrl: video.url,
-                mediaType: 1,
-                thumbnailUrl: video.image,
-                renderLargerThumbnail: true
-              }
-            }
-          }, { quoted: msg });
-        }
 
-        conn.ev.off('messages.upsert', this);
+            if (tipo === 2) {
+              return conn.sendMessage(from, {
+                document: { url: audioUrl },
+                fileName: `${video.title}.mp3`,
+                mimetype: 'audio/mp3',
+                caption: `🎵 ${video.title}`
+              }, { quoted: msg });
+            }
+
+            if (tipo === 3) {
+              return conn.sendMessage(from, {
+                audio: { url: audioUrl },
+                mimetype: 'audio/mpeg',
+                ptt: true,
+                contextInfo: {
+                  externalAdReply: {
+                    title: video.title,
+                    body: video.author.name,
+                    sourceUrl: video.url,
+                    mediaType: 1,
+                    thumbnailUrl: video.image,
+                    renderLargerThumbnail: true
+                  }
+                }
+              }, { quoted: msg });
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            conn.sendMessage(from, { text: '❌ Error al descargar.', quoted: msg });
+          });
       }
-    });
+    };
+
+    const listener = ({ messages }) => {
+      if (!messages || !messages[0]) return;
+      const msg = messages[0];
+      if (!msg.message || msg.key.fromMe) return;
+      collect(msg);
+    };
+
+    conn.ev.on('messages.upsert', listener);
 
   } catch (e) {
     console.error(e);
