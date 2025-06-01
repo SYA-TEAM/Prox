@@ -33,7 +33,7 @@ Soy  *${botname}* »  ⊹˚୨ •(=^●ω●^=)•
 │• *Usuarios »* ${totalreg}
 │• *Comandos »* ${totalCommands}
 │• *País »* ${mundo}
-│• Baileys » Multi Device
+│• *Baileys »* Multi Device
 ╰─────────────────
 ✐; *❀*→ ᴘᴀʀᴀ ᴄʀᴇᴀʀ ᴜɴ sᴜʙ-ʙᴏᴛ ᴄᴏɴ ᴛᴜ ɴᴜᴍᴇʀᴏ ᴜᴛɪʟɪᴢᴀ *#qr* o *#code*
 
