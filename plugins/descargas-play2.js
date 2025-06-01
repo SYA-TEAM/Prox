@@ -30,7 +30,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     const downloadData = await downloadResponse.json();
 
     if (!downloadData?.result?.download?.url) {
-      return m.reply("❌ No se pudo obtener el audio del video.");
+      return m.reply(" No se pudo obtener el audio del video.");
     }
 
     await conn.sendMessage(m.chat, {
