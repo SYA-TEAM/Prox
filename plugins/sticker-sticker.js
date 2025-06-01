@@ -11,7 +11,7 @@ let handler = async (m, { conn, args }) => {
 
     if (/webp|image|video/g.test(mime)) {
       if (/video/.test(mime) && (q.msg || q).seconds > 15) {
-        return m.reply('✧ ¡El video no puede durar más de 15 segundos!')
+        return m.reply(' ¡El video no puede durar más de 15 segundos!')
       }
 
       let img = await q.download?.()
