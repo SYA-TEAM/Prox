@@ -1,75 +1,94 @@
-import fetch from 'node-fetch';
-import yts from 'yt-search';
+import fetch from "node-fetch"
+import yts from 'yt-search'
+import axios from "axios"
+const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/
 
-const limit = 250; // MB máximo permitido
-
-const handler = async (m, { conn, text, command }) => {
-  if (!text) return m.reply('🌸 Ingresa el nombre de un video de YouTube para buscar.');
-
+const handler = async (m, { conn, text, usedPrefix, command }) => {
   try {
-    await m.react('🔥');
-    const res = await yts(text);
-    const video = res.all[0];
+    if (!text.trim()) {
+      return conn.reply(m.chat, `❀ Por favor, ingresa el nombre de la música a descargar.`, m)
+    }
+  
+let videoIdToFind = text.match(youtubeRegexID) || null
+let ytplay2 = await yts(videoIdToFind === null ? text : 'https://youtu.be/' + videoIdToFind[1])
 
-    if (!video) return m.reply('❌ No se encontró ningún resultado.');
-
-    const encabezado = `> ✦ 𝖠𝗇𝗒𝖺 𝖥𝗈𝗋𝗀𝖾𝗋 𝖯𝗅𝖺𝗒𝟤 ✦`;
-
-    const textoBonito = `${encabezado}`;
-
-    // Enviar miniatura decorada
-    await conn.sendFile(m.chat, video.thumbnail, 'thumb.jpg', textoBonito, m, null, {
+if (videoIdToFind) {
+const videoId = videoIdToFind[1]  
+ytplay2 = ytplay2.all.find(item => item.videoId === videoId) || ytplay2.videos.find(item => item.videoId === videoId)
+} 
+ytplay2 = ytplay2.all?.[0] || ytplay2.videos?.[0] || ytplay2  
+if (!ytplay2 || ytplay2.length == 0) {
+return m.reply('✧ No se encontraron resultados para tu búsqueda.')
+}
+let { title, thumbnail, timestamp, views, ago, url, author } = ytplay2
+title = title || 'no encontrado'
+thumbnail = thumbnail || 'no encontrado'
+timestamp = timestamp || 'no encontrado'
+views = views || 'no encontrado'
+ago = ago || 'no encontrado'
+url = url || 'no encontrado'
+author = author || 'no encontrado'
+    const vistas = formatViews(views)
+    const canal = author.name ? author.name : 'Desconocido'
+    const infoMessage = `「✦」Descargando *<${title || 'Desconocido'}>*\n\n> ✧ Canal » *${canal}*\n> ✰ Vistas » *${vistas || 'Desconocido'}*\n> ⴵ Duración » *${timestamp || 'Desconocido'}*\n> ✐ Publicado » *${ago || 'Desconocido'}*\n> 🜸 Link » ${url}`
+    const thumb = (await conn.getFile(thumbnail))?.data
+    const JT = {
       contextInfo: {
         externalAdReply: {
-          title: `♪ ${video.title}`,
-          body: `🌸 Anya Forger Play2`,
-          thumbnailUrl: video.thumbnail,
-          sourceUrl: video.url,
-          mediaType: 2,
-          renderLargerThumbnail: false,
-          showAdAttribution: false
-        }
-      }
-    });
-
-    // Enviar audio o video SIN caption
-    if (command === 'play2' || command === 'playvid') {
-      const api = await fetch(`https://ytdl.sylphy.xyz/dl/mp4?url=${video.url}&quality=480`);
-      const json = await api.json();
-
-      if (!json.data || !json.data.dl_url) throw '❌ Error al descargar el video.';
-
-      const doc = json.data.size_mb >= limit;
-      await conn.sendFile(m.chat, json.data.dl_url, `${json.data.title}.mp4`, '', m, null, {
-        asDocument: doc,
-        fileName: `${json.data.title}.mp4`,
-        mimetype: 'video/mp4'
-      });
-
-      await m.react('📽️');
-    } else if (command === 'play') {
-      const api = await fetch(`https://ytdl.sylphy.xyz/dl/mp3?url=${video.url}&quality=128`);
-      const json = await api.json();
-
-      if (!json.data || !json.data.dl_url) throw '❌ Error al descargar el audio.';
-
-      await conn.sendFile(m.chat, json.data.dl_url, `${json.data.title}.mp3`, '', m, null, {
-        asDocument: json.data.size_mb >= 90,
-        mimetype: 'audio/mpeg',
-        fileName: `${json.data.title}.mp3`
-      });
-
-      await m.react('🎧');
+          title: wm,
+          body: title,
+          mediaType: 1,
+          previewType: 0,
+          mediaUrl: url,
+          sourceUrl: url,
+          thumbnail: thumb,
+          renderLargerThumbnail: true,
+        },
+      },
     }
-
-  } catch (e) {
-    console.error(e);
-    m.reply('⚠️ Ocurrió un error al procesar tu solicitud.');
+    await conn.reply(m.chat, infoMessage, m, JT)    
+    if (command === 'play' || command === 'yta' || command === 'ytmp3' || command === 'playaudio') {
+      try {
+        const api = await (await fetch(`https://api.vreden.my.id/api/ytmp3?url=${url}`)).json()
+        const resulta = api.result
+        const result = resulta.download.url    
+        if (!result) throw new Error('⚠ El enlace de audio no se generó correctamente.')
+        await conn.sendMessage(m.chat, { audio: { url: result }, fileName: `${api.result.title}.mp3`, mimetype: 'audio/mpeg' }, { quoted: m })
+      } catch (e) {
+        return conn.reply(m.chat, '⚠︎ No se pudo enviar el audio. Esto puede deberse a que el archivo es demasiado pesado o a un error en la generación de la URL. Por favor, intenta nuevamente más tarde.', m)
+      }
+    } else if (command === 'play2' || command === 'ytv' || command === 'ytmp4' || command === 'mp4') {
+      try {
+        const response = await fetch(`https://api.neoxr.eu/api/youtube?url=${url}&type=video&quality=480p&apikey=GataDios`)
+        const json = await response.json()
+        await conn.sendFile(m.chat, json.data.url, json.title + '.mp4', title, m)
+      } catch (e) {
+        return conn.reply(m.chat, '⚠︎ No se pudo enviar el video. Esto puede deberse a que el archivo es demasiado pesado o a un error en la generación de la URL. Por favor, intenta nuevamente más tarde.', m)
+      }
+    } else {
+      return conn.reply(m.chat, '✧︎ Comando no reconocido.', m)
+    }
+  } catch (error) {
+    return m.reply(`⚠︎ Ocurrió un error: ${error}`)
   }
-};
+}
+handler.command = handler.help = ['play2', 'mp4']
+handler.tags = ['descargas']
+handler.group = true
 
-handler.help = ['play', 'play2'];
-handler.tags = ['dl'];
-handler.command = ['play2', 'playvid'];
+export default handler
 
-export default handler;
+function formatViews(views) {
+  if (views === undefined) {
+    return "No disponible"
+  }
+
+  if (views >= 1_000_000_000) {
+    return `${(views / 1_000_000_000).toFixed(1)}B (${views.toLocaleString()})`
+  } else if (views >= 1_000_000) {
+    return `${(views / 1_000_000).toFixed(1)}M (${views.toLocaleString()})`
+  } else if (views >= 1_000) {
+    return `${(views / 1_000).toFixed(1)}k (${views.toLocaleString()})`
+  }
+  return views.toString()
+}
