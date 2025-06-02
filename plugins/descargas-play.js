@@ -6,7 +6,7 @@ const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-z
 const handler = async (m, { conn, text, usedPrefix, command }) => {
   try {
     if (!text.trim()) {
-      return conn.reply(m.chat, `❀ Por favor, ingresa el nombre de la música a descargar.`, m)
+      return conn.reply(m.chat, `⪩ Por favor, ingresa el nombre o link de la música a descargar.`, m)
     }
   
 let videoIdToFind = text.match(youtubeRegexID) || null
@@ -18,7 +18,7 @@ ytplay2 = ytplay2.all.find(item => item.videoId === videoId) || ytplay2.videos.f
 } 
 ytplay2 = ytplay2.all?.[0] || ytplay2.videos?.[0] || ytplay2  
 if (!ytplay2 || ytplay2.length == 0) {
-return m.reply('✧ No se encontraron resultados para tu búsqueda.')
+return m.reply('✰ No se encontraron resultados para tu búsqueda.')
 }
 let { title, thumbnail, timestamp, views, ago, url, author } = ytplay2
 title = title || 'no encontrado'
@@ -30,7 +30,7 @@ url = url || 'no encontrado'
 author = author || 'no encontrado'
     const vistas = formatViews(views)
     const canal = author.name ? author.name : 'Desconocido'
-    const infoMessage = `「✦」Descargando *<${title || 'Desconocido'}>*\n\n> ✧ Canal » *${canal}*\n> ✰ Vistas » *${vistas || 'Desconocido'}*\n> ⴵ Duración » *${timestamp || 'Desconocido'}*\n> ✐ Publicado » *${ago || 'Desconocido'}*\n> 🜸 Link » ${url}`
+    const infoMessage = `「✦」 *<${title || 'Desconocido'}>*\n\n> ✧ Canal » *${canal}*\n> ✰ Vistas » *${vistas || 'Desconocido'}*\n> ⴵ Duración » *${timestamp || 'Desconocido'}*\n> ✐ Publicado » *${ago || 'Desconocido'}*\n> 🜸 Link » ${url}`
     const thumb = (await conn.getFile(thumbnail))?.data
     const JT = {
       contextInfo: {
@@ -63,7 +63,7 @@ author = author || 'no encontrado'
         const json = await response.json()
         await conn.sendFile(m.chat, json.data.url, json.title + '.mp4', title, m)
       } catch (e) {
-        return conn.reply(m.chat, '⚠︎ No se pudo enviar el video. Esto puede deberse a que el archivo es demasiado pesado o a un error en la generación de la URL. Por favor, intenta nuevamente más tarde.', m)
+        return conn.reply(m.chat, '> ✢ No se pudo enviar el video. Esto puede pasar por varias razones una de ellas esque el enlace no se generó correctamente o el video es muy pesado :v, igual puedes intentarlo más tarde. Posdata: No intentes descargar videos de una duración más de 45 minutos máximo, de esa duración para arriba puede ser que no funcione.', m)
       }
     } else {
       return conn.reply(m.chat, '✧︎ Comando no reconocido.', m)
