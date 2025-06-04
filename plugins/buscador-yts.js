@@ -1,28 +1,41 @@
 import yts from 'yt-search'
 
-var handler = async (m, { text, conn, args, command, usedPrefix }) => {
+var handler = async (m, { text, conn, usedPrefix, command }) => {
+  if (!text) return conn.reply(m.chat, `🔍 ιᥒgrᥱsᥲ ᥙᥒᥲ ᑲᥙ́s𝗊ᥙᥱძᥲ ძᥱ ᥡᥙ᥆𝗍ᥙᑲᥱ.`, m)
 
-if (!text) return conn.reply(m.chat, `${emoji} іᥒgrᥱsᥲ ᥙᥒᥲ ᑲᥙ́s𝗊ᥙᥱძᥲ ძᥱ ᥡᥙ᥆𝗍ᥙᑲᥱ.`, m)
+  await conn.reply(m.chat, '⏳ 𝙱ᥙsᥴᥲᥒძ᥆... ᥱsᥣᥲ ᥴᥙᥱᥣ᥊ 🛰️', m)
 
-conn.reply(m.chat, wait, m)
+  const results = await yts(text)
+  const videos = results.videos.slice(0, 5) // solo los primeros 5
 
-let results = await yts(text)
-let tes = results.all
-let teks = results.all.map(v => {
-  switch (v.type) {
-    case 'video': return `📌 *${v.title}*
-👤 Canal: ${v.author.name}
-⏱️ Duración: ${v.timestamp}
-📆 Publicado: ${v.ago}
-👁️ Vistas: ${v.views}
-🔗 Link: ${v.url}`
+  if (!videos.length) return conn.reply(m.chat, '❌ ᑲᥙ́s𝗊ᥙᥱძᥲ sᥱᥒ ɾᥱsᥙᥣሼᥲძ᥆...', m)
+
+  for (let video of videos) {
+    const { title, timestamp, views, ago, author, url, thumbnail } = video
+
+    const caption = `📌 *${title}*\n\n` +
+      `👤 *Canal:* ${author.name}\n` +
+      `⏱️ *Duración:* ${timestamp}\n` +
+      `📆 *Publicado:* ${ago}\n` +
+      `👁️ *Vistas:* ${views}\n` +
+      `🔗 *Enlace:* ${url}`
+
+    const buttons = [
+      { buttonId: `${usedPrefix}ytmp3 ${url}`, buttonText: { displayText: '🎧 Audio (MP3)' }, type: 1 },
+      { buttonId: `${usedPrefix}ytmp4 ${url}`, buttonText: { displayText: '🎥 Video (MP4)' }, type: 1 }
+    ]
+
+    await conn.sendMessage(m.chat, {
+      image: { url: thumbnail },
+      caption,
+      footer: '📽️ Resultado de YouTube',
+      buttons,
+      headerType: 4
+    }, { quoted: m })
   }
-}).filter(v => v).join('\n\n━━━━━━━━━━━━━━━\n\n')
-
-conn.sendFile(m.chat, tes[0].thumbnail, 'yts.jpeg', teks, fkontak, m)
-
 }
-handler.help = ['ytsearch']
+
+handler.help = ['ytsearch <texto>']
 handler.tags = ['buscador']
 handler.command = ['ytbuscar', 'ytsearch', 'yts']
 handler.register = true
