@@ -21,7 +21,7 @@ var handler = async (m, { text, conn, usedPrefix, command }) => {
                `   👤 ${v.author.name}\n\n`
     buttons.push({
       buttonId: `${usedPrefix}ytmp3 ${v.url}`,
-      buttonText: { displayText: `${i + 1}️⃣ Audio MP3 y Video MP4` },
+      buttonText: { displayText: `${i + 1}️⃣ Audio MP3` },
       type: 1
     })
   }
