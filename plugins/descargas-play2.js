@@ -2,7 +2,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
   if (!text) return m.reply(`✐ ₊˚ʚ🌸ɞ˚₊ Ingresa un texto para buscar en YouTube.\n🎶 Ejemplo: *${usedPrefix + command} Shakira*`);
 
   try {
-    await m.react('🔍');
+    await m.react('🕒');
 
     const searchApi = `https://delirius-apiofc.vercel.app/search/ytsearch?q=${encodeURIComponent(text)}`;
     const searchResponse = await fetch(searchApi);
@@ -44,7 +44,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
       fileName: `${title}.mp3`
     }, { quoted: m });
 
-    await m.react("🌈");
+    await m.react("💜");
   } catch (error) {
     console.error(error);
     await m.react('💢');
