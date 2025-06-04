@@ -24,7 +24,7 @@ let handler = async (m, { conn, text, usedPrefix, command }) => {
 
 handler.help = ['ytmp4 *<url>*'];
 handler.tags = ['descargas'];
-handler.command = ['ytmp4', 'ytv'];
+handler.command = ['ytv'];
 handler.register = true;
 
 export default handler;
