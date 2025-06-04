@@ -19,12 +19,11 @@ const handler = async (m, { conn, args, usedPrefix }) => {
         messageText += `★ *Autor:* ${video.canal || 'Desconocido'}\n`;
         messageText += `★ *Publicado:* ${convertTimeToSpanish(video.publicado)}\n`;
         messageText += `✰ *Link:* ${video.url}\n\n`;
-        messageText += `> ❀ Elige una opción para descargar`;
 
         await conn.sendMessage(m.chat, {
             image: thumbnail,
             caption: messageText,
-            footer: 'ᴘʀᴇꜱɪᴏɴᴀ ᴇʟ ʙᴏᴛᴏɴ ᴘᴀʀᴀ ᴅᴇꜱᴄᴀʀɢᴀ.',
+            footer: 'ᴛᴏᴄᴀ ʟᴀ ᴏᴘᴄɪᴏ́ɴ ǫᴜᴇ ᴅᴇsᴇᴇs.',
             contextInfo: {
                 mentionedJid: [m.sender],
                 forwardingScore: 999,
