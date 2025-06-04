@@ -37,7 +37,7 @@ const handler = async (m, { conn, text, usedPrefix, command }) => {
   m.react('✅'); // Reacción de éxito
 };
 
-handler.command = ['play', 'playvid', 'play2'];
+handler.command = ;
 handler.tags = ['downloader']
 handler.group = true
 handler.limit = 6
