@@ -73,6 +73,6 @@ handler.tags = ['descargas']
 handler.command = ['apk', 'modapk', 'aptoide']
 handler.register = true
 handler.group = false
-handler.coin = 33
+handler.coin = 10
 
 export default handler
