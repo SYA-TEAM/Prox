@@ -1,61 +1,53 @@
 import yts from 'yt-search';
 import fetch from 'node-fetch';
-import { prepareWAMessageMedia, generateWAMessageFromContent } from '@whiskeysockets/baileys';
 
 const handler = async (m, { conn, args, usedPrefix }) => {
-    if (!args[0]) return conn.reply(m.chat, '*`Por favor ingresa un término de búsqueda`*', m);
+    if (!args[0]) return conn.reply(m.chat, '*❌ Ingresa un término para buscar.*', m);
 
-    await m.react('🕓');
+    await m.react('🔍');
     try {
-        let searchResults = await searchVideos(args.join(" "));
+        const searchResults = await searchVideos(args.join(" "));
 
-        if (!searchResults.length) throw new Error('No se encontraron resultados.');
+        if (!searchResults.length) throw 'No se encontraron resultados.';
 
-        let video = searchResults[0];
-        let thumbnail = await (await fetch(video.miniatura)).buffer();
+        const video = searchResults[0];
+        const thumbnail = await (await fetch(video.miniatura)).buffer();
 
-        let messageText = `✧ ${video.titulo} ✧\n\n`;
-        messageText += `★ *Duración:* ${video.duracion || 'No disponible'}\n`;
-        messageText += `★ *Autor:* ${video.canal || 'Desconocido'}\n`;
-        messageText += `★ *Publicado:* ${convertTimeToSpanish(video.publicado)}\n`;
-        messageText += `✰ *Link:* ${video.url}\n\n`;
+        const texto = [
+            `✨ *${video.titulo}*`,
+            ``,
+            `📌 *Duración:* ${video.duracion}`,
+            `🎙️ *Autor:* ${video.canal}`,
+            `📆 *Publicado:* ${convertTimeToSpanish(video.publicado)}`,
+            `🌐 *Enlace:* ${video.url}`,
+            ``,
+            `⚔️ Elige una opción para descargar:`
+        ].join('\n');
 
         await conn.sendMessage(m.chat, {
             image: thumbnail,
-            caption: messageText,
-            footer: 'ᴛᴏᴄᴀ ʟᴀ ᴏᴘᴄɪᴏ́ɴ ǫᴜᴇ ᴅᴇsᴇᴇs.',
-            contextInfo: {
-                mentionedJid: [m.sender],
-                forwardingScore: 999,
-                isForwarded: false
-            },
+            caption: texto,
+            footer: '${wm}',
+            mentions: [m.sender],
             buttons: [
-                {
-                    buttonId: `${usedPrefix}playaudio ${video.url}`,
-                    buttonText: { displayText: '✿ Descargar Audio ♪' },
-                    type: 1,
-                },
-                {
-                    buttonId: `${usedPrefix}ytmp4 ${video.url}`,
-                    buttonText: { displayText: '✿ Descargar Video ꙳' },
-                    type: 1,
-                }
+                { buttonId: `${usedPrefix}playaudio ${video.url}`, buttonText: { displayText: '🎧 Audio' }, type: 1 },
+                { buttonId: `${usedPrefix}ytmp4 ${video.url}`, buttonText: { displayText: '🎞️ Video' }, type: 1 },
             ],
-            headerType: 1,
-            viewOnce: true
+            headerType: 4
         }, { quoted: m });
 
         await m.react('✅');
-    } catch (e) {
-        console.error(e);
-        await m.react('✖️');
-        conn.reply(m.chat, '*`Error al buscar el video.`*', m);
+    } catch (err) {
+        console.error(err);
+        await m.react('❌');
+        conn.reply(m.chat, '*⚠️ Error al buscar el video.*', m);
     }
 };
 
 handler.help = ['play *<texto>*'];
 handler.tags = ['dl'];
 handler.command = ['play'];
+
 export default handler;
 
 async function searchVideos(query) {
@@ -70,14 +62,14 @@ async function searchVideos(query) {
             vistas: video.views || 'No disponible',
             duracion: video.duration.timestamp || 'No disponible'
         }));
-    } catch (error) {
-        console.error('Error en yt-search:', error.message);
+    } catch (e) {
+        console.error('Error en yt-search:', e.message);
         return [];
     }
 }
 
-function convertTimeToSpanish(timeText) {
-    return timeText
+function convertTimeToSpanish(t) {
+    return t
         .replace(/year/, 'año').replace(/years/, 'años')
         .replace(/month/, 'mes').replace(/months/, 'meses')
         .replace(/day/, 'día').replace(/days/, 'días')
