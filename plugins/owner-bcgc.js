@@ -1,14 +1,23 @@
-const handler = async (m, {conn, isROwner, text}) => {
+const handler = async (m, { conn, isROwner, text }) => {
+  const ownerNumber = '50493732693@s.whatsapp.net'; // formato correcto con @s.whatsapp.net
+
+  if (m.sender !== ownerNumber) {
+    throw '❌ Solo el propietario autorizado puede usar este comando.';
+  }
+
   const delay = (time) => new Promise((res) => setTimeout(res, time));
   const getGroups = await conn.groupFetchAllParticipating();
   const groups = Object.entries(getGroups).slice(0).map((entry) => entry[1]);
   const anu = groups.map((v) => v.id);
   const pesan = m.quoted && m.quoted.text ? m.quoted.text : text;
-  if (!pesan) throw `${emoji} Te faltó el texto.`;
+
+  if (!pesan) throw '📩 Te faltó el texto.';
+
   for (const i of anu) {
     await delay(500);
     conn.relayMessage(i,
-        {liveLocationMessage: {
+      {
+        liveLocationMessage: {
           degreesLatitude: 35.685506276233525,
           degreesLongitude: 139.75270667105852,
           accuracyInMeters: 0,
@@ -17,10 +26,13 @@ const handler = async (m, {conn, isROwner, text}) => {
           sequenceNumber: 2,
           timeOffset: 3,
           contextInfo: m,
-        }}, {}).catch((_) => _);
+        }
+      }, {}).catch((_) => _);
   }
-  m.reply(`${emoji} *𝖬𝖾𝗇𝗌𝖺𝗃𝖾 𝖤𝗇𝗏𝗂𝖺𝖽𝗈 𝖠:* ${anu.length} *Grupo/S*`);
+
+  m.reply(`✅ *Mensaje enviado a:* ${anu.length} *grupo(s)*`);
 };
+
 handler.help = ['broadcastgroup', 'bcgc'];
 handler.tags = ['owner'];
 handler.command = ['bcgc'];
