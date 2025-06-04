@@ -6,33 +6,32 @@ var handler = async (m, { text, conn, usedPrefix, command }) => {
   await conn.reply(m.chat, '⏳ 𝙱ᥙsᥴᥲᥒძ᥆... ᥱsᥣᥲ ᥴᥙᥱᥣ᥊ 🛰️', m)
 
   const results = await yts(text)
-  const videos = results.videos.slice(0, 5) // solo los primeros 5
+  const videos = results.videos.slice(0, 5)
 
   if (!videos.length) return conn.reply(m.chat, '❌ ᑲᥙ́s𝗊ᥙᥱძᥲ sᥱᥒ ɾᥱsᥙᥣሼᥲძ᥆...', m)
 
-  for (let video of videos) {
-    const { title, timestamp, views, ago, author, url, thumbnail } = video
+  let caption = `🎬 *Resultados encontrados:*\n\n`
 
-    const caption = `📌 *${title}*\n\n` +
-      `👤 *Canal:* ${author.name}\n` +
-      `⏱️ *Duración:* ${timestamp}\n` +
-      `📆 *Publicado:* ${ago}\n` +
-      `👁️ *Vistas:* ${views}\n` +
-      `🔗 *Enlace:* ${url}`
+  const buttons = []
 
-    const buttons = [
-      { buttonId: `${usedPrefix}ytmp3 ${url}`, buttonText: { displayText: '🎧 Audio (MP3)' }, type: 1 },
-      { buttonId: `${usedPrefix}ytmp4 ${url}`, buttonText: { displayText: '🎥 Video (MP4)' }, type: 1 }
-    ]
-
-    await conn.sendMessage(m.chat, {
-      image: { url: thumbnail },
-      caption,
-      footer: '📽️ Resultado de YouTube',
-      buttons,
-      headerType: 4
-    }, { quoted: m })
+  for (let i = 0; i < videos.length; i++) {
+    const v = videos[i]
+    caption += `*${i + 1}.* ${v.title}\n` +
+               `   ⏱️ ${v.timestamp} | 👁️ ${v.views} | 📆 ${v.ago}\n` +
+               `   👤 ${v.author.name}\n\n`
+    buttons.push({
+      buttonId: `${usedPrefix}ytmp3 ${v.url}`,
+      buttonText: { displayText: `${i + 1}️⃣ Audio MP3 y Video MP4` },
+      type: 1
+    })
   }
+
+  await conn.sendMessage(m.chat, {
+    text: caption.trim(),
+    footer: '📽️ Resultado de YouTube',
+    buttons,
+    headerType: 1
+  }, { quoted: m })
 }
 
 handler.help = ['ytsearch <texto>']
