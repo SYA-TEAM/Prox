@@ -36,6 +36,5 @@ const handler = async (m, { conn, isROwner, text }) => {
 handler.help = ['broadcastgroup', 'bcgc'];
 handler.tags = ['owner'];
 handler.command = ['bcgc'];
-handler.owner = true;
 
 export default handler;
