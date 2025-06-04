@@ -27,7 +27,6 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     await conn.sendMessage(m.chat, {
       audio: { url: downloadData.result.download.url },
       mimetype: 'audio/mpeg',
-      ptt: true,
       fileName: `${video.title}.mp3`
     }, { quoted: m });
 
