@@ -21,7 +21,7 @@ const handler = async (m, { conn, args, usedPrefix }) => {
         messageText += `🎤 *𝖠𝗎𝗍𝗈𝗋:* ${video.canal || 'Desconocido'}\n`;
         messageText += `★ *𝖯𝗎𝖻𝗅𝗂𝖼𝖺𝖽𝗈:* ${convertTimeToSpanish(video.publicado)}\n`;
         messageText += `✰ *𝖫𝗂𝗇𝗄:* ${video.url}\n\n`;
-        messageText += `❀ 𝖤𝗅𝗂𝗀𝖾 𝗎𝗇𝖺 𝗈𝗉𝖼𝗂𝗈́𝗇 𝗉𝖺𝗋𝖺 𝖽𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗋`;
+        messageText += `> ❀ 𝖤𝗅𝗂𝗀𝖾 𝗎𝗇𝖺 𝗈𝗉𝖼𝗂𝗈́𝗇 𝗉𝖺𝗋𝖺 𝖽𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗋`;
 
         let ytSections = searchResults.slice(1, 11).map((v, index) => ({
             title: `${index + 1}┃ ${v.titulo}`,
@@ -61,7 +61,7 @@ const handler = async (m, { conn, args, usedPrefix }) => {
             },
             buttons: [
                 {
-                    buttonId: `${usedPrefix}ytmp3 ${video.url}`,
+                    buttonId: `${usedPrefix}playaudio ${video.url}`,
                     buttonText: { displayText: '✿ 𝖣𝖾𝗌𝖼𝖺𝗋𝗀𝖺r 𝖠𝗎𝖽𝗂𝗈 ♪' },
                     type: 1,
                 },
