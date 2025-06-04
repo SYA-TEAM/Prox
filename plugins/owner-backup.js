@@ -19,7 +19,7 @@ conn.reply(m.chat, `${msm} Ocurrió un error.`, m)}}
 
 handler.help = ['copia']
 handler.tags = ['owner']
-handler.command = ['backup', 'respaldo', 'copia']
+handler.command = ['copy']
 handler.rowner = true
 
 export default handler
