@@ -28,12 +28,12 @@ const handler = async (m, { conn, args, usedPrefix }) => {
             rows: [
                 {
                     title: `✿ 𝖣𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗋 𝖬𝖯3`,
-                    description: `⏳ Duración: ${v.duracion || 'No disponible'}`, 
-                    id: `${usedPrefix}ytmp3 ${v.url}`
+                    description: `❒ Duración: ${v.duracion || 'No disponible'}`, 
+                    id: `${usedPrefix}playaudio ${v.url}`
                 },
                 {
                     title: `✿ 𝖣𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗋 𝖬𝖯4`,
-                    description: `⏳ Duración: ${v.duracion || 'No disponible'}`, 
+                    description: `❒ Duración: ${v.duracion || 'No disponible'}`, 
                     id: `${usedPrefix}ytmp4 ${v.url}`
                 }
             ]
