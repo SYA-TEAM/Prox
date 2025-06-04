@@ -18,7 +18,7 @@ const handler = async (m, { conn, args, usedPrefix }) => {
         let messageText = `✦ *𝖸𝗈𝗎𝖳𝗎𝖻𝖾 𝖯𝗅𝖺𝗒* ✦\n\n`;
         messageText += `✧ ${video.titulo} ✧\n\n`;
         messageText += `★ *𝖣𝗎𝗋𝖺𝖼𝗂𝗈𝗇:* ${video.duracion || 'No disponible'}\n`;
-        messageText += `🎤 *𝖠𝗎𝗍𝗈𝗋:* ${video.canal || 'Desconocido'}\n`;
+        messageText += `★ *𝖠𝗎𝗍𝗈𝗋:* ${video.canal || 'Desconocido'}\n`;
         messageText += `★ *𝖯𝗎𝖻𝗅𝗂𝖼𝖺𝖽𝗈:* ${convertTimeToSpanish(video.publicado)}\n`;
         messageText += `✰ *𝖫𝗂𝗇𝗄:* ${video.url}\n\n`;
         messageText += `> ❀ 𝖤𝗅𝗂𝗀𝖾 𝗎𝗇𝖺 𝗈𝗉𝖼𝗂𝗈́𝗇 𝗉𝖺𝗋𝖺 𝖽𝖾𝗌𝖼𝖺𝗋𝗀𝖺𝗋`;
@@ -75,7 +75,7 @@ const handler = async (m, { conn, args, usedPrefix }) => {
                     nativeFlowInfo: {
                         name: 'single_select',
                         paramsJson: JSON.stringify({
-                            title: '𝖱𝖾𝗌𝗎𝗅𝗍𝖺𝖽𝗈𝗌  𝖸𝗈𝗎𝖳𝗎𝖻𝖾 🔍',
+                            title: '𝖸𝗈𝗎𝖳𝗎𝖻𝖾 🔍',
                             sections: ytSections,
                         }),
                     },
@@ -85,7 +85,7 @@ const handler = async (m, { conn, args, usedPrefix }) => {
                     nativeFlowInfo: {
                         name: 'single_select',
                         paramsJson: JSON.stringify({
-                            title: '𝖱𝖾𝗌𝗎𝗅𝗍𝖺𝖽𝗈𝗌  𝖲𝗉𝗈𝗍𝗂𝖿𝗒 🔍',
+                            title: '𝖲𝗉𝗈𝗍𝗂𝖿𝗒 🔍',
                             sections: spotifySections,
                         }),
                     },
