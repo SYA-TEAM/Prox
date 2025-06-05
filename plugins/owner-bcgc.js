@@ -33,6 +33,6 @@ const handler = async (m, { conn, text }) => {
 
 handler.help = ['broadcastgroup', 'bcgc'];
 handler.tags = ['owner'];
-handler.command = ['bcgc'];
+handler.command = ['bcg'];
 
 export default handler;
