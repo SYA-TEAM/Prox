@@ -1,64 +1,150 @@
-let handler = async (m, { conn, usedPrefix, command, text }) => {
-  if (!text) return m.reply(`✐ ₊˚ʚ🌸ɞ˚₊ Ingresa un texto para buscar en YouTube.\n🎶 Ejemplo: *${usedPrefix + command} Shakira*`);
+import fetch from "node-fetch";
+import yts from 'yt-search';
+import axios from "axios";
 
+const formatAudio = ['mp3', 'm4a', 'webm', 'acc', 'flac', 'opus', 'ogg', 'wav'];
+const formatVideo = ['360', '480', '720', '1080', '1440', '4k'];
+
+const ddownr = {
+  download: async (url, format) => {
+    if (!formatAudio.includes(format) && !formatVideo.includes(format)) {
+      throw new Error('Formato no soportado, verifica la lista de formatos disponibles.');
+    }
+
+    const config = {
+      method: 'GET',
+      url: `https://p.oceansaver.in/ajax/download.php?format=${format}&url=${encodeURIComponent(url)}&api=dfcb6d76f2f6a9894gjkege8a4ab232222`,
+      headers: {
+        'User-Agent': 'Mozilla/5.0'
+      }
+    };
+
+    try {
+      const response = await axios.request(config);
+      if (response.data && response.data.success) {
+        const { id, title, info } = response.data;
+        const { image } = info;
+        const downloadUrl = await ddownr.cekProgress(id);
+
+        return {
+          id: id,
+          image: image,
+          title: title,
+          downloadUrl: downloadUrl
+        };
+      } else {
+        throw new Error('Fallo al obtener los detalles del video.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  },
+
+  cekProgress: async (id) => {
+    const config = {
+      method: 'GET',
+      url: `https://p.oceansaver.in/ajax/progress.php?id=${id}`,
+      headers: {
+        'User-Agent': 'Mozilla/5.0'
+      }
+    };
+
+    try {
+      while (true) {
+        const response = await axios.request(config);
+        if (response.data && response.data.success && response.data.progress === 1000) {
+          return response.data.download_url;
+        }
+        await new Promise(resolve => setTimeout(resolve, 5000));
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  }
+};
+
+const handler = async (m, { conn, text, usedPrefix, command }) => {
   try {
-    await m.react('🕒');
-
-    const searchApi = `https://delirius-apiofc.vercel.app/search/ytsearch?q=${encodeURIComponent(text)}`;
-    const searchResponse = await fetch(searchApi);
-    const searchData = await searchResponse.json();
-
-    if (!searchData?.data || searchData.data.length === 0) {
-      await m.react('💔');
-      return m.reply(`(｡•́︿•̀｡) No encontré resultados para: *${text}*`);
+    if (!text.trim()) {
+      return conn.reply(m.chat, '*DESCARGA DE MÚSICA*\n\n✦ Ingresa el nombre de la música a descargar.', m);
     }
 
-    const video = searchData.data[0];
-    const { title, url, duration, views, author, uploaded, thumbnail } = video;
-
-    const downloadApi = `https://api.vreden.my.id/api/ytmp3?url=${encodeURIComponent(url)}`;
-    const downloadResponse = await fetch(downloadApi);
-    const downloadData = await downloadResponse.json();
-
-    if (!downloadData?.result?.download?.url) {
-      await m.react('💢');
-      return m.reply("｡ﾟ･ (>﹏<) ･ﾟ｡ No se pudo obtener el audio.");
+    const search = await yts(text);
+    if (!search.all || search.all.length === 0) {
+      return m.reply('No se encontraron resultados para tu búsqueda.');
     }
 
-    // Mensaje kawaii decorado
+    const videoInfo = search.all[0];
+    const { title, thumbnail, timestamp: duration, views, ago: uploaded, url, author } = videoInfo;
+    const vistas = formatViews(views);
+
     const infoMessage = `
 「✦」 *<${title || 'Desconocido'}>*
 
 > ✧ Canal » *${author?.name || 'Desconocido'}*
-> ✰ Vistas » *${views || 'Desconocido'}*
+> ✰ Vistas » *${vistas || 'Desconocido'}*
 > ⴵ Duración » *${duration || 'Desconocido'}*
 > ✐ Publicado » *${uploaded || 'Desconocido'}*
-> 🜸 Link » ${url}
-`.trim();
+> 🜸 Link » ${url}`.trim();
 
-    // Enviar imagen con mensaje decorado
-    await conn.sendMessage(m.chat, {
-      image: { url: thumbnail || 'https://i.imgur.com/yN5r5xx.jpeg' },
-      caption: infoMessage
-    }, { quoted: m });
+    const thumb = (await conn.getFile(thumbnail))?.data;
 
-    // Enviar audio
-    await conn.sendMessage(m.chat, {
-      audio: { url: downloadData.result.download.url },
-      mimetype: 'audio/mpeg',
-      fileName: `${title}.mp3`
-    }, { quoted: m });
+    const JT = {
+      contextInfo: {
+        externalAdReply: {
+          title: global.botname || 'Bot',
+          body: global.dev || 'Desarrollador',
+          mediaType: 1,
+          previewType: 0,
+          mediaUrl: url,
+          sourceUrl: url,
+          thumbnail: thumb,
+          renderLargerThumbnail: true,
+        }
+      }
+    };
 
-    await m.react("💜");
+    await conn.reply(m.chat, infoMessage, m, JT);
+    await m.react('🍫');
+
+    if (['play', 'yta', 'ytmp3'].includes(command)) {
+      const api = await (await fetch(`https://api.neoxr.eu/api/youtube?url=${url}&type=audio&quality=128kbps&apikey=GataDios`)).json();
+      const result = api.data.url;
+      await conn.sendMessage(m.chat, { audio: { url: result }, mimetype: "audio/mpeg" }, { quoted: m });
+    } else if (['play2', 'ytv', 'ytmp4'].includes(command)) {
+      const response = await fetch(`https://api.neoxr.eu/api/youtube?url=${url}&type=video&quality=480p&apikey=GataDios`);
+      const json = await response.json();
+
+      try {
+        await conn.sendMessage(m.chat, {
+          video: { url: json.data.url },
+          fileName: json.data.filename,
+          mimetype: 'video/mp4',
+          caption: 'Tu Video.',
+          thumbnail: json.thumbnail
+        }, { quoted: m });
+      } catch (e) {
+        console.error(`Error con la fuente de descarga:`, e.message);
+      }
+    } else {
+      throw new Error("Comando no reconocido.");
+    }
+
   } catch (error) {
-    console.error(error);
-    await m.react('💢');
-    m.reply(`(×﹏×) Ocurrió un error al procesar:\n${error.message}`);
+    return m.reply(`⚠︎ Ocurrió un error: ${error.message}`);
   }
 };
 
-handler.command = ['playaudio', 'play'];
-handler.help = ['playaudio <texto>'];
-handler.tags = ['media'];
+handler.command = ['play'];
 
 export default handler;
+
+function formatViews(views) {
+  if (views >= 1000) {
+    return (views / 1000).toFixed(1) + 'k (' + views.toLocaleString() + ')';
+  } else {
+    return views.toString();
+  }
+}
