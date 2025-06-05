@@ -14,7 +14,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     }
 
     const video = searchData.data[0];
-    const { title, url, duration, views, author, uploaded } = video;
+    const { title, url, duration, views, author, uploaded, thumbnail } = video;
 
     const downloadApi = `https://api.vreden.my.id/api/ytmp3?url=${encodeURIComponent(url)}`;
     const downloadResponse = await fetch(downloadApi);
@@ -36,8 +36,13 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
 > 🜸 Link » ${url}
 `.trim();
 
-    await m.reply(infoMessage);
+    // Enviar imagen con mensaje decorado
+    await conn.sendMessage(m.chat, {
+      image: { url: thumbnail || 'https://i.imgur.com/yN5r5xx.jpeg' },
+      caption: infoMessage
+    }, { quoted: m });
 
+    // Enviar audio
     await conn.sendMessage(m.chat, {
       audio: { url: downloadData.result.download.url },
       mimetype: 'audio/mpeg',
