@@ -1,55 +1,38 @@
-import fetch from "node-fetch"
-import yts from 'yt-search'
-import axios from "axios"
+import fetch from 'node-fetch';
 
-const youtubeRegexID = /(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/
+let handler = async(m, { conn, args, text }) => {
 
-const handler = async (m, { conn, text, usedPrefix, command }) => {
-  try {
-    if (!text.trim()) {
-      return conn.reply(m.chat, `⪩ Por favor, ingresa el nombre o link del video a descargar.`, m)
-    }
+if (!text) return m.reply('🍭 Ingrese Un Link De YouTube\n> *Ejemplo:* https://youtube.com/shorts/ZisXJqH1jtw?si=0RZacIJU5zhoCmWh');
 
-    await m.react('🕓') // Reacción rápida al comenzar
+m.react(rwait);
 
-    let videoIdToFind = text.match(youtubeRegexID) || null
-    let ytplay2 = await yts(videoIdToFind === null ? text : 'https://youtu.be/' + videoIdToFind[1])
-
-    if (videoIdToFind) {
-      const videoId = videoIdToFind[1]  
-      ytplay2 = ytplay2.all.find(item => item.videoId === videoId) || ytplay2.videos.find(item => item.videoId === videoId)
-    } 
-
-    ytplay2 = ytplay2.all?.[0] || ytplay2.videos?.[0] || ytplay2  
-    if (!ytplay2 || ytplay2.length == 0) {
-      return m.reply('✰ No se encontraron resultados para tu búsqueda.')
-    }
-
-    const { title, url } = ytplay2
-    if (!url) return m.reply('✰ No se pudo obtener el enlace del video.')
-
-    try {
-      const response = await fetch(`https://api.neoxr.eu/api/youtube?url=${encodeURIComponent(url)}&type=video&quality=480p&apikey=GataDios`)
-      const json = await response.json()
-
-      if (!json?.data?.url) {
-        return conn.reply(m.chat, '⚠ No se pudo obtener el enlace de descarga del video.', m)
+let video;
+try {
+      video = await (await fetch(`https://api.neoxr.eu/api/youtube?url=${text}&type=video&quality=480p&apikey=GataDios`)).json();
+} catch (error) {
+try {
+      video = await (await fetch(`https://api.fgmods.xyz/api/downloader/ytmp4?url=${text}&quality=480p&apikey=be9NqGwC`)).json();
+} catch (error) {
+try {
+      video = await (await fetch(`https://api.alyachan.dev/api/ytv?url=${text}&apikey=uXxd7d`)).json();
+} catch (error) {
+      video = await (await fetch(`https://good-camel-seemingly.ngrok-free.app/download/mp4?url=${text}`)).json();
       }
-
-      await conn.sendFile(m.chat, json.data.url, `${title}.mp4`, null, m)
-      await m.react('✅') // Confirmación exitosa
-    } catch (e) {
-      await m.react('❌')
-      return conn.reply(m.chat, '> ✢ No se pudo enviar el video. Esto puede pasar por varias razones: enlace inválido, video pesado o duración mayor a 45 minutos. Intenta con otro video.', m)
     }
-  } catch (error) {
-    await m.react('❌')
-    return m.reply(`⚠︎ Ocurrió un error: ${error.message || error}`)
-  }
+ }
+
+let link = video?.data?.url || video?.download_url || video?.result?.dl_url || video?.downloads?.link[0]
+
+if (!link) return m.reply('《✧》Hubo un error al intentar acceder al link.\n> Si el problema persiste, reportalo en el grupo de soporte.');
+
+await conn.sendMessage(m.chat, {
+      video: { url: link },
+      mimetype: "video/mp4",
+      caption: `${dev}`,
+    }, { quoted: m });
+    m.react(done);
 }
 
-handler.command = handler.help = ['ytmp4']
-handler.tags = ['descargas']
-handler.group = false
+handler.command = ['ytmp4', 'ymp4']
 
-export default handler
+export default handler;
