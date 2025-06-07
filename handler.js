@@ -567,7 +567,7 @@ global.dfail = (type, m, conn) => {
   private: `📩 〘 ${comando} 〙 debe usarse en un chat privado. Intenta en el canal correspondiente.`,
   admin: `👑 〘 ${comando} 〙 requiere permisos de administrador. Acceso denegado.`,
   botAdmin: `🤖 〘 ${comando} 〙 requiere que el bot tenga permisos de administrador. Por favor, actualiza los permisos.`,
-  unreg: `📛 Para usar 〘 ${comando} 〙 debes registrarte primero.\n\nUtiliza: #${verifyaleatorio} ${user2}.${edadaleatoria}`,
+  unreg: `👤 Para usar 〘 ${comando} 〙 debes registrarte primero.\n\nUtiliza: #${verifyaleatorio} ${user2}.${edadaleatoria}`,
   restrict: `🚫 Esta función está desactivada y no permite excepciones.`
 }[type];
 
