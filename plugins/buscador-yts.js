@@ -4,10 +4,15 @@ import fs from 'fs';
 
 const handler = async (m, { conn, text, usedPrefix: prefijo }) => {
     const device = await getDevice(m.key.id);
-    
+
     if (!text) return conn.reply(m.chat, '⚠️ 𝙄𝙉𝙂𝙍𝙀𝙎𝘼 𝙀𝙇 𝙉𝙊𝙈𝘽𝙍𝙀 𝘿𝙀 𝙇𝘼 𝙈Ú𝙎𝙄𝘾𝘼 𝙌𝙐𝙀 𝙌𝙐𝙄𝙀𝙍𝙀𝙎 𝘽𝙐𝙎𝘾𝘼𝙍 ⚠️', m);
 
-    await conn.react(m.chat, m.key, '🕒');
+    await conn.sendMessage(m.chat, {
+        react: {
+            text: '🕒',
+            key: m.key
+        }
+    });
 
     const results = await yts.search({ query: text, pages: 1 });
     const videos = results.videos.slice(0, 10);
@@ -62,7 +67,6 @@ const handler = async (m, { conn, text, usedPrefix: prefijo }) => {
         }, { userJid: conn.user.jid, quoted: null });
 
         await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
-        await conn.react(m.chat, m.key, '✅');
 
     } else {
         const idioma = global.db.data.users[m.sender]?.language || 'es';
@@ -77,8 +81,14 @@ const handler = async (m, { conn, text, usedPrefix: prefijo }) => {
 「✦」*Vistas* = ${v.views}`).join('\n\n───────────────\n\n');
 
         await conn.sendFile(m.chat, results.videos[0].thumbnail, 'thumb.jpg', teks.trim(), m);
-        await conn.react(m.chat, m.key, '✅');
     }
+
+    await conn.sendMessage(m.chat, {
+        react: {
+            text: '✅',
+            key: m.key
+        }
+    });
 };
 
 handler.help = ['yts *<texto>*'];
