@@ -19,7 +19,7 @@ let handler = async (m, { conn, usedPrefix, command, text }) => {
     await conn.sendMessage(m.chat, {
       image: { url: result.image },
       caption: txt,
-      footer: 'By Wirk para Anya',
+      footer: dev,
       buttons: [
         {
           buttonId: `.ytmp4 ${result.url}`,
