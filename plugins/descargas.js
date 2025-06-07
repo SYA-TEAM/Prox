@@ -101,37 +101,25 @@ const savetube = {
 
   download: async (link, format) => {
     if (!link) {
-      return {
-        status: false,
-        code: 400,
-        error: "¿Dónde está el link? No puedes descargar sin un link 🗿"
-      };
+      return { status: false, code: 400, error: "¿Dónde está el link? 🗿" };
     }
 
     if (!savetube.isUrl(link)) {
-      return {
-        status: false,
-        code: 400,
-        error: "¡Pon un link de YouTube válido, por favor! 🗿"
-      };
+      return { status: false, code: 400, error: "Link inválido 🗿" };
     }
 
     if (!format || !savetube.formats.includes(format)) {
       return {
         status: false,
         code: 400,
-        error: "Formato no disponible, elige uno de los que están listados 🗿",
+        error: "Formato no disponible 🗿",
         available_fmt: savetube.formats
       };
     }
 
     const id = savetube.youtube(link);
     if (!id) {
-      return {
-        status: false,
-        code: 400,
-        error: "No se puede extraer el link de YouTube, verifica el link y prueba de nuevo 😂"
-      };
+      return { status: false, code: 400, error: "No se pudo extraer el ID del video 😥" };
     }
 
     try {
@@ -150,7 +138,7 @@ const savetube = {
         return {
           status: false,
           code: 400,
-          error: "El video es demasiado largo (más de 60 minutos) para ser descargado en este momento."
+          error: "El video dura más de 60 minutos 😮"
         };
       }
 
@@ -165,17 +153,16 @@ const savetube = {
         status: true,
         code: 200,
         result: {
-          title: decrypted.title || "Desconocido 🤷🏻",
+          title: decrypted.title,
           type: format === 'mp3' ? 'audio' : 'video',
-          format: format,
+          format,
           thumbnail: decrypted.thumbnail || `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`,
           download: dl.data.data.downloadUrl,
-          id: id,
+          id,
           key: decrypted.key,
           duration: decrypted.duration,
           quality: format === 'mp3' ? '128' : format,
-          downloaded: dl.data.data.downloaded || false,
-          author: decrypted.author || {},
+          author: decrypted.author,
           views: decrypted.viewCount,
           publishedAt: decrypted.publishedTime,
           url: `https://youtu.be/${id}`
@@ -183,42 +170,51 @@ const savetube = {
       };
 
     } catch (error) {
-      return {
-        status: false,
-        code: 500,
-        error: error.message
-      };
+      return { status: false, code: 500, error: error.message };
     }
   }
 };
 
-const handler = async (m, { conn, args, command }) => {
-  if (args.length < 1) return m.reply(`*[ ℹ️ ] Ingresa una URL de un video o audio de YouTube*`);
+// handler
+const handler = async (m, { conn, args, command, usedPrefix }) => {
+  if (!args[0]) return m.reply(`*[ ℹ️ ] Ingresa una URL o el nombre del video de YouTube*`);
 
-  const url = args[0];
   const format = command === 'ytmp3g' ? 'mp3' : args[1] || '360';
+  let link = args[0];
 
-  if (!savetube.isUrl(url)) return m.reply("Por favor, ingresa un link válido de YouTube.");
+  await m.react('🔍');
+
+  if (!savetube.isUrl(link)) {
+    try {
+      let search = await (await import('yt-search')).default(args.join(" "));
+      if (!search || !search.videos || !search.videos.length) {
+        return m.reply("❌ No encontré resultados.");
+      }
+      link = search.videos[0].url;
+    } catch (e) {
+      return m.reply("❌ Error al buscar en YouTube.");
+    }
+  }
+
+  await m.react('🕒');
 
   try {
-    await m.react('🕒');
-
-    const res = await savetube.download(url, format);
+    const res = await savetube.download(link, format);
     if (!res.status) {
-      await m.react('✖️');
+      await m.react('❌');
       return m.reply(`❌ *Error:* ${res.error}`);
     }
 
-    const { title, download, type, thumbnail, quality, duration, author, views, publishedAt } = res.result;
+    const { title, download, type, thumbnail, quality, duration, author, views, publishedAt, url } = res.result;
 
-    const videoDetails = ` *「✦」 ${title}*\n\n` +
-                         `> ✦ *Canal:* » ${author.name || "Desconocido"}\n` +
-                         `> ⴵ *Duración:* » ${Math.floor(duration / 60)}:${duration % 60}s\n` +
-                         `> ✰ *Vistas:* » ${views}\n` +
-                         `> ✐ *Publicado:* » ${publishedAt}\n` +
-                         `> 🜸 *Enlace:* » ${url}\n`;
+    const info = `*「✦」 ${title}*\n\n` +
+      `> ✦ *Canal:* » ${author.name}\n` +
+      `> ⏱ *Duración:* » ${Math.floor(duration / 60)}:${(duration % 60).toString().padStart(2, '0')}\n` +
+      `> 👁 *Vistas:* » ${views}\n` +
+      `> 📅 *Publicado:* » ${publishedAt}\n` +
+      `> 🔗 *Link:* » ${url}`;
 
-    await conn.sendMessage(m.chat, { image: { url: thumbnail }, caption: videoDetails }, { quoted: m });
+    await conn.sendMessage(m.chat, { image: { url: thumbnail }, caption: info }, { quoted: m });
 
     const caption = `🎬 *${title}*\n📥 *Formato:* ${type} | ${quality}p\n⏱ *Duración:* ${duration}s`;
 
@@ -232,7 +228,7 @@ const handler = async (m, { conn, args, command }) => {
     } else {
       await conn.sendMessage(m.chat, {
         audio: { url: download },
-        mimetype: "audio/mpeg",
+        mimetype: 'audio/mpeg',
         ptt: false,
         fileName: `${title}.mp3`
       }, { quoted: m });
@@ -240,14 +236,13 @@ const handler = async (m, { conn, args, command }) => {
 
     await m.react('✅');
   } catch (e) {
-    console.error(e);
-    await m.react('✖️');
-    m.reply(`*❌ ¡Fallo en la descarga!*\n_Mensaje:_ ${e.message}`);
+    await m.react('❌');
+    m.reply(`❌ *Error inesperado:* ${e.message}`);
   }
 };
 
-handler.help = ['ytmp4 <url> [calidad]', 'ytmp3 <url>'];
-handler.command = ['ytmp4x', 'ytmp3g'];
+handler.help = ['ytmp4x <url|texto> [calidad]', 'ytmp3g <url|texto>'];
 handler.tags = ['dl'];
+handler.command = ['ytmp4x', 'ytmp3g', 'play'];
 
 export default handler;
