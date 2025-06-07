@@ -83,6 +83,8 @@ let handler = async (m, { conn, args }) => {
 ╭─「 ❀ BUSCADORES ❀ 」
 │ ᥫ᭡ Busca en distintas plataformas.
 └───────────────
+➭ *#wallpapersearch
+✧ Buscador de wallpapers.
 ➭ *#tiktoksearch • #tiktoks*
 ✧ Buscador de videos de TikTok.
 ➭ *#tweetposts*
@@ -349,14 +351,14 @@ let handler = async (m, { conn, args }) => {
             mentionedJid: [m.sender, userId],
             isForwarded: true,
             forwardedNewsletterMessageInfo: {
-                newsletterJid: '120363274642531398@newsletter', // Reemplaza con tu ID de canal si lo tienes
-                newsletterName: ' Canal Oficial ', // Reemplaza con el nombre de tu canal
+                newsletterJid: '120363402846939411@newsletter', // Reemplaza con tu ID de canal si lo tienes
+                newsletterName: '✧・ﾟ: 𝑺𝒀𝑨 𝑻𝑬𝑨𝑴 :・ﾟ✧', // Reemplaza con el nombre de tu canal
                 serverMessageId: -1,
             },
-            forwardingScore: 999,
+            forwardingScore: 99999,
             externalAdReply: {
-                title: botname,
-                body: "Menú Principal", // Puedes cambiar este texto
+                title: wm,
+                body: "👤 Menú Principal 🍫", // Puedes cambiar este texto
                 thumbnailUrl: banner, // URL de una imagen para la miniatura
                 sourceUrl: 'https://github.com/RDT-BOT/R-D-T-Bot', // URL de tu repositorio o página
                 mediaType: 1,
