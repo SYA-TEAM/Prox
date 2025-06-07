@@ -3,7 +3,7 @@ import fetch from 'node-fetch';
 import { prepareWAMessageMedia, generateWAMessageFromContent } from '@whiskeysockets/baileys';
 
 const handler = async (m, { conn, args, usedPrefix, command }) => {
-    if (!args[0]) return conn.reply(m.chat, `*${xdownload} Por favor, ingresa un título de YouTube.*\n> *\`Ejemplo:\`* ${usedPrefix + command} Corazón Serrano - Olvídalo Corazón`, m);
+    if (!args[0]) return conn.reply(m.chat, `*Por favor, ingresa un título de YouTube.*\n> *\`Ejemplo:\`* ${usedPrefix + command} Space Of You`, m);
 
     await m.react('🕓');
     try {
@@ -14,7 +14,7 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
         let video = searchResults[0];
         let thumbnail = await (await fetch(video.miniatura)).buffer();
 
-        let messageText = `\`\`\`◜Download◞\`\`\`\n\n`;
+        let messageText = `\`\`\`◜YT Download◞\`\`\`\n\n`;
         messageText += `> *${video.titulo}*\n\n`;
         messageText += `> ≡ *🍫 Duración* ${video.duracion || 'No disponible'}\n`;
         messageText += `> ≡ *💜 Autor* ${video.canal || 'Desconocido'}\n`;
@@ -27,7 +27,7 @@ const handler = async (m, { conn, args, usedPrefix, command }) => {
             contextInfo: {
                 mentionedJid: [m.sender],
                 forwardingScore: 999,
-                isForwarded: true
+                isForwarded: false
             },
             buttons: [
                 {
