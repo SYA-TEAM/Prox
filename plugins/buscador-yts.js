@@ -1,43 +1,80 @@
-import yts from 'yt-search'
+import { prepareWAMessageMedia, generateWAMessageFromContent, getDevice } from '@whiskeysockets/baileys';
+import yts from 'yt-search';
+import fs from 'fs';
 
-var handler = async (m, { text, conn, usedPrefix, command }) => {
-  if (!text) return conn.reply(m.chat, `🔍 ιᥒgrᥱsᥲ ᥙᥒᥲ ᑲᥙ́s𝗊ᥙᥱძᥲ ძᥱ ᥡᥙ᥆𝗍ᥙᑲᥱ.`, m)
+const handler = async (m, { conn, text, usedPrefix: prefijo }) => {
+    const device = await getDevice(m.key.id);
 
-  await conn.reply(m.chat, '⏳ 𝙱ᥙsᥴᥲᥒძ᥆... ᥱsᥣᥲ ᥴᥙᥱᥣ᥊ 🛰️', m)
+    if (!text) return conn.reply(m.chat, '⚠️ 𝙄𝙉𝙂𝙍𝙀𝙎𝘼 𝙀𝙇 𝙉𝙊𝙈𝘽𝙍𝙀 𝘿𝙀 𝙇𝘼 𝙈Ú𝙎𝙄𝘾𝘼 𝙌𝙐𝙀 𝙌𝙐𝙄𝙀𝙍𝙀𝙎 𝘽𝙐𝙎𝘾𝘼𝙍 ⚠️', m);
 
-  const results = await yts(text)
-  const videos = results.videos.slice(0, 5)
+    const results = await yts.search({ query: text, pages: 1 });
+    const videos = results.videos.slice(0, 10);
+    const randomVideo = videos[Math.floor(Math.random() * videos.length)];
 
-  if (!videos.length) return conn.reply(m.chat, '❌ ᑲᥙ́s𝗊ᥙᥱძᥲ sᥱᥒ ɾᥱsᥙᥣሼᥲძ᥆...', m)
+    if (device !== 'desktop' && device !== 'web') {
+        const messa = await prepareWAMessageMedia({ image: { url: randomVideo.thumbnail } }, { upload: conn.waUploadToServer });
+        
+        const interactiveMessage = {
+            body: {
+                text: `*『 YOUTUBE － SEARCH 』*\n\n` +
+                      `「✦」*Título* = ${randomVideo.title}\n` +
+                      `「✦」*Duración* = ${randomVideo.duration.timestamp}\n` +
+                      `「✦」*Autor* = ${randomVideo.author.name || 'Desconocido'}\n` +
+                      `「✦」*Publicado* = ${randomVideo.ago}\n` +
+                      `「✦」*Enlace* = ${randomVideo.url}`
+            },
+            footer: { text: `${global.dev || 'Bot by Wirk'}`.trim() },
+            header: {
+                title: ``,
+                hasMediaAttachment: true,
+                imageMessage: messa.imageMessage,
+            },
+            nativeFlowMessage: {
+                buttons: [
+                    {
+                        name: 'single_select',
+                        buttonParamsJson: JSON.stringify({
+                            title: '✦ 𝖮𝗉𝖼𝗂𝗈𝗇𝖾𝗌 ✦',
+                            sections: videos.map((video) => ({
+                                title: video.title,
+                                rows: [
+                                    { header: video.title, title: video.author.name, description: 'Descargar MP3 (Audio)', id: `${prefijo}ytmp3 ${video.url}` },
+                                    { header: video.title, title: video.author.name, description: 'Descargar MP4 (Video)', id: `${prefijo}ytmp4 ${video.url}` }
+                                ]
+                            }))
+                        })
+                    }
+                ],
+                messageParamsJson: ''
+            }
+        };
 
-  let caption = `🎬 *Resultados encontrados:*\n\n`
+        const msg = generateWAMessageFromContent(m.chat, {
+            viewOnceMessage: {
+                message: { interactiveMessage }
+            }
+        }, { userJid: conn.user.jid, quoted: null });
 
-  const buttons = []
+        conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
 
-  for (let i = 0; i < videos.length; i++) {
-    const v = videos[i]
-    caption += `*${i + 1}.* ${v.title}\n` +
-               `   ⏱️ ${v.timestamp} | 👁️ ${v.views} | 📆 ${v.ago}\n` +
-               `   👤 ${v.author.name}\n\n`
-    buttons.push({
-      buttonId: `${usedPrefix}ytmp3 ${v.url}`,
-      buttonText: { displayText: `${i + 1}️⃣ Audio MP3` },
-      type: 1
-    })
-  }
+    } else {
+        const idioma = global.db.data.users[m.sender]?.language || 'es';
+        const _translate = JSON.parse(fs.readFileSync(`./language/${idioma}.json`));
+        const traductor = _translate.plugins.buscador_yts;
+        const teks = results.videos.map((v) => `
+「✦」*Título* = ${v.title}
+「✦」*Enlace* = ${v.url}
+「✦」*Duración* = ${v.timestamp}
+「✦」*Publicado* = ${v.ago}
+「✦」*Vistas* = ${v.views}`).join('\n\n───────────────\n\n');
 
-  await conn.sendMessage(m.chat, {
-    text: caption.trim(),
-    footer: '📽️ Resultado de YouTube',
-    buttons,
-    headerType: 1
-  }, { quoted: m })
-}
+        conn.sendFile(m.chat, results.videos[0].thumbnail, 'thumb.jpg', teks.trim(), m);
+    }
+};
 
-handler.help = ['ytsearch <texto>']
-handler.tags = ['buscador']
-handler.command = ['ytbuscar', 'ytsearch', 'yts']
-handler.register = true
-handler.coin = 1
+handler.help = ['yts *<texto>*'];
+handler.tags = ['dl'];
+handler.command = ['yts', 'ytsearch'];
+handler.register = true;
 
-export default handler
+export default handler;
