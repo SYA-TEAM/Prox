@@ -8,10 +8,7 @@ const handler = async (m, { conn, text, usedPrefix: prefijo }) => {
     if (!text) return conn.reply(m.chat, '⚠️ 𝙄𝙉𝙂𝙍𝙀𝙎𝘼 𝙀𝙇 𝙉𝙊𝙈𝘽𝙍𝙀 𝘿𝙀 𝙇𝘼 𝙈Ú𝙎𝙄𝘾𝘼 𝙌𝙐𝙀 𝙌𝙐𝙄𝙀𝙍𝙀𝙎 𝘽𝙐𝙎𝘾𝘼𝙍 ⚠️', m);
 
     await conn.sendMessage(m.chat, {
-        react: {
-            text: '🕒',
-            key: m.key
-        }
+        react: { text: '🕒', key: m.key }
     });
 
     const results = await yts.search({ query: text, pages: 1 });
@@ -20,7 +17,7 @@ const handler = async (m, { conn, text, usedPrefix: prefijo }) => {
 
     if (device !== 'desktop' && device !== 'web') {
         const messa = await prepareWAMessageMedia({ image: { url: randomVideo.thumbnail } }, { upload: conn.waUploadToServer });
-        
+
         const interactiveMessage = {
             body: {
                 text: `*『 YOUTUBE － SEARCH 』*\n\n` +
@@ -41,18 +38,24 @@ const handler = async (m, { conn, text, usedPrefix: prefijo }) => {
                     {
                         name: 'single_select',
                         buttonParamsJson: JSON.stringify({
-                            title: '🌸 Opciones de descarga 🌸',
-                            sections: [
-                                {
-                                    title: '🎶 Descarga en MP3 o MP4',
-                                    rows: videos.map((video) => ({
-                                        header: '「✦」' + video.title,
-                                        title: video.author.name,
-                                        description: `🎧 MP3 | 📹 MP4`,
+                            title: '🌸 Selecciona una opción para descargar 🌸',
+                            sections: videos.map((video, i) => ({
+                                title: `📌 ${video.title}`,
+                                rows: [
+                                    {
+                                        header: `🎧 ${video.title}`,
+                                        title: '🎵 Descargar MP3',
+                                        description: 'Presiona para obtener el audio',
                                         id: `${prefijo}ytmp3 ${video.url}`
-                                    }))
-                                }
-                            ]
+                                    },
+                                    {
+                                        header: `📹 ${video.title}`,
+                                        title: '🎬 Descargar MP4',
+                                        description: 'Presiona para obtener el video',
+                                        id: `${prefijo}ytmp4 ${video.url}`
+                                    }
+                                ]
+                            }))
                         })
                     }
                 ],
@@ -84,10 +87,7 @@ const handler = async (m, { conn, text, usedPrefix: prefijo }) => {
     }
 
     await conn.sendMessage(m.chat, {
-        react: {
-            text: '✅',
-            key: m.key
-        }
+        react: { text: '✅', key: m.key }
     });
 };
 
