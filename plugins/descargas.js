@@ -174,7 +174,11 @@ const savetube = {
           key: decrypted.key,
           duration: decrypted.duration,
           quality: format === 'mp3' ? '128' : format,
-          downloaded: dl.data.data.downloaded || false
+          downloaded: dl.data.data.downloaded || false,
+          author: decrypted.author || {},
+          views: decrypted.viewCount,
+          publishedAt: decrypted.publishedTime,
+          url: `https://youtu.be/${id}`
         }
       };
 
@@ -205,7 +209,16 @@ const handler = async (m, { conn, args, command }) => {
       return m.reply(`❌ *Error:* ${res.error}`);
     }
 
-    const { title, download, type, thumbnail, quality, duration } = res.result;
+    const { title, download, type, thumbnail, quality, duration, author, views, publishedAt } = res.result;
+
+    const videoDetails = ` *「✦」 ${title}*\n\n` +
+                         `> ✦ *Canal:* » ${author.name || "Desconocido"}\n` +
+                         `> ⴵ *Duración:* » ${Math.floor(duration / 60)}:${duration % 60}s\n` +
+                         `> ✰ *Vistas:* » ${views}\n` +
+                         `> ✐ *Publicado:* » ${publishedAt}\n` +
+                         `> 🜸 *Enlace:* » ${url}\n`;
+
+    await conn.sendMessage(m.chat, { image: { url: thumbnail }, caption: videoDetails }, { quoted: m });
 
     const caption = `🎬 *${title}*\n📥 *Formato:* ${type} | ${quality}p\n⏱ *Duración:* ${duration}s`;
 
