@@ -40,7 +40,7 @@ let handler = async (m, { conn, args }) => {
 │➭ *Baileys:* Multi Device
 ╰───────────────
 
-*✧ Usa #qr o #code para ser Sub-Bot ✧*
+*✧ Usa #qr o #code para ser Sub-Bot*
 
 ╭─「 ❀ INFO-BOT ❀ 」
 │ ᥫ᭡ Comandos sobre el estado e info de la Bot.
@@ -49,10 +49,6 @@ let handler = async (m, { conn, args }) => {
 ✧ Ver la lista de comandos.
 ➭ *#uptime • #runtime*
 ✧ Ver el tiempo de actividad.
-➭ *#sc • #script*
-✧ Link del repositorio oficial.
-➭ *#staff • #colaboradores*
-✧ Ver los desarrolladores.
 ➭ *#serbot • #serbot code*
 ✧ Crea una sesión de Sub-Bot.
 ➭ *#bots • #sockets*
