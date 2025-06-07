@@ -17,7 +17,8 @@ const handler = async (m, { conn, text, command }) => {
     const video = res.all[0];
     const total = Number(video.duration.seconds) || 0;
 
-    const cap = `> ❀ ${video.title}
+    const cap = `> *❀ ${video.title}*
+    
 > ➮ 𝖠𝗎𝗍𝗈𝗋 = *${video.author.name}*
 > ➮ 𝖣𝗎𝗋𝖺𝖼𝗂𝗈́𝗇 = *${video.duration.timestamp}*
 > ➮ 𝖵𝗂𝗌𝗍𝖺𝗌 = *${video.views}*
