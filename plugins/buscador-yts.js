@@ -17,13 +17,13 @@ const handler = async (m, { conn, text, usedPrefix: prefijo }) => {
         const interactiveMessage = {
             body: {
                 text: `*『 YOUTUBE － SEARCH 』*\n\n` +
-                      `「✦」*Título* = ${randomVideo.title}\n` +
-                      `「✦」*Duración* = ${randomVideo.duration.timestamp}\n` +
-                      `「✦」*Autor* = ${randomVideo.author.name || 'Desconocido'}\n` +
-                      `「✦」*Publicado* = ${randomVideo.ago}\n` +
-                      `「✦」*Enlace* = ${randomVideo.url}`
+                      `「✦」𝗧𝗶𝘁𝘂𝗹𝗼 = ${randomVideo.title}\n` +
+                      `「✦」𝗗𝘂𝗿𝗮𝗰𝗶𝗼𝗻 = ${randomVideo.duration.timestamp}\n` +
+                      `「✦」𝗖𝗮𝗻𝗮𝗹 = ${randomVideo.author.name || 'Desconocido'}\n` +
+                      `「✦」𝗣𝘂𝗯𝗹𝗶𝗰𝗮𝗱𝗼 = ${randomVideo.ago}\n` +
+                      `「✦」𝗘𝗻𝗹𝗮𝗰𝗲 = ${randomVideo.url}`
             },
-            footer: { text: `${global.dev || 'Bot by Wirk'}`.trim() },
+            footer: { text: `${global.dev || '✿ ᴀɴʏᴀ ✿'}`.trim() },
             header: {
                 title: ``,
                 hasMediaAttachment: true,
