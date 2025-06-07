@@ -30,14 +30,14 @@ let handler = async (m, { conn, args }) => {
 > Hola, @${userId.split('@')[0]} ❀
 > Soy *${botname}* ⊹˚୨ •(=^●ω●^=)•
 
-╭─「 ✦ INFO DE LA BOT ✦ 」
-│➭ *Modo:* Público
-│➭ *Bot:* ${(conn.user.jid == global.conn.user.jid ? 'Principal 🅥' : 'Sub-Bot 🅑')}
-│➭ *Activada:* ${uptime}
-│➭ *Usuarios:* ${totalreg}
-│➭ *Comandos:* ${totalCommands}
-│➭ *País:* ${mundo}
-│➭ *Baileys:* Multi Device
+╭─「 ✦ *INFO DE LA BOT* ✦ 」
+│✿ *Modo =* Público
+│✿ *Bot =* ${(conn.user.jid == global.conn.user.jid ? 'Principal 🅥' : 'Sub-Bot 🅑')}
+│✿ *Activada =* ${uptime}
+│✿ *Usuarios =* ${totalreg}
+│✿ *Comandos =* ${totalCommands}
+│✿ *País =* ${mundo}
+│✿ *Baileys =* Multi Device
 ╰───────────────
 
 *✧ Usa #qr o #code para ser Sub-Bot*
@@ -83,7 +83,7 @@ let handler = async (m, { conn, args }) => {
 ╭─「 ❀ BUSCADORES ❀ 」
 │ ᥫ᭡ Busca en distintas plataformas.
 └───────────────
-➭ *#wallpapersearch
+➭ *#wallpapersearch*
 ✧ Buscador de wallpapers.
 ➭ *#tiktoksearch • #tiktoks*
 ✧ Buscador de videos de TikTok.
