@@ -34,7 +34,7 @@ let handler = async (m, { conn }) => {
 
 handler.help = ['maybox'];
 handler.tags = ['uploader'];
-handler.command = ['maybox'];
+handler.command = ['box'];
 export default handler;
 
 function formatBytes(bytes) {
