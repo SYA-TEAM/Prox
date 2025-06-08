@@ -36,7 +36,7 @@ let handler = async (m, { conn }) => {
 
 handler.help = ['maybox'];
 handler.tags = ['uploader'];
-handler.command = ['box'];
+handler.command = ['wirksibox', 'tourl'];
 export default handler;
 
 // --- Funciones auxiliares ---
