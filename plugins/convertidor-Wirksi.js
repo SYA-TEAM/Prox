@@ -1,4 +1,4 @@
-//Codigo ofc de Anya ⚔️
+// Código ofc de Anya ⚔️
 import fetch from "node-fetch";
 import crypto from "crypto";
 import { FormData, Blob } from "formdata-node";
@@ -9,7 +9,7 @@ let handler = async (m, { conn }) => {
   let mime = (q.msg || q).mimetype || '';
   if (!mime) return conn.reply(m.chat, `📎 Por favor responde a un archivo válido (imagen, video, documento, etc).`, m);
 
-  await m.react('🕒);
+  await m.react('🕒');
 
   try {
     let media = await q.download();
