@@ -55,8 +55,8 @@ global.etiqueta = '✦ ᴡɪʀᴋ';
 global.moneda = '🍫 𝗖𝗵𝗼𝗰𝗼𝗳𝗿𝗲𝘀𝗮𝘀 🍓'
 global.welcom1 = '❍ Edita Con El Comando setwelcome'
 global.welcom2 = '❍ Edita Con El Comando setbye'
-global.banner = 'https://qu.ax/ndDnT.jpg'
-global.avatar = 'https://raw.githubusercontent.com/The-King-Destroy/Adiciones/main/Contenido/1742678797993.jpeg'
+global.banner = 'https://raw.githubusercontent.com/Ado926/WirksiBoxFiles/main/1749341421832-e3qjo8-IMG-20250607-WA0389.jpg'
+global.avatar = 'https://qu.ax/ndDnT.jpg'
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
 
