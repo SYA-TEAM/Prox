@@ -101,8 +101,29 @@ global.icono = [
 'https://qu.ax/LfnqV.jpg',
 ].getRandom()
 
-global.rcanal = { contextInfo: { isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: channelRD.id, serverMessageId: 100, newsletterName: channelRD.name, }, externalAdReply: { showAdAttribution: true, title: packname, body: dev, mediaUrl: null, description: null, previewType: "PHOTO", thumbnailUrl: icono, sourceUrl: redes, mediaType: 1, renderLargerThumbnail: false }, }, }}
-
+global.rcanal = {
+  contextInfo: {
+    isForwarded: true,
+    forwardedNewsletterMessageInfo: {
+      newsletterJid: '120363402846939411@newsletter',
+      serverMessageId: 100,
+      newsletterName: '✿ 𝖲𝖸𝖠 𝖳𝖤𝖠𝖬 - © 𝟤𝟢𝟤𝟧 ❀',
+    },
+    externalAdReply: {
+      showAdAttribution: true,
+      title: global.wm,
+      body: '✦ ᴀɴʏᴀ ғᴏʀɢᴇʀ ✦',
+      mediaUrl: 'https://chat.whatsapp.com/LVswMhDLIzbAf4WliK6nau',
+      description: null,
+      previewType: 'PHOTO',
+      thumbnailUrl: 'https://files.catbox.moe/8pux7u.jpg',
+      sourceUrl: 'https://wirksi-box.vercel.app',
+      mediaType: 2,
+      renderLargerThumbnail: false,
+    },
+  },
+};
+  
 export default handler
 
 function pickRandom(list) {
