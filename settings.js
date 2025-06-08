@@ -55,7 +55,7 @@ global.etiqueta = '✦ ᴡɪʀᴋ';
 global.moneda = '🍫 𝗖𝗵𝗼𝗰𝗼𝗳𝗿𝗲𝘀𝗮𝘀 🍓'
 global.welcom1 = '❍ Edita Con El Comando setwelcome'
 global.welcom2 = '❍ Edita Con El Comando setbye'
-global.banner = 'https://files.catbox.moe/4c1o4e.jpg'
+global.banner = 'https://qu.ax/nmrHS.jpg'
 global.avatar = 'https://qu.ax/ndDnT.jpg'
 
 //*─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─⭒─ׄ─ׅ─ׄ─*
