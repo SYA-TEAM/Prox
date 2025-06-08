@@ -51,7 +51,7 @@ async function maybox(content, mime) {
   const filename = `${Date.now()}-${crypto.randomBytes(3).toString('hex')}.${ext}`;
   form.append('file', blob, filename);
 
-  const res = await fetch('https://wirksibox.onrender.com', {
+  const res = await fetch('https://wirksibox.onrender.com/api/upload', {
     method: 'POST',
     body: form,
     headers: {
