@@ -1,34 +1,36 @@
+//Codigo ofc de Anya ⚔️
 import fetch from "node-fetch";
 import crypto from "crypto";
 import { FormData, Blob } from "formdata-node";
 import { fileTypeFromBuffer } from "file-type";
 
 let handler = async (m, { conn }) => {
-  let q = m.quoted ? m.quoted : m;
+  let q = m.quoted || m;
   let mime = (q.msg || q).mimetype || '';
-  if (!mime) return conn.reply(m.chat, `🐸 Por favor responde a un archivo válido (imagen, video, html, etc).`, m);
+  if (!mime) return conn.reply(m.chat, `📎 Por favor responde a un archivo válido (imagen, video, documento, etc).`, m);
 
-  await m.react('📦');
+  await m.react('🕒);
 
   try {
     let media = await q.download();
     let linkData = await maybox(media, mime);
 
-    if (!linkData?.data?.url) throw '❌ Error al subir';
+    if (!linkData?.data?.url) throw '❌ No se pudo subir el archivo';
 
-    let txt = `*乂 W I R K S I B O X - U P L O A D E R 乂 *\n\n`;
-    txt += `*» Archivo:* ${linkData.data.originalName}\n`;
-    txt += `*» Tamaño:* ${formatBytes(linkData.data.size)}\n`;
-    txt += `*» Subido:* ${new Date(linkData.data.uploadedAt).toLocaleString()}\n`;
-    txt += `*» Enlace:* ${linkData.data.url}\n\n`;
-    txt += `> Powered By Wirk`;
+    let info = linkData.data;
+    let txt = `*乂 W I R K S I B O X - U P L O A D E R 乂*\n\n`;
+    txt += `*📄 Archivo:* ${info.originalName}\n`;
+    txt += `*📦 Tamaño:* ${formatBytes(info.size)}\n`;
+    txt += `*📅 Subido:* ${formatDate(info.uploadedAt)}\n`;
+    txt += `*🔗 Enlace:* ${info.url}\n\n`;
+    txt += `> 🌐 *Servicio proporcionado por Wirk*`;
 
-    await conn.sendFile(m.chat, media, linkData.data.fileName, txt, m);
+    await conn.sendFile(m.chat, media, info.fileName, txt, m);
     await m.react('✅');
   } catch (err) {
     console.error(err);
     await m.react('❌');
-    await conn.reply(m.chat, `(⁠っ⁠-⁠ ‿⁠-⁠)⁠っ Hubo un error subiendo el archivo a MayBox...`, m);
+    await conn.reply(m.chat, `🚫 Hubo un error al subir el archivo a MayBox. Intenta de nuevo más tarde.`, m);
   }
 };
 
@@ -37,11 +39,16 @@ handler.tags = ['uploader'];
 handler.command = ['box'];
 export default handler;
 
+// --- Funciones auxiliares ---
 function formatBytes(bytes) {
   if (bytes === 0) return '0 B';
   const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${(bytes / 1024 ** i).toFixed(2)} ${sizes[i]}`;
+}
+
+function formatDate(date) {
+  return new Date(date).toLocaleString('es-ES', { timeZone: 'America/Tegucigalpa' });
 }
 
 async function maybox(content, mime) {
@@ -55,9 +62,9 @@ async function maybox(content, mime) {
     method: 'POST',
     body: form,
     headers: {
-      'User-Agent': 'MaycolAIUltraMD',
+      'User-Agent': 'AnyaForger',
     }
   });
 
   return await res.json();
-                                   }
+}
